@@ -20,7 +20,7 @@ python3 -m http.server 8000   # → http://localhost:8000
 | `shop.html?cat=charm` | 전체 상품 목록 (쇼핑몰형 메인에서 사용, 스님이 늘면 비교용) |
 | `monk.html?id=haewol` | 스님 페이지 = 가게. 기본 스토어형(짧은 프로필 + 상품 진열·분류·정렬), dev 패널에서 소개형 |
 | `ritual.html?id=sasipgu` | 의식 상세 (절차, 비용, 준비물, 모시는 스님) |
-| `monk-profile.html?id=haewol` | 스님 소개 (인물 · 걸어온 길 · 스님의 말 · 모시는 방식 · 사찰 풍경 · 오시는 길) |
+| `monk-profile.html?id=haewol` | 스님 소개 (인물 · 걸어온 길 · 스님의 말 · 모시는 방식) |
 | `charm.html?monk=haewol&id=pyeongan` | 부적 상세. 기본 쇼핑몰형(구매 영역 · 밑줄 탭 · 따라오는 구매 상자), dev 패널에서 소개형 |
 | `rite.html?monk=haewol&id=sasipgu` | 스님별 의식 예약 (모시는 방식, 예약 위젯, 진행 순서, 후기, 오시는 길) |
 | `help.html` | 고객센터 (FAQ, 환불 규정, 1:1 문의) |
@@ -41,7 +41,7 @@ python3 -m http.server 8000   # → http://localhost:8000
 ## 이미지
 
 `assets/images/`의 사진은 `../temple/public/images/`에서 가져와 JPG로 줄인 **임시 이미지**입니다.
-스님 사진·표지는 `data.js`의 `photo`, `cover`, `storyPhoto`, `templePhoto`, 의식별 사진은 `RITUAL_IMAGES`, 사찰 풍경 갤러리는 스님별 `gallery`에서 바꿉니다 (스님 소개 페이지에 표시, 없으면 숨김). 직함 `role`, 걸어온 길 `history`, 스님의 말 `interview`, 사찰 소개 `templeIntro`는 **예시 문구**입니다.
+스님 사진·표지는 `data.js`의 `photo`, `cover`, `storyPhoto`, `templePhoto`, 의식별 사진은 `RITUAL_IMAGES`, 사찰 풍경 갤러리는 스님별 `gallery`에서 바꿉니다 (스님 페이지에 표시, 없으면 숨김). 직함 `role`, 걸어온 길 `history`, 스님의 말 `interview`, 사찰 소개 `templeIntro`는 **예시 문구**입니다.
 사진이 없는 스님은 수묵 그림과 한자 도장으로 자동 대체됩니다.
 
 **부적 상품 사진**: `data.js` 스님의 `charms` 항목에 `photo: '경로'`(한 장) 또는 `photos: ['앞면', '봉투', …]`(여러 장, 첫 장이 대표)를 넣으면 진열 · 상세 · 장바구니 · 팝업 모두 사진으로 바뀝니다. 없으면 코드로 그린 부적 그림(SVG)이 나옵니다.

@@ -82,21 +82,6 @@
       </div>
     </section>
 
-    <!-- 5. 사찰 -->
-    <section id="templeSec" class="py-24 md:py-32">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
-          <div class="lg:col-span-7">
-            <span class="reveal" id="templeEyebrow"></span>
-            <h2 id="templeTitle" class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight" style="--index:1"></h2>
-            <p id="templeIntro" class="reveal mt-5 text-muted leading-relaxed max-w-[56ch]" style="--index:2"></p>
-          </div>
-          <div id="templeInfo" class="reveal lg:col-span-5" style="--index:2"></div>
-        </div>
-        <div id="gallery" class="mt-12"></div>
-      </div>
-    </section>
-
     <!-- 6. 마무리 -->
     <section class="px-4 sm:px-6 lg:px-8 pb-24 md:pb-32">
       <div class="reveal max-w-7xl mx-auto rounded-[2.5rem] p-1.5 bg-edge/5 ring-1 ring-edge/10">
@@ -136,7 +121,7 @@
       $('#page').remove(); $('#notFound').classList.remove('hidden'); $('#notFound').classList.add('flex');
     } else {
       document.title = `${m.name} 스님 소개 · ${m.temple} | 염원 念願`;
-      document.querySelector('meta[name=description]').setAttribute('content', `${m.name} 스님(${m.temple})이 걸어온 길과 모시는 방식, 청련사를 소개합니다.`);
+      document.querySelector('meta[name=description]').setAttribute('content', `${m.name} 스님(${m.temple})이 걸어온 길과 모시는 방식을 소개합니다.`);
 
       // 1. 히어로
       $('#backLink').href = monkUrl(m.id); $('#backText').textContent = `${m.name} 스님 페이지`;
@@ -167,11 +152,6 @@
       $('#wayEyebrow').innerHTML = P.eyebrow('心 · 모시는 방식');
       $('#wayTitle').textContent = `${m.name} 스님은 이렇게 모십니다`;
       fill('#waySec', '#ways', P.ways(m));
-      $('#templeEyebrow').innerHTML = P.eyebrow('寺 · 계신 곳');
-      $('#templeTitle').textContent = m.temple;
-      $('#templeIntro').textContent = m.templeIntro || `${m.area}에 있는 절입니다.`;
-      $('#templeInfo').innerHTML = P.templeInfo(m);
-      $('#gallery').innerHTML = P.gallery(m);
 
       // 6. 마무리
       $('#endTitle').textContent = `${m.name} 스님께 정성을 맡기시겠어요?`;
