@@ -23,6 +23,65 @@
   <div data-shell="header"></div>
 
   <main id="page">
+    <!-- ============ 스토어형 (dev 옵션 monkLayout = store) ============ -->
+    <section id="store" class="hidden pt-28 md:pt-32 pb-16 scroll-mt-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <a href="index.html" class="ease-spring inline-flex items-center gap-1.5 text-sm text-subtle hover:text-fg group">
+          <iconify-icon icon="solar:alt-arrow-left-linear" width="16" class="ease-spring group-hover:-translate-x-1"></iconify-icon>염원 홈
+        </a>
+        <!-- 짧은 스토어 프로필 -->
+        <div class="mt-4 rounded-[1.75rem] overflow-hidden ring-1 ring-edge/10 bg-surface">
+          <div id="stCover" class="relative h-24 md:h-32"></div>
+          <div class="relative px-5 md:px-8 pb-6 flex flex-col md:flex-row md:items-end gap-4 md:gap-6">
+            <div id="stAvatar" class="-mt-10 md:-mt-12 shrink-0"></div>
+            <div class="flex-1 min-w-0">
+              <h1 id="stName" class="text-2xl md:text-3xl font-bold tracking-tight flex flex-wrap items-center gap-2"></h1>
+              <p id="stMeta" class="mt-1 text-sm text-subtle"></p>
+              <p id="stStats" class="mt-3 text-sm flex flex-wrap items-center gap-x-4 gap-y-1.5"></p>
+            </div>
+            <div class="flex gap-2 shrink-0">
+              <a href="#story" class="ease-spring h-11 px-4 rounded-full bg-edge/5 border border-edge/10 text-sm font-semibold flex items-center gap-1.5 hover:bg-edge/10"><iconify-icon icon="solar:user-linear" width="16"></iconify-icon>스님 이야기</a>
+              <button type="button" data-ask class="ease-spring h-11 px-4 rounded-full bg-fg text-page text-sm font-semibold flex items-center gap-1.5 hover:scale-[1.02] active:scale-[0.98]"><iconify-icon icon="solar:chat-round-dots-linear" width="16"></iconify-icon>상담 문의</button>
+            </div>
+          </div>
+        </div>
+        <!-- 신뢰 띠 -->
+        <ul class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-fg2">
+          <li class="flex items-center gap-2 rounded-xl bg-edge/[0.03] border border-edge/10 px-3 py-2.5"><iconify-icon icon="solar:verified-check-linear" width="16" class="text-cinnabar"></iconify-icon>승적 · 사찰 확인</li>
+          <li class="flex items-center gap-2 rounded-xl bg-edge/[0.03] border border-edge/10 px-3 py-2.5"><iconify-icon icon="solar:pen-linear" width="16" class="text-cinnabar"></iconify-icon>스님 직접 수기</li>
+          <li class="flex items-center gap-2 rounded-xl bg-edge/[0.03] border border-edge/10 px-3 py-2.5"><iconify-icon icon="solar:delivery-linear" width="16" class="text-cinnabar"></iconify-icon>5만 원 이상 무료배송</li>
+          <li class="flex items-center gap-2 rounded-xl bg-edge/[0.03] border border-edge/10 px-3 py-2.5"><iconify-icon icon="solar:shield-check-linear" width="16" class="text-cinnabar"></iconify-icon>발송 · 봉행 전 전액 환불</li>
+        </ul>
+      </div>
+      <!-- 고정 도구 줄: 분류 + 정렬 -->
+      <div class="sticky top-[5.25rem] z-30 mt-8 px-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 rounded-full p-1.5 pl-2 backdrop-blur-xl bg-deep/80 border border-edge/10">
+          <div id="stTabs" role="tablist" aria-label="상품 분류" class="flex gap-1 overflow-x-auto no-scrollbar"></div>
+          <label class="sr-only" for="stSort">정렬</label>
+          <select id="stSort" class="shrink-0 h-9 rounded-full bg-transparent border-0 pl-3 pr-7 text-sm text-muted focus:outline-none">
+            <option value="popular">후기 많은 순</option>
+            <option value="rating">평점 높은 순</option>
+            <option value="low">낮은 가격 순</option>
+            <option value="high">높은 가격 순</option>
+          </select>
+        </div>
+      </div>
+      <div id="stGrid" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8"></div>
+    </section>
+
+    <!-- 스토어형: 스님 이야기 -->
+    <section id="story" class="hidden py-20 md:py-28 bg-deep/40 border-y border-edge/5 scroll-mt-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div class="lg:col-span-7">
+          <span class="inline-block rounded-full px-3 py-1 text-[11px] tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">僧 · 스님 이야기</span>
+          <p id="syTagline" class="mt-6 font-serif font-extrabold text-2xl md:text-3xl leading-snug"></p>
+          <p id="syIntro" class="mt-5 text-muted leading-relaxed max-w-[60ch]"></p>
+          <div id="syTags" class="mt-6 flex flex-wrap gap-2"></div>
+        </div>
+        <dl id="syStats" class="lg:col-span-5 self-end grid grid-cols-2 gap-3"></dl>
+      </div>
+    </section>
+
     <!-- 프로필 -->
     <section id="profile" class="pt-28 md:pt-32 pb-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -73,7 +132,7 @@
     </section>
 
     <!-- 고정 탭 -->
-    <div class="sticky top-[5.25rem] z-30 px-4">
+    <div id="tabsWrap" class="sticky top-[5.25rem] z-30 px-4">
       <nav id="tabs" class="mx-auto max-w-7xl flex gap-1 overflow-x-auto no-scrollbar rounded-full p-1.5 backdrop-blur-xl bg-deep/70 border border-edge/10 w-max max-w-full" aria-label="스님 페이지 메뉴"></nav>
     </div>
 
@@ -278,6 +337,54 @@
       ].join('');
       if (!m.charms.length) { $('#pfCharmBtn').remove(); $('#barCharm').remove(); }
       $('#askBtn').addEventListener('click', () => YW.toast('시안에서는 상담 창이 열리지 않습니다'));
+
+      // ---------- 스토어형 (기본) ----------
+      // dev 옵션 monkLayout: store(상품 진열 중심) | intro(소개 중심, 이전 구성)
+      const storeMode = YW.devOpt('monkLayout') === 'store';
+      if (storeMode) renderStore();
+      function renderStore() {
+        ['#profile', '#tabsWrap', '#charms', '#rituals', '#stickyBar'].forEach(s => $(s) && $(s).classList.add('hidden'));
+        ['#store', '#story'].forEach(s => $(s).classList.remove('hidden'));
+        const products = YW.shopProducts().filter(p => p.monk.id === m.id);
+        const nCharm = products.filter(p => p.kind === 'charm').length, nRite = products.length - nCharm;
+
+        $('#stCover').innerHTML = landscapeSVG(m.seed);
+        $('#stAvatar').innerHTML = monkAvatar(m, 'w-20 h-20 md:w-24 md:h-24 text-xl md:text-2xl ring-4 ring-surface');
+        $('#stName').innerHTML = `${m.name} 스님 <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-medium bg-cinnabar/10 text-cinnabar-soft"><iconify-icon icon="solar:verified-check-linear" width="14"></iconify-icon>승적 · 사찰 확인</span>`;
+        $('#stMeta').innerHTML = `<span class="font-serif">${m.hanja}</span> · ${m.temple} · ${m.area} · 출가 ${m.years}년`;
+        $('#stStats').innerHTML = `
+          <a href="#reviews" class="flex items-center gap-1 hover:underline underline-offset-2"><iconify-icon icon="solar:star-bold" width="15" class="text-cinnabar"></iconify-icon><b>${m.rating}</b><span class="text-subtle">후기 ${m.reviewCount.toLocaleString('ko-KR')}</span></a>
+          <span class="flex items-center gap-1 text-fg2"><iconify-icon icon="solar:chat-round-dots-linear" width="15" class="text-subtle"></iconify-icon>${m.reply}</span>
+          <span class="flex items-center gap-1 text-fg2"><iconify-icon icon="solar:bag-4-linear" width="15" class="text-subtle"></iconify-icon>부적 ${nCharm} · 제례 · 기도 ${nRite}</span>`;
+
+        // 스님 이야기
+        $('#syTagline').textContent = `“${m.tagline}”`;
+        $('#syIntro').textContent = m.intro;
+        $('#syTags').innerHTML = m.specialties.map(t => `<span class="rounded-full px-3 py-1.5 text-xs bg-surface border border-edge/10 text-fg2">${t}</span>`).join('');
+        const box = (k, v) => `<div class="rounded-2xl bg-surface ring-1 ring-edge/10 p-5"><dt class="text-xs text-subtle">${k}</dt><dd class="mt-1 text-lg font-bold tracking-tight">${v}</dd></div>`;
+        $('#syStats').innerHTML = [box('평점', `<span class="text-cinnabar">★</span> ${m.rating}`), box('후기', `${m.reviewCount.toLocaleString('ko-KR')}건`), box('출가', `${m.years}년`), box('상담 응답', `<span class="text-sm">${m.reply}</span>`)].join('');
+
+        // 진열: 분류 + 정렬
+        const st = { cat: location.hash === '#charms' ? 'charm' : location.hash === '#rituals' ? 'ritual' : 'all', sort: 'popular' };
+        const sorters = { popular: (a, b) => b.reviews - a.reviews, rating: (a, b) => b.rating - a.rating, low: (a, b) => a.price - b.price, high: (a, b) => b.price - a.price };
+        const best = products.filter(p => p.kind === 'charm').sort(sorters.popular).slice(0, 3).map(p => p.id);
+        const draw = () => {
+          const tabsDef = [['all', '전체', products.length], ['charm', '부적', nCharm], ['ritual', '제례 · 기도', nRite]].filter(t => t[2]);
+          $('#stTabs').innerHTML = tabsDef.map(([k, name, n]) => `<button type="button" role="tab" aria-selected="${st.cat === k}" data-stcat="${k}" class="ease-spring shrink-0 h-9 px-4 rounded-full text-sm font-medium ${st.cat === k ? 'bg-fg text-page' : 'text-muted hover:text-fg'}">${name} <span class="text-xs tabular-nums opacity-70">${n}</span></button>`).join('');
+          const list = products.filter(p => st.cat === 'all' || (st.cat === 'charm' ? p.kind === 'charm' : p.kind === 'rite')).sort(sorters[st.sort]);
+          const charms = list.filter(p => p.kind === 'charm'), rites = list.filter(p => p.kind === 'rite');
+          const head = (t, n, id) => `<h2 id="${id}" class="mb-5 text-lg font-bold tracking-tight scroll-mt-40">${t} <span class="text-sm font-normal text-subtle">${n}</span></h2>`;
+          $('#stGrid').innerHTML =
+            (charms.length ? head('부적', charms.length, 'stCharms') + `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-9">${charms.map(p => YW.charmCard(p, { best: best.includes(p.id) })).join('')}</div>` : '')
+            + (rites.length ? `<div class="${charms.length ? 'mt-16' : ''}">${head('제례 · 기도', rites.length, 'stRites')}<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${rites.map(p => YW.riteCard(p)).join('')}</div></div>` : '');
+        };
+        $('#stTabs').addEventListener('click', e => { const b = e.target.closest('[data-stcat]'); if (!b) return; st.cat = b.dataset.stcat; draw(); });
+        $('#stSort').addEventListener('change', e => { st.sort = e.target.value; draw(); });
+        $('[data-ask]').addEventListener('click', () => YW.toast('시안에서는 상담 창이 열리지 않습니다'));
+        draw();
+        // #charms, #rituals 링크로 들어오면 진열 위치로
+        if (['#charms', '#rituals'].includes(location.hash)) setTimeout(() => $('#stGrid').scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+      }
 
       // ---------- 탭 ----------
       const tabs = [
@@ -505,10 +612,10 @@
         </a>`).join('');
 
       YW.observeReveals();
-      YW.stickyBar('#stickyBar', '#profile');
+      if (!storeMode) YW.stickyBar('#stickyBar', '#profile');
 
       // 내용을 그린 뒤 #rituals 같은 주소의 위치로 다시 이동
-      if (location.hash && $(location.hash)) setTimeout(() => $(location.hash).scrollIntoView({ behavior: 'smooth' }), 150);
+      if (location.hash && $(location.hash) && !(storeMode && ['#charms', '#rituals'].includes(location.hash))) setTimeout(() => $(location.hash).scrollIntoView({ behavior: 'smooth' }), 150);
     }
   </script>
 </body>

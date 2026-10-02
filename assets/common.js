@@ -141,7 +141,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { mainLayout: 'shop', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
+  const DEV_DEFAULTS = { mainLayout: 'brand', monkLayout: 'store', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -710,12 +710,13 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     $$('#ywDev [data-theme-id]').forEach(b => b.setAttribute('aria-pressed', b.dataset.themeId === id));
   }
   const DEV_OPTIONS = [
-    { key: 'mainLayout', label: '메인 구성 (헤더 포함)', choices: [['shop', '쇼핑몰형'], ['brand', '브랜드형']] },
+    { key: 'mainLayout', label: '메인 구성 (헤더 포함)', choices: [['brand', '랜딩형'], ['shop', '쇼핑몰형']] },
+    { key: 'monkLayout', label: '스님 페이지 구성', choices: [['store', '스토어형'], ['intro', '소개형']] },
     { key: 'cardLink', label: '메인 의식 카드 클릭', choices: [['detail', '상세 페이지만'], ['both', '상세 + 바로 예약']] },
     { key: 'emptyRitual', label: '모시는 스님이 없는 의식', choices: [['hide', '숨김'], ['soon', '준비 중 표시']] },
     { key: 'cardPrice', label: '의식 카드 가격', choices: [['hide', '숨김'], ['show', '표시']] },
-    { key: 'charmClick', label: '스님 페이지에서 부적 클릭', choices: [['page', '상세 페이지'], ['modal', '팝업']] },
-    { key: 'riteClick', label: '스님 페이지에서 의식 클릭', choices: [['page', '상세 페이지'], ['inline', '페이지 안 예약']] },
+    { key: 'charmClick', label: '(소개형) 부적 클릭', choices: [['page', '상세 페이지'], ['modal', '팝업']] },
+    { key: 'riteClick', label: '(소개형) 의식 클릭', choices: [['page', '상세 페이지'], ['inline', '페이지 안 예약']] },
   ];
   function setDevOpt(key, val) {
     const o = store.get('yw-dev-opts', {}); o[key] = val; store.set('yw-dev-opts', o);

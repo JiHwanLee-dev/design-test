@@ -412,6 +412,17 @@
     const priceLine = m => [m.minCharm && `부적 ${manwon(m.minCharm)}부터`, m.minService && `제례 · 기도 ${manwon(m.minService)}부터`].filter(Boolean).join(' · ');
     const ratingHtml = (m, size = 13) => `<span class="flex items-center gap-1.5"><span class="flex text-cinnabar">${stars(m.rating, size)}</span><b>${m.rating}</b><span class="text-subtle">(${m.reviewCount.toLocaleString('ko-KR')})</span></span>`;
 
+    // 스님 카드 안 상품 미리보기: 진열이 아니라 '여기서 살 수 있다'는 신호만
+    const previewHtml = m => {
+      const top = [...m.charms].sort((a, b) => (b.reviews || 0) - (a.reviews || 0)).slice(0, 3);
+      const prices = [...m.charms.map(c => c.price), ...m.services.map(s => s.price)];
+      return `
+        <div class="mt-6 flex items-center gap-4 rounded-2xl bg-edge/[0.03] border border-edge/10 p-3 pr-4">
+          <div class="flex -space-x-3 shrink-0">${top.map((ci, i) => `<span class="w-11 rounded-md ring-2 ring-surface shadow-[0_8px_16px_-8px_var(--drop)]" style="transform:rotate(${(i - 1) * 6}deg)">${charmSVG(D.CHARM_TYPES[ci.id], YW.charmSeed(m.id, ci.id))}</span>`).join('')}</div>
+          <p class="text-sm leading-snug"><b>부적 ${m.charms.length} · 제례 · 기도 ${m.services.length}</b><span class="block text-xs text-subtle mt-0.5 tabular-nums">${manwon(Math.min(...prices))} – ${manwon(Math.max(...prices))}</span></p>
+        </div>`;
+    };
+
     // 1분: 크게 한 장
     const featureCard = m => `
       <a href="${monkUrl(m.id)}" class="reveal group block rounded-[2.25rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-edge/25">
@@ -434,6 +445,7 @@
             <p class="mt-8 font-serif font-extrabold text-2xl leading-snug text-fg">“${m.tagline}”</p>
             <p class="mt-4 text-muted leading-relaxed">${m.intro}</p>
             <div class="mt-6 flex flex-wrap gap-1.5">${m.specialties.map(tagHtml).join('')}</div>
+            ${previewHtml(m)}
             <div class="mt-auto pt-8 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
               <div class="text-sm space-y-1.5">${ratingHtml(m, 15)}<p class="text-muted">${priceLine(m)}</p></div>
               <span class="ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-cinnabar text-white pl-7 pr-2 py-2 min-h-[56px] font-semibold group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(200,85,61,0.25)] w-max">
