@@ -27,6 +27,7 @@
     <!-- ============ 스토어형 (dev 옵션 monkLayout = store) ============ -->
     <section id="store" class="hidden pt-28 md:pt-32 pb-16 scroll-mt-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div id="stHead">
         <a href="index.html" class="ease-spring inline-flex items-center gap-1.5 text-sm text-subtle hover:text-fg group">
           <iconify-icon icon="solar:alt-arrow-left-linear" width="16" class="ease-spring group-hover:-translate-x-1"></iconify-icon>염원 홈
         </a>
@@ -46,6 +47,7 @@
             </div>
           </div>
         </div>
+        </div>
         <!-- 신뢰 띠 -->
         <ul class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-fg2">
           <li class="flex items-center gap-2 rounded-xl bg-edge/[0.03] border border-edge/10 px-3 py-2.5"><iconify-icon icon="solar:verified-check-linear" width="16" class="text-cinnabar"></iconify-icon>승적 · 사찰 확인</li>
@@ -55,7 +57,7 @@
         </ul>
       </div>
       <!-- 고정 도구 줄: 분류 + 정렬 -->
-      <div class="sticky top-[5.25rem] z-30 mt-8 px-4">
+      <div id="stTools" class="sticky top-[5.25rem] z-30 mt-8 px-4 scroll-mt-24">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 rounded-full p-1.5 pl-2 backdrop-blur-xl bg-deep/80 border border-edge/10">
           <div id="stTabs" role="tablist" aria-label="상품 분류" class="flex gap-1 overflow-x-auto no-scrollbar"></div>
           <label class="sr-only" for="stSort">정렬</label>
@@ -357,12 +359,36 @@
       $('#askBtn').addEventListener('click', () => YW.toast('시안에서는 상담 창이 열리지 않습니다'));
 
       // ---------- 스토어형 (기본) ----------
-      // dev 옵션 monkLayout: store(상품 진열 중심) | intro(소개 중심, 이전 구성)
-      const storeMode = YW.devOpt('monkLayout') === 'store';
+      // dev 옵션 monkLayout: mix(위는 소개형 프로필 + 아래는 스토어 진열) | store(상품 진열 중심) | intro(소개 중심)
+      const layout = YW.devOpt('monkLayout');
+      const mixMode = layout === 'mix';
+      const storeMode = layout === 'store' || mixMode; // 스토어 진열을 쓰는 구성
       if (storeMode) renderStore();
       function renderStore() {
-        ['#profile', '#tabsWrap', '#charms', '#rituals', '#stickyBar'].forEach(s => $(s) && $(s).classList.add('hidden'));
-        ['#store', '#story'].forEach(s => $(s).classList.remove('hidden'));
+        // 혼합형: 소개형 상단은 살리고 스토어의 얇은 프로필 · 스님 이야기(상단과 겹침)는 숨김
+        const hide = mixMode ? ['#tabsWrap', '#charms', '#rituals', '#stickyBar', '#stHead'] : ['#profile', '#tabsWrap', '#charms', '#rituals', '#stickyBar'];
+        hide.forEach(s => $(s) && $(s).classList.add('hidden'));
+        $('#store').classList.remove('hidden');
+        if (!mixMode) $('#story').classList.remove('hidden');
+        if (mixMode) {
+          $('#profile').after($('#store')); // 소개형 상단 바로 아래로
+          $('#store').classList.remove('pt-28', 'md:pt-32'); $('#store').classList.add('pt-2');
+          $('#profile').classList.replace('pb-16', 'pb-6');
+          // 진열 줄이 첫 화면 끝에 보이도록 상단을 줄임 (배너 · 여백 · 태그)
+          $('#pfCover').classList.replace('md:h-72', 'md:h-44');
+          $('#pfTagline').classList.replace('mt-8', 'mt-5');
+          $('#pfIntro').classList.replace('mt-5', 'mt-3');
+          $('#pfTags').classList.add('hidden'); // 전문 분야는 바로 아래 진열 분류와 겹침
+          $('#profile aside').classList.replace('lg:pt-20', 'lg:pt-14');
+          $('#stTools').classList.replace('mt-8', 'mt-5');
+          // 소개글은 두 줄로 줄이고 '더 보기'로 펼침
+          $('#pfIntro').classList.add('line-clamp-2');
+          $('#pfIntro').insertAdjacentHTML('afterend', '<button type="button" id="pfMore" class="reveal mt-1 text-sm text-cinnabar-soft hover:underline underline-offset-2">더 보기</button>');
+          $('#pfMore').addEventListener('click', () => {
+            const clamped = $('#pfIntro').classList.toggle('line-clamp-2');
+            $('#pfMore').textContent = clamped ? '더 보기' : '접기';
+          });
+        }
         const products = YW.shopProducts().filter(p => p.monk.id === m.id);
         const nCharm = products.filter(p => p.kind === 'charm').length, nRite = products.length - nCharm;
 
@@ -402,6 +428,13 @@
         $('#stSort').addEventListener('change', e => { st.sort = e.target.value; draw(); });
         $('[data-ask]').addEventListener('click', () => YW.toast('시안에서는 상담 창이 열리지 않습니다'));
         draw();
+        // 혼합형: 상단 [부적 고르기] [제례 · 기도 예약] → 진열로 내려가며 분류 선택
+        if (mixMode) $('#profile').addEventListener('click', e => {
+          const a = e.target.closest('a[href="#charms"], a[href="#rituals"]'); if (!a) return;
+          e.preventDefault();
+          st.cat = a.getAttribute('href') === '#charms' ? 'charm' : 'ritual'; draw();
+          $('#stTools').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
         // #charms, #rituals 링크로 들어오면 진열 위치로
         if (['#charms', '#rituals'].includes(location.hash)) setTimeout(() => $('#stGrid').scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
       }
