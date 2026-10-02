@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>부적 | 염원 念願</title>
+  <meta name="description" content="스님이 직접 쓰는 부적의 설명, 받아 보시기까지의 절차, 배송·환불 안내입니다.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+  <script src="assets/theme.js"></script>
+  <link rel="stylesheet" href="assets/common.css">
+</head>
+<body class="grain font-sans break-keep-all selection:bg-cinnabar/40">
+
+  <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div class="orb absolute -top-40 -left-32 w-[40rem] h-[40rem] rounded-full" style="background: radial-gradient(circle, rgba(200,85,61,0.12), transparent 65%);"></div>
+  </div>
+
+  <div data-shell="header"></div>
+
+  <main id="page">
+    <!-- 구매 영역 -->
+    <section id="buy" class="pt-28 md:pt-32 pb-16 md:pb-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav aria-label="현재 위치" class="reveal flex flex-wrap items-center gap-1.5 text-sm text-subtle">
+          <a href="index.html" class="ease-spring hover:text-fg">홈</a>
+          <iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon>
+          <a id="crumbMonk" class="ease-spring hover:text-fg"></a>
+          <iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon>
+          <a id="crumbCharms" class="ease-spring hover:text-fg">부적</a>
+          <iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon>
+          <span id="crumbName" class="text-fg2"></span>
+        </nav>
+
+        <div class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+          <!-- 부적 그림 -->
+          <div class="lg:col-span-6 lg:sticky lg:top-28">
+            <div class="reveal rounded-[2.25rem] p-1.5 bg-edge/5 ring-1 ring-edge/10" style="--index:1">
+              <div class="relative overflow-hidden rounded-[calc(2.25rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] aspect-[4/5] sm:aspect-square flex items-center justify-center">
+                <span id="artMark" aria-hidden="true" class="absolute -right-4 -bottom-10 font-serif font-extrabold text-[14rem] leading-none text-edge/[0.04] select-none"></span>
+                <div id="art" class="relative w-48 sm:w-60 float shadow-[0_40px_80px_-30px_var(--drop)] rounded-[1rem]" style="--rot:-2deg"></div>
+                <span id="artBadge" class="absolute left-5 top-5 rounded-full px-3 py-1.5 text-xs font-medium bg-edge/5 border border-edge/10 text-fg2"></span>
+              </div>
+            </div>
+            <ul class="reveal mt-4 grid grid-cols-3 gap-2 text-xs text-muted" style="--index:2">
+              <li class="flex flex-col items-center gap-1.5 rounded-2xl bg-edge/[0.03] border border-edge/10 py-3 text-center"><iconify-icon icon="solar:pen-linear" width="18" class="text-cinnabar"></iconify-icon>스님 직접 작성</li>
+              <li class="flex flex-col items-center gap-1.5 rounded-2xl bg-edge/[0.03] border border-edge/10 py-3 text-center"><iconify-icon icon="solar:hand-heart-linear" width="18" class="text-cinnabar"></iconify-icon>성함으로 축원</li>
+              <li class="flex flex-col items-center gap-1.5 rounded-2xl bg-edge/[0.03] border border-edge/10 py-3 text-center"><iconify-icon icon="solar:delivery-linear" width="18" class="text-cinnabar"></iconify-icon>밀봉 등기 발송</li>
+            </ul>
+          </div>
+
+          <!-- 옵션 · 담기 -->
+          <div class="lg:col-span-6">
+            <p id="cat" class="reveal text-sm text-cinnabar-soft font-medium" style="--index:1"></p>
+            <h1 id="name" class="reveal mt-2 text-4xl md:text-5xl font-bold tracking-tight leading-tight" style="--index:1"></h1>
+            <a id="monkChip" class="reveal ease-spring mt-5 inline-flex items-center gap-3 rounded-full bg-edge/[0.03] border border-edge/10 pl-1.5 pr-4 py-1.5 hover:bg-edge/[0.07]" style="--index:2"></a>
+            <div id="rating" class="reveal mt-5 flex items-center gap-2 text-sm" style="--index:2"></div>
+            <p id="desc" class="reveal mt-6 text-muted leading-relaxed max-w-[56ch]" style="--index:3"></p>
+
+            <div class="reveal mt-8 pt-8 border-t border-edge/10" style="--index:3">
+              <p class="text-sm font-semibold text-fg2">제작 방식</p>
+              <div id="materials" class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2" role="radiogroup" aria-label="제작 방식"></div>
+
+              <label class="mt-5 flex items-center gap-3 rounded-xl bg-edge/[0.03] border border-edge/10 px-4 py-3.5 cursor-pointer ease-spring hover:bg-edge/[0.06]">
+                <input id="bless" type="checkbox" class="w-4 h-4 accent-[#c8553d]">
+                <span class="flex-1 text-sm">이름 축원 봉인 <span class="text-subtle">· 성함으로 축원한 뒤 한지 봉투에 밀봉</span></span>
+                <span class="text-sm tabular-nums text-fg2" id="blessPrice"></span>
+              </label>
+
+              <label class="mt-5 block">
+                <span class="text-sm font-semibold text-fg2">축원 받으실 분 성함 <span class="text-faint font-normal">(선택)</span></span>
+                <input id="who" maxlength="20" class="ease-spring mt-2 w-full h-12 rounded-xl bg-edge/[0.04] border border-edge/10 px-4 text-sm placeholder:text-faint focus:outline-none focus:border-cinnabar/60" placeholder="예) 한지원 · 비워 두시면 주문자 성함으로 축원합니다">
+              </label>
+
+              <div class="mt-8 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-2 rounded-full bg-edge/[0.04] border border-edge/10 p-1">
+                  <button id="minus" aria-label="수량 줄이기" class="ease-spring w-10 h-10 rounded-full flex items-center justify-center hover:bg-edge/10"><iconify-icon icon="solar:minus-circle-linear" width="20"></iconify-icon></button>
+                  <span id="qty" class="w-6 text-center tabular-nums font-semibold">1</span>
+                  <button id="plus" aria-label="수량 늘리기" class="ease-spring w-10 h-10 rounded-full flex items-center justify-center hover:bg-edge/10"><iconify-icon icon="solar:add-circle-linear" width="20"></iconify-icon></button>
+                </div>
+                <div class="text-right">
+                  <p class="text-xs text-subtle">합계</p>
+                  <p id="total" class="text-3xl font-bold tracking-tight tabular-nums"></p>
+                </div>
+              </div>
+
+              <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button id="addBtn" class="group ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-edge/5 border border-edge/15 pl-7 pr-2 py-2 min-h-[56px] font-semibold hover:bg-edge/10 hover:scale-[1.02] active:scale-[0.98]">
+                  장바구니 담기
+                  <span class="ease-spring w-10 h-10 rounded-full bg-edge/5 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:cart-large-2-linear" width="20"></iconify-icon></span>
+                </button>
+                <button id="buyBtn" class="group ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-cinnabar text-white pl-7 pr-2 py-2 min-h-[56px] font-semibold hover:scale-[1.02] active:scale-[0.98] hover:shadow-[0_0_30px_rgba(200,85,61,0.25)]">
+                  바로 주문하기
+                  <span class="ease-spring w-10 h-10 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:arrow-right-linear" width="20"></iconify-icon></span>
+                </button>
+              </div>
+
+              <ul class="mt-6 space-y-2 text-sm text-muted">
+                <li class="flex items-center gap-2"><iconify-icon icon="solar:delivery-linear" width="18" class="text-subtle"></iconify-icon>결제 후 1–2일 안에 등기 발송 · <span id="shipNote"></span></li>
+                <li class="flex items-center gap-2"><iconify-icon icon="solar:wallet-linear" width="18" class="text-subtle"></iconify-icon>발송 전까지 전액 환불</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 고정 탭 -->
+    <div class="sticky top-[5.25rem] z-30 px-4">
+      <nav id="tabs" class="mx-auto flex gap-1 overflow-x-auto no-scrollbar rounded-full p-1.5 backdrop-blur-xl bg-deep/70 border border-edge/10 w-max max-w-full" aria-label="상세 정보 메뉴"></nav>
+    </div>
+
+    <!-- 상세 설명 -->
+    <section id="about" class="py-24 md:py-32 scroll-mt-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div class="lg:col-span-5">
+          <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">符 · 이 부적은</span>
+          <h2 id="aboutTitle" class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug" style="--index:1"></h2>
+          <p id="aboutDesc" class="reveal mt-6 text-muted leading-relaxed" style="--index:2"></p>
+          <blockquote id="monkWord" class="reveal mt-8 border-l-2 border-cinnabar/60 pl-5 text-fg2 leading-relaxed" style="--index:3"></blockquote>
+        </div>
+        <div class="lg:col-span-7">
+          <p class="reveal text-sm font-semibold text-fg2">제작 방식 비교</p>
+          <div id="matCompare" class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
+          <p class="reveal mt-10 text-sm font-semibold text-fg2">받으신 뒤에는</p>
+          <ul id="care" class="mt-4 space-y-3"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 받아 보시기까지 -->
+    <section id="process" class="py-24 md:py-32 bg-deep/40 border-y border-edge/5 scroll-mt-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">順 · 받아 보시기까지</span>
+        <h2 class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug" style="--index:1">결제하시면<br>이렇게 보내 드립니다</h2>
+        <ol id="steps" class="mt-14 grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6"></ol>
+      </div>
+    </section>
+
+    <!-- 배송 · 교환 · 환불 -->
+    <section id="policy" class="py-24 md:py-32 scroll-mt-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div class="lg:col-span-4">
+          <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">送 · 배송 · 교환 · 환불</span>
+          <h2 class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug" style="--index:1">주문 전에<br>확인해 주세요</h2>
+          <a href="help.html#refund" class="reveal ease-spring mt-6 inline-flex items-center gap-1 text-sm text-cinnabar-soft hover:gap-2" style="--index:2">전체 환불 규정 보기 <iconify-icon icon="solar:arrow-right-linear" width="14"></iconify-icon></a>
+        </div>
+        <div class="lg:col-span-8">
+          <div class="reveal rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10">
+            <dl id="policyList" class="rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] divide-y divide-edge/10"></dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 후기 -->
+    <section id="reviews" class="py-24 md:py-32 bg-deep/40 border-y border-edge/5 scroll-mt-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">緣 · 후기</span>
+        <h2 id="reviewTitle" class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug" style="--index:1"></h2>
+        <div id="reviewGrid" class="mt-12 columns-1 md:columns-2 lg:columns-3 gap-5"></div>
+      </div>
+    </section>
+
+    <!-- 같은 스님의 다른 부적 -->
+    <section id="moreSec" class="py-24 md:py-32">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-end justify-between gap-6">
+          <h2 id="moreTitle" class="reveal text-2xl md:text-3xl font-bold tracking-tight"></h2>
+          <a id="moreAll" class="reveal ease-spring text-sm text-muted hover:text-fg flex items-center gap-1 shrink-0">전체 보기<iconify-icon icon="solar:alt-arrow-right-linear" width="16"></iconify-icon></a>
+        </div>
+        <div id="more" class="mt-8 flex gap-4 overflow-x-auto no-scrollbar -mx-4 px-4 lg:mx-0 lg:px-0 snap-x"></div>
+      </div>
+    </section>
+  </main>
+
+  <main id="notFound" class="hidden min-h-[100dvh] items-center justify-center px-4">
+    <div class="text-center">
+      <span class="font-serif text-7xl font-extrabold text-edge/10">無</span>
+      <h1 class="mt-6 text-2xl font-bold">찾으시는 부적이 없습니다</h1>
+      <p class="mt-3 text-subtle">스님 페이지에서 다시 골라 주세요.</p>
+      <a href="index.html" class="ease-spring mt-8 inline-flex h-12 px-6 rounded-full bg-cinnabar text-white font-semibold items-center gap-2 hover:scale-[1.02]">홈으로<iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></a>
+    </div>
+  </main>
+
+  <div data-shell="footer"></div>
+
+  <!-- 모바일 하단 고정 바 -->
+  <div id="stickyBar" class="lg:hidden fixed bottom-0 inset-x-0 z-40 px-4 pb-4 translate-y-full opacity-0 ease-spring">
+    <div class="flex items-center gap-2 rounded-full p-1.5 pl-5 bg-deep/80 backdrop-blur-xl border border-edge/10">
+      <p class="flex-1 min-w-0 text-sm leading-tight"><span id="barName" class="block truncate text-subtle text-xs"></span><b id="barTotal" class="tabular-nums"></b></p>
+      <button id="barAdd" class="h-12 px-5 rounded-full bg-cinnabar text-white text-sm font-semibold flex items-center gap-2 active:scale-[0.98] ease-spring"><iconify-icon icon="solar:cart-large-2-linear" width="18"></iconify-icon>담기</button>
+    </div>
+  </div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/common.js"></script>
+  <script>
+    const { D, $, $$, won, esc, monkUrl, monkAvatar, charmSVG, stars } = YW;
+    YW.mountShell({ active: 'monk' });
+
+    const params = new URLSearchParams(location.search);
+    const m = YW.monkById(params.get('monk'));
+    const ci = m && m.charms.find(x => x.id === params.get('id'));
+
+    if (!ci) {
+      $('#page').remove(); $('#stickyBar').remove();
+      $('#notFound').classList.remove('hidden'); $('#notFound').classList.add('flex');
+    } else {
+      render();
+    }
+
+    function render() {
+      const c = D.CHARM_TYPES[ci.id];
+      const info = D.RITUAL_DETAILS.charm;
+      const reviews = YW.charmReviews(m.id, ci.id);
+      document.title = `${c.name} · ${m.name} 스님 | 염원 念願`;
+      document.querySelector('meta[name=description]').setAttribute('content', `${m.name} 스님(${m.temple})이 직접 쓰는 ${c.name}. ${c.desc}`);
+
+      // ---------- 상단 ----------
+      $('#crumbMonk').textContent = `${m.name} 스님`; $('#crumbMonk').href = monkUrl(m.id);
+      $('#crumbCharms').href = `${monkUrl(m.id)}#charms`;
+      $('#crumbName').textContent = c.name;
+      $('#art').innerHTML = charmSVG(c, YW.charmSeed(m.id, ci.id));
+      $('#artMark').textContent = c.glyph;
+      $('#artBadge').textContent = `${c.cat} · 경면주사 수기 가능`;
+      $('#cat').textContent = c.cat;
+      $('#name').textContent = c.name;
+      $('#monkChip').href = monkUrl(m.id);
+      $('#monkChip').innerHTML = `${monkAvatar(m, 'w-9 h-9 text-[11px]')}<span class="text-sm"><b>${m.name} 스님</b> <span class="text-subtle">· ${m.temple}</span></span><iconify-icon icon="solar:alt-arrow-right-linear" width="16" class="text-subtle"></iconify-icon>`;
+      $('#rating').innerHTML = reviews.length
+        ? `<span class="flex text-cinnabar">${stars(reviews.reduce((a, r) => a + r.stars, 0) / reviews.length, 15)}</span><a href="#reviews" class="text-muted hover:text-fg">이 부적 후기 ${reviews.length}건</a>`
+        : `<span class="flex text-cinnabar">${stars(m.rating, 15)}</span><span class="text-muted">스님 평점 ${m.rating} · 후기 ${m.reviewCount.toLocaleString('ko-KR')}건</span>`;
+      $('#desc').textContent = c.desc;
+      $('#blessPrice').textContent = '+' + won(D.BLESS_PRICE);
+
+      // ---------- 옵션 · 가격 ----------
+      const st = { material: 'print', bless: false, qty: 1 };
+      const unit = () => YW.charmUnit(ci.price, st.material, st.bless);
+      function renderBuy() {
+        $('#materials').innerHTML = D.MATERIALS.map(x => {
+          const on = st.material === x.id;
+          return `<button role="radio" aria-checked="${on}" data-mat="${x.id}" class="ease-spring rounded-xl px-4 py-3 text-left border ${on ? 'border-cinnabar/70 bg-cinnabar/10' : 'border-edge/10 bg-edge/[0.03] hover:bg-edge/[0.06]'}">
+            <span class="block text-sm font-semibold">${x.name}</span>
+            <span class="block text-xs mt-0.5 tabular-nums ${on ? 'text-cinnabar-soft' : 'text-subtle'}">${won(ci.price + x.add)}</span>
+          </button>`;
+        }).join('');
+        const total = unit() * st.qty;
+        $('#qty').textContent = st.qty;
+        $('#total').textContent = won(total);
+        $('#barTotal').textContent = won(total);
+        $('#shipNote').textContent = total >= 50000 ? '배송비 무료' : `배송비 3,000원 (5만 원 이상 무료)`;
+      }
+      $('#barName').textContent = c.name;
+      $('#materials').addEventListener('click', e => { const b = e.target.closest('[data-mat]'); if (b) { st.material = b.dataset.mat; renderBuy(); } });
+      $('#bless').addEventListener('change', e => { st.bless = e.target.checked; renderBuy(); });
+      $('#minus').addEventListener('click', () => { st.qty = Math.max(1, st.qty - 1); renderBuy(); });
+      $('#plus').addEventListener('click', () => { st.qty = Math.min(9, st.qty + 1); renderBuy(); });
+      async function add() {
+        return YW.addToCart(m.id, YW.charmCartItem(m, ci.id, { material: st.material, bless: st.bless, who: $('#who').value.trim(), qty: st.qty }));
+      }
+      $('#addBtn').addEventListener('click', async () => { if (await add()) { YW.toast(`${c.name}을 담았습니다`); YW.openCart(); } });
+      $('#barAdd').addEventListener('click', async () => { if (await add()) YW.toast(`${c.name}을 담았습니다`); });
+      $('#buyBtn').addEventListener('click', async () => { if (await add()) YW.openCheckout(); });
+      renderBuy();
+
+      // ---------- 탭 ----------
+      const tabs = [['about', '상세 설명'], ['process', '받아 보시기까지'], ['policy', '배송 · 환불'], ['reviews', `후기 ${reviews.length}`]];
+      $('#tabs').innerHTML = tabs.map(([id, label]) => `<a href="#${id}" data-tab="${id}" class="ease-spring shrink-0 h-10 px-4 rounded-full text-sm font-medium flex items-center text-muted hover:text-fg">${label}</a>`).join('');
+      const setTab = id => $$('#tabs [data-tab]').forEach(a => { const on = a.dataset.tab === id; a.classList.toggle('bg-fg', on); a.classList.toggle('text-page', on); a.classList.toggle('text-muted', !on); });
+      const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) setTab(en.target.id); }), { rootMargin: '-45% 0px -50% 0px' });
+      tabs.forEach(([id]) => io.observe($('#' + id)));
+      setTab('about');
+
+      // ---------- 상세 설명 ----------
+      $('#aboutTitle').innerHTML = `${c.name},<br>이런 마음을 담습니다`;
+      $('#aboutDesc').textContent = c.desc;
+      $('#monkWord').innerHTML = `“주문하신 분의 사연을 먼저 읽고, 그날 아침 붓을 듭니다.”<span class="block mt-2 text-sm text-subtle">— ${m.name} 스님 · ${m.temple}</span>`;
+      $('#matCompare').innerHTML = D.MATERIALS.map((x, i) => `
+        <div class="reveal rounded-[1.75rem] p-1.5 bg-edge/5 ring-1 ring-edge/10" style="--index:${i}">
+          <div class="h-full rounded-[calc(1.75rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-5">
+            <p class="text-xs text-subtle tabular-nums">${won(ci.price + x.add)}</p>
+            <p class="mt-1 font-bold">${x.name}</p>
+            <p class="mt-2 text-sm text-muted leading-relaxed">${x.note}</p>
+          </div>
+        </div>`).join('');
+      $('#care').innerHTML = info.care.map((t, i) => `<li class="reveal flex gap-3 leading-relaxed text-fg2" style="--index:${i}"><iconify-icon icon="solar:shield-check-linear" width="20" class="text-cinnabar shrink-0 mt-0.5"></iconify-icon>${t}</li>`).join('');
+
+      // ---------- 받아 보시기까지 ----------
+      $('#steps').innerHTML = info.steps.map((s, i) => `
+        <li class="reveal md:pr-6" style="--index:${i}">
+          <span class="font-serif text-5xl font-extrabold text-edge/10">0${i + 1}</span>
+          <div class="mt-4 h-px bg-gradient-to-r from-cinnabar/60 to-transparent"></div>
+          <h3 class="mt-6 text-lg font-semibold">${s.t}</h3>
+          <p class="mt-3 text-sm text-muted leading-relaxed">${s.d}</p>
+        </li>`).join('');
+
+      // ---------- 배송 · 교환 · 환불 ----------
+      const row = (k, v) => `<div class="grid grid-cols-1 sm:grid-cols-[9rem_1fr] gap-1 sm:gap-6 px-6 md:px-8 py-5"><dt class="text-sm text-subtle">${k}</dt><dd class="text-sm text-fg2 leading-relaxed">${v}</dd></div>`;
+      $('#policyList').innerHTML = [
+        row('배송 방법', '등기 우편 (운송장 번호를 문자로 알려 드립니다)'),
+        row('발송 시기', '결제 후 1–2일 안에 축원을 올리고 발송합니다'),
+        row('배송비', '3,000원 · 같은 스님께 5만 원 이상 주문하시면 무료'),
+        row('교환', '축원 후 밀봉해 보내 드려 교환은 어렵습니다. 받으신 부적이 손상되었으면 다시 써서 보내 드립니다'),
+        ...D.REFUND_RULES.filter(r => r.item === '부적').map(r => row(`환불 · ${r.when}`, `<span class="${/전액/.test(r.rate) ? 'text-cinnabar font-semibold' : ''}">${r.rate}</span>`)),
+        row('판매', `${m.name} 스님 (${m.temple}) · 염원은 통신판매중개자입니다`),
+      ].join('');
+
+      // ---------- 후기 ----------
+      $('#reviewTitle').textContent = reviews.length ? `${c.name}을 받으신 분들` : `${m.name} 스님께 맡기신 분들`;
+      const shown = reviews.length ? reviews : D.REVIEWS.filter(r => r.monk === m.id).slice(0, 3);
+      $('#reviewGrid').innerHTML = (reviews.length ? '' : `<p class="mb-6 text-sm text-subtle break-inside-avoid">이 부적의 후기는 아직 없어 스님의 다른 후기를 보여 드립니다.</p>`) + shown.map((r, i) => `
+        <figure class="reveal break-inside-avoid mb-5 rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10" style="--index:${i % 3}">
+          <div class="rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-6 md:p-7">
+            <div class="flex items-center justify-between gap-3"><div class="flex text-cinnabar">${stars(r.stars)}</div><span class="text-[11px] text-faint tabular-nums">${r.date}</span></div>
+            <blockquote class="mt-4 text-fg leading-relaxed">${r.body}</blockquote>
+            <figcaption class="mt-6 text-sm"><b>${r.name}</b> <span class="text-subtle">· ${r.service}</span></figcaption>
+          </div>
+        </figure>`).join('');
+
+      // ---------- 같은 스님의 다른 부적 ----------
+      const others = m.charms.filter(x => x.id !== ci.id);
+      if (!others.length) $('#moreSec').remove();
+      else {
+        $('#moreTitle').textContent = `${m.name} 스님의 다른 부적`;
+        $('#moreAll').href = `${monkUrl(m.id)}#charms`;
+        $('#more').innerHTML = others.map((x, i) => {
+          const oc = D.CHARM_TYPES[x.id];
+          return `<a href="${YW.charmUrl(m.id, x.id)}" class="reveal group snap-start shrink-0 w-56 rounded-[1.75rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-cinnabar/50" style="--index:${i}">
+            <div class="h-full rounded-[calc(1.75rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-5 flex flex-col items-center text-center">
+              <div class="w-24 ease-spring group-hover:-translate-y-1 group-hover:-rotate-2 shadow-[0_20px_40px_-18px_var(--drop)] rounded-[1rem]">${charmSVG(oc, YW.charmSeed(m.id, x.id))}</div>
+              <p class="mt-4 text-xs text-cinnabar-soft">${oc.cat}</p>
+              <p class="mt-0.5 font-bold">${oc.name}</p>
+              <p class="mt-1 text-sm text-muted tabular-nums">${won(x.price)}부터</p>
+            </div>
+          </a>`;
+        }).join('');
+      }
+
+      YW.observeReveals();
+      YW.stickyBar('#stickyBar', '#buy');
+    }
+  </script>
+</body>
+</html>

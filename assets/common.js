@@ -33,12 +33,29 @@ window.YW = (() => {
     return { ...t, ...d, key, mark: c.hanja, name: c.name, by, active: by.length > 0,
       min: prices.length ? Math.min(...prices) : null, max: prices.length ? Math.max(...prices) : null };
   }
+  // 부적 상세 · 장바구니 (팝업과 상세 페이지가 같이 씀)
+  const charmUrl = (monkId, charmId) => `charm.html?monk=${encodeURIComponent(monkId)}&id=${encodeURIComponent(charmId)}`;
+  const charmSeed = (monkId, charmId) => hash(monkId, charmId) % 997 + 1;
+  const charmUnit = (price, material, bless) => price + D.MATERIALS.find(x => x.id === material).add + (bless ? D.BLESS_PRICE : 0);
+  function charmCartItem(m, charmId, { material = 'print', bless = false, who = '', qty = 1 }) {
+    const c = D.CHARM_TYPES[charmId], ci = m.charms.find(x => x.id === charmId);
+    const mat = D.MATERIALS.find(x => x.id === material);
+    return {
+      key: ['charm', m.id, charmId, material, bless, who].join('|'),
+      type: 'charm', ref: charmId, seed: charmSeed(m.id, charmId), name: c.name,
+      opts: [mat.name, bless ? '축원 봉인' : null, who ? `축원: ${who}` : null].filter(Boolean).join(' · '),
+      unit: charmUnit(ci.price, material, bless), qty,
+    };
+  }
+  // 이 부적의 후기 (후기의 '어떤 의식' 이름에 부적 이름이 들어 있으면)
+  const charmReviews = (monkId, charmId) => D.REVIEWS.filter(r => r.monk === monkId && r.service.startsWith(D.CHARM_TYPES[charmId].name));
+
   // 메뉴·목록에 보여줄 의식 (dev 옵션 '준비 중 표시'면 모시는 스님이 없는 의식도 포함)
   const visibleRituals = () => D.CATEGORIES.map(c => ritualInfo(c.key)).filter(r => r && (r.active || devOpt('emptyRitual') === 'soon'))
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide' };
+  const DEV_DEFAULTS = { cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -567,6 +584,7 @@ window.YW = (() => {
     { key: 'cardLink', label: '메인 의식 카드 클릭', choices: [['detail', '상세 페이지만'], ['both', '상세 + 바로 예약']] },
     { key: 'emptyRitual', label: '모시는 스님이 없는 의식', choices: [['hide', '숨김'], ['soon', '준비 중 표시']] },
     { key: 'cardPrice', label: '의식 카드 가격', choices: [['hide', '숨김'], ['show', '표시']] },
+    { key: 'charmClick', label: '스님 페이지에서 부적 클릭', choices: [['page', '상세 페이지'], ['modal', '팝업']] },
   ];
   function setDevOpt(key, val) {
     const o = store.get('yw-dev-opts', {}); o[key] = val; store.set('yw-dev-opts', o);
@@ -679,8 +697,9 @@ window.YW = (() => {
   return {
     D, $, $$, won, manwon, esc, hash, rng, monkById, monkUrl, phoneOk,
     ritualUrl, ritualInfo, visibleRituals, offeredBy, bookUrl, priceAt, devOpt, onDevChange,
+    charmUrl, charmSeed, charmUnit, charmCartItem, charmReviews, calc,
     charmSVG, monkAvatar, landscapeSVG, stars,
     openLayer, closeLayer, toast, confirmDialog,
-    addToCart, openCart, mountShell, observeReveals, observeCounters, stickyBar, renderFaq,
+    addToCart, openCart, openCheckout, mountShell, observeReveals, observeCounters, stickyBar, renderFaq,
   };
 })();

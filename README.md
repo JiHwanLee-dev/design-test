@@ -19,6 +19,7 @@ python3 -m http.server 8000   # → http://localhost:8000
 | `index.html` | 메인 (의식 안내 요약, 모시는 스님, 이용 방법, 후기, FAQ) |
 | `monk.html?id=haewol` | 스님 페이지 (부적 주문, 제례·기도 예약). `&svc=sasipgu`로 의식 미리 선택 |
 | `ritual.html?id=sasipgu` | 의식 상세 (절차, 비용, 준비물, 모시는 스님) |
+| `charm.html?monk=haewol&id=pyeongan` | 부적 상세 (옵션·담기, 받아 보시기까지, 배송·환불, 후기) |
 | `help.html` | 고객센터 (FAQ, 환불 규정, 1:1 문의) |
 | `_preview/palette.html` | 배경색 시안 비교용 |
 
@@ -39,6 +40,7 @@ python3 -m http.server 8000   # → http://localhost:8000
 - 메인 의식 카드 클릭: 상세 페이지만 / 상세 + 바로 예약
 - 모시는 스님이 없는 의식: 숨김 / 준비 중 표시
 - 의식 카드 가격: 숨김 / 표시 (숨기면 소요 시간만, 비용은 의식 상세 페이지에서 안내)
+- 스님 페이지에서 부적 클릭: 상세 페이지 / 팝업
 
 ## 참고
 
