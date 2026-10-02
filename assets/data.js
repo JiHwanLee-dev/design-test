@@ -110,6 +110,15 @@ window.YW_DATA = (() => {
       // 사진 (임시 이미지). 없으면 수묵 그림과 한자 도장으로 대신 그림
       photo: 'assets/images/monk-haewol.jpg', cover: 'assets/images/temple-panorama.jpg',
       storyPhoto: 'assets/images/monk-prayer.jpg', templePhoto: 'assets/images/gallery-1.jpg',
+      // 사찰 풍경 (스님 페이지 갤러리). 없으면 섹션이 숨겨짐
+      gallery: [
+        { src: 'assets/images/gallery-1.jpg', cap: '아침 안개 속 대웅전' },
+        { src: 'assets/images/gallery-3.jpg', cap: '석탑과 법당' },
+        { src: 'assets/images/gallery-2.jpg', cap: '법당 안' },
+        { src: 'assets/images/gallery-5.jpg', cap: '산문으로 오르는 길' },
+        { src: 'assets/images/rock-buddha.jpg', cap: '마애불 앞 공양' },
+        { src: 'assets/images/gallery-4.jpg', cap: '처마 끝 풍경' },
+      ],
       rating: 4.93, reviewCount: 1284, reply: '평균 12분 내 답변',
       tagline: '떠난 이와 남은 이 모두 편안해지도록',
       intro: '출가 31년째, 성북동 골목 끝 작은 절에서 천도재와 사십구재를 주로 모십니다. 유가족과 먼저 충분히 이야기를 나눈 뒤 재를 올립니다. 영가의 생전 이야기를 듣고 축원문을 한 줄씩 직접 씁니다.',
@@ -356,15 +365,6 @@ window.YW_DATA = (() => {
     sasipgu: 'assets/images/hero-incense.jpg', deung: 'assets/images/svc-prayer.jpg', baegil: 'assets/images/svc-prayer.jpg',
     gaeeop: 'assets/images/gallery-5.jpg',
   };
-  // 메인 '산사 풍경' 갤러리
-  const GALLERY = [
-    { src: 'assets/images/gallery-1.jpg', cap: '아침 안개 속 대웅전' },
-    { src: 'assets/images/gallery-3.jpg', cap: '석탑과 법당' },
-    { src: 'assets/images/gallery-2.jpg', cap: '법당 안' },
-    { src: 'assets/images/gallery-5.jpg', cap: '산문으로 오르는 길' },
-    { src: 'assets/images/rock-buddha.jpg', cap: '마애불 앞 공양' },
-    { src: 'assets/images/gallery-4.jpg', cap: '처마 끝 풍경' },
-  ];
   // 히어로 사진 후보 (dev 패널에서 바꿔 보기)
   const HERO_IMAGES = {
     eaves: { src: 'assets/images/hero-scene.jpg', alt: '해 뜨는 산자락을 배경으로 사찰 처마 끝에 매달린 풍경', pos: 'object-[78%_center] md:object-center' },
@@ -383,5 +383,5 @@ window.YW_DATA = (() => {
     if (m.charms.length) m.specialties.unshift('부적');
   });
 
-  return { RITUAL_IMAGES, GALLERY, HERO_IMAGES, CHARM_TYPES, MATERIALS, BLESS_PRICE, MODES, SERVICE_TYPES, CATEGORIES, SHOP_CATS, MONKS, EXAMPLE_MONKS, REVIEWS, SLOTS, RITUAL_DETAILS, FAQ_CATS, FAQS, REFUND_RULES };
+  return { RITUAL_IMAGES, HERO_IMAGES, CHARM_TYPES, MATERIALS, BLESS_PRICE, MODES, SERVICE_TYPES, CATEGORIES, SHOP_CATS, MONKS, EXAMPLE_MONKS, REVIEWS, SLOTS, RITUAL_DETAILS, FAQ_CATS, FAQS, REFUND_RULES };
 })();

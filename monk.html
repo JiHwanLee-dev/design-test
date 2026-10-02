@@ -168,6 +168,20 @@
       </div>
     </section>
 
+    <!-- 사찰 풍경 (스님별 gallery 데이터) -->
+    <section id="gallerySec" class="py-24 md:py-32 scroll-mt-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">寺 · 사찰 풍경</span>
+            <h2 id="galleryTitle" class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug" style="--index:1"></h2>
+          </div>
+          <p id="galleryNote" class="reveal text-muted leading-relaxed max-w-sm" style="--index:2"></p>
+        </div>
+        <div id="galleryGrid" class="mt-12 grid grid-cols-2 md:grid-cols-12 auto-rows-[10rem] md:auto-rows-[13rem] gap-3 md:gap-4"></div>
+      </div>
+    </section>
+
     <!-- 후기 -->
     <section id="reviews" class="py-24 md:py-32 lg:py-40 scroll-mt-36">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -576,6 +590,21 @@
             <figcaption class="mt-6 text-sm"><b class="text-fg">${r.name}</b> <span class="text-subtle">· ${r.service}</span></figcaption>
           </div>
         </figure>`).join('') : '<p class="text-subtle">아직 후기가 없습니다.</p>';
+
+      // ---------- 사찰 풍경 ----------
+      if (!m.gallery || !m.gallery.length) $('#gallerySec').remove();
+      else {
+        $('#galleryTitle').textContent = `${m.temple} 풍경`;
+        $('#galleryNote').textContent = `${m.name} 스님이 부적을 쓰고 재를 올리는 곳입니다. 직접 오셔서 함께하셔도 좋습니다.`;
+        // 큰 사진 한 장 + 작은 사진들
+        const spans = ['col-span-2 row-span-2 md:col-span-7', 'md:col-span-5', 'md:col-span-5', 'md:col-span-4', 'md:col-span-4', 'col-span-2 md:col-span-4'];
+        $('#galleryGrid').innerHTML = m.gallery.map((g, i) => `
+          <figure class="reveal group relative overflow-hidden rounded-[1.5rem] ring-1 ring-edge/10 ${spans[i] || 'md:col-span-4'}" style="--index:${i % 3}">
+            ${YW.photo(g.src, g.cap, 'absolute inset-0 w-full h-full object-cover ease-spring group-hover:scale-105')}
+            <span class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 ease-spring"></span>
+            <figcaption class="absolute left-4 bottom-3 text-sm text-white font-medium opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 ease-spring">${g.cap}</figcaption>
+          </figure>`).join('');
+      }
 
       // ---------- 사찰 안내 ----------
       $('#templeTitle').innerHTML = `${m.temple}<span class="block text-base font-medium text-subtle mt-2">${m.area}</span>`;

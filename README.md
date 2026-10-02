@@ -39,7 +39,7 @@ python3 -m http.server 8000   # → http://localhost:8000
 ## 이미지
 
 `assets/images/`의 사진은 `../temple/public/images/`에서 가져와 JPG로 줄인 **임시 이미지**입니다.
-스님 사진·표지는 `data.js`의 `photo`, `cover`, `storyPhoto`, `templePhoto`, 의식별 사진은 `RITUAL_IMAGES`, 메인 갤러리는 `GALLERY`에서 바꿉니다.
+스님 사진·표지는 `data.js`의 `photo`, `cover`, `storyPhoto`, `templePhoto`, 의식별 사진은 `RITUAL_IMAGES`, 사찰 풍경 갤러리는 스님별 `gallery`에서 바꿉니다 (스님 페이지에 표시, 없으면 숨김).
 사진이 없는 스님은 수묵 그림과 한자 도장으로 자동 대체됩니다.
 
 ## DEV 패널
