@@ -91,3 +91,43 @@ body { background: rgb(var(--c-page)); color: rgb(var(--c-fg)); -webkit-font-smo
 .faq-open .faq-body { grid-template-rows: 1fr; }
 .faq-open .faq-icon { transform: rotate(180deg); }
 
+
+/* ---------- 스님 페이지 산문 (assets/gate.js) ----------
+ * 벽 색은 문 그림 가장자리의 나무 · 벽 · 돌 색을 뽑은 값이라 테마 색이 아닌 값을 직접 씀.
+ * 그림 높이 기준: 위 나무(0~4%) / 벽(4~84%) / 아래 돌(84~100%) */
+:root { --gate-wood: #866f57; --gate-wall: #dfcfb8; --gate-stone: #b6a48e; }
+/* 그림 받는 동안 화면 전체를 벽 색으로 덮어 페이지가 먼저 보이지 않게 */
+html.gate-pending::before { content: ""; position: fixed; inset: 0; z-index: 65; background: var(--gate-wall); }
+
+.yw-gate { position: fixed; inset: 0; z-index: 65; overflow: hidden; cursor: pointer; }
+/* 장면: 원본이 정사각형이라 한 변 = 화면 높이. 넓은 화면은 양옆을 벽 색 띠로 이어 칠하고, 세로 화면은 양옆이 잘림 */
+.yw-gate-scene {
+  position: absolute; top: 0; left: 50%;
+  width: 100vh; height: 100vh; width: 100dvh; height: 100dvh;
+  margin-left: -50vh; margin-left: -50dvh;
+  perspective: 1400px;
+  transform-origin: 50% 48%; /* 걸어 들어갈 때 커지는 기준: 문 한가운데 */
+  transition: transform 0.6s cubic-bezier(0.55, 0, 0.75, 0.3), opacity 0.6s ease-in;
+}
+.yw-gate-scene::before, .yw-gate-scene::after {
+  content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; width: 100vw;
+  background: linear-gradient(180deg, var(--gate-wood) 0 4%, var(--gate-wall) 4.4% 84%, var(--gate-stone) 84.4% 100%);
+}
+.yw-gate-scene::before { right: 97%; }
+.yw-gate-scene::after { left: 97%; }
+.yw-gate-frame {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 97%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 3%, #000 97%, transparent 100%);
+}
+.yw-gate-door { position: absolute; transition: transform 0.7s cubic-bezier(0.45, 0, 0.2, 1); backface-visibility: hidden; }
+.yw-gate-door.left { transform-origin: left center; }
+.yw-gate-door.right { transform-origin: right center; }
+/* ② 열림: 경첩을 기준으로 안쪽으로 젖혀짐 */
+.yw-gate[data-phase="opening"] .left, .yw-gate[data-phase="entering"] .left { transform: rotateY(82deg); }
+.yw-gate[data-phase="opening"] .right, .yw-gate[data-phase="entering"] .right { transform: rotateY(-82deg); }
+.yw-gate[data-phase="opening"], .yw-gate[data-phase="entering"] { pointer-events: none; }
+/* ③ 걸어 들어가기: 문 한가운데를 향해 커지며 옅어짐 */
+.yw-gate[data-phase="entering"] .yw-gate-scene { transform: scale(2.6); opacity: 0; }
+/* walk: 문짝은 닫힌 채로 장면만 커짐 */
+.yw-gate[data-mode="walk"] .yw-gate-door { transform: none; }

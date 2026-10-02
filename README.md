@@ -32,6 +32,7 @@ python3 -m http.server 8000   # → http://localhost:8000
 | `assets/data.js` | 스님, 부적, 의식, 후기, FAQ 데이터. 스님 추가는 `EXAMPLE_MONKS` → `MONKS`로 옮기기 |
 | `assets/common.js` | 헤더·푸터, 장바구니(스님별 결제), 주문서, dev 패널 |
 | `assets/booking.js` | 제례·기도 예약 위젯 (스님 페이지와 의식 예약 페이지가 같이 씀) |
+| `assets/gate.js` | 스님 페이지에 들어올 때 산문이 열리는 연출 (temple 프로젝트 MonkGate를 옮김) |
 | `assets/theme.js` | Tailwind 설정, 기본 테마 (`DEFAULT_THEME`) |
 | `assets/common.css` | 테마별 색 (CSS 변수), 애니메이션 |
 
@@ -48,6 +49,7 @@ python3 -m http.server 8000   # → http://localhost:8000
 - 메인 히어로 사진: 처마 풍경 / 다실 햇살 / 향 연기
 - 메인 구성: 랜딩형 / 쇼핑몰형 (헤더 메뉴도 함께 바뀜)
 - 스님 페이지 구성: 스토어형 / 소개형
+- 스님 페이지 들어갈 때 산문: 처음 한 번 / 매번 / 걸어 들어가기 / 없음
 - 배경색: 화이트 / 한지 미색 / 새벽 안개 / 먹색
 - 메인 의식 카드 클릭: 상세 페이지만 / 상세 + 바로 예약
 - 모시는 스님이 없는 의식: 숨김 / 준비 중 표시
