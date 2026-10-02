@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스님 소개 | 염원 念願</title>
+  <meta name="description" content="스님이 걸어온 길과 모시는 방식, 계신 사찰을 소개합니다.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+  <script src="assets/theme.js"></script>
+  <link rel="stylesheet" href="assets/common.css">
+</head>
+<body class="grain font-sans break-keep-all selection:bg-cinnabar/40">
+
+  <div data-shell="header"></div>
+
+  <main id="page">
+    <!-- 1. 인물 히어로 -->
+    <section id="top" class="relative pt-28 md:pt-32 pb-20 md:pb-28 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <a id="backLink" class="reveal ease-spring inline-flex items-center gap-1.5 text-sm text-subtle hover:text-fg group">
+          <iconify-icon icon="solar:alt-arrow-left-linear" width="16" class="ease-spring group-hover:-translate-x-1"></iconify-icon><span id="backText"></span>
+        </a>
+        <div class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+          <div class="lg:col-span-5">
+            <div class="reveal rounded-[2.25rem] p-1.5 bg-edge/5 ring-1 ring-edge/10" style="--index:1">
+              <div id="portrait" class="relative aspect-[4/5] overflow-hidden rounded-[calc(2.25rem-0.375rem)] bg-deep"></div>
+            </div>
+          </div>
+          <div class="lg:col-span-7 relative">
+            <span id="hanjaV" aria-hidden="true" class="hidden md:block absolute right-0 -top-6 font-serif font-extrabold text-8xl lg:text-9xl text-edge/[0.07] [writing-mode:vertical-rl] select-none"></span>
+            <span class="reveal" style="--index:1"><span id="eyebrow"></span></span>
+            <h1 id="name" class="reveal mt-5 text-5xl md:text-6xl font-bold tracking-tight" style="--index:2"></h1>
+            <p id="meta" class="reveal mt-3 text-muted" style="--index:2"></p>
+            <p id="tagline" class="reveal mt-10 font-serif font-extrabold text-2xl md:text-4xl leading-snug" style="--index:3"></p>
+            <p id="intro" class="reveal mt-6 text-base md:text-lg text-muted leading-relaxed max-w-[56ch]" style="--index:4"></p>
+            <div id="tags" class="reveal mt-6 flex flex-wrap gap-2" style="--index:4"></div>
+            <div class="reveal mt-10 flex flex-col sm:flex-row gap-3" style="--index:5">
+              <a id="ctaCharm" class="group ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-cinnabar text-white pl-7 pr-2 py-2 min-h-[52px] font-semibold hover:scale-[1.02] active:scale-[0.98]">
+                부적 보기<span class="ease-spring w-9 h-9 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></span>
+              </a>
+              <a id="ctaRite" class="group ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-edge/5 border border-edge/10 pl-7 pr-2 py-2 min-h-[52px] font-semibold hover:bg-edge/10 hover:scale-[1.02] active:scale-[0.98]">
+                제례 · 기도 예약<span class="ease-spring w-9 h-9 rounded-full bg-edge/5 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:calendar-linear" width="18"></iconify-icon></span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 걸어온 길 -->
+    <section id="historySec" class="py-20 md:py-28 bg-deep/40 border-y border-edge/5">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <span class="reveal" id="historyEyebrow"></span>
+        <h2 class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight" style="--index:1">걸어온 길</h2>
+        <div id="history" class="mt-12"></div>
+      </div>
+    </section>
+
+    <!-- 3. 스님의 말 -->
+    <section id="interviewSec" class="py-24 md:py-32">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div class="lg:col-span-5 lg:sticky lg:top-28">
+          <span class="reveal" id="interviewEyebrow"></span>
+          <h2 class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug" style="--index:1">스님께<br>여쭈었습니다</h2>
+          <div id="storyPhoto" class="reveal mt-8 relative aspect-[4/3] rounded-[1.75rem] overflow-hidden ring-1 ring-edge/10" style="--index:2"></div>
+        </div>
+        <div id="interview" class="lg:col-span-7"></div>
+      </div>
+    </section>
+
+    <!-- 4. 이렇게 모십니다 -->
+    <section id="waySec" class="py-20 md:py-28 bg-deep/40 border-y border-edge/5">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <span class="reveal" id="wayEyebrow"></span>
+        <h2 id="wayTitle" class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight" style="--index:1"></h2>
+        <div id="ways" class="mt-10"></div>
+      </div>
+    </section>
+
+    <!-- 5. 사찰 -->
+    <section id="templeSec" class="py-24 md:py-32">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+          <div class="lg:col-span-7">
+            <span class="reveal" id="templeEyebrow"></span>
+            <h2 id="templeTitle" class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight" style="--index:1"></h2>
+            <p id="templeIntro" class="reveal mt-5 text-muted leading-relaxed max-w-[56ch]" style="--index:2"></p>
+          </div>
+          <div id="templeInfo" class="reveal lg:col-span-5" style="--index:2"></div>
+        </div>
+        <div id="gallery" class="mt-12"></div>
+      </div>
+    </section>
+
+    <!-- 6. 마무리 -->
+    <section class="px-4 sm:px-6 lg:px-8 pb-24 md:pb-32">
+      <div class="reveal max-w-7xl mx-auto rounded-[2.5rem] p-1.5 bg-edge/5 ring-1 ring-edge/10">
+        <div class="relative overflow-hidden rounded-[calc(2.5rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] px-6 py-16 md:px-16 md:py-20 flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div>
+            <p id="endTitle" class="text-2xl md:text-4xl font-bold tracking-tight leading-snug"></p>
+            <p class="mt-3 text-muted">부적을 고르시거나 날짜를 잡아 주세요. 스님이 직접 확인 전화를 드립니다.</p>
+          </div>
+          <a id="endCta" class="group ease-spring shrink-0 inline-flex items-center justify-between gap-4 rounded-full bg-cinnabar text-white pl-8 pr-2 py-2 min-h-[56px] text-lg font-semibold hover:scale-[1.02] active:scale-[0.98]">
+            스님 페이지로<span class="ease-spring w-10 h-10 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:arrow-right-linear" width="20"></iconify-icon></span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <main id="notFound" class="hidden min-h-[100dvh] items-center justify-center px-4">
+    <div class="text-center">
+      <span class="font-serif text-7xl font-extrabold text-edge/10">無</span>
+      <h1 class="mt-6 text-2xl font-bold">찾으시는 스님이 없습니다</h1>
+      <a href="index.html" class="ease-spring mt-8 inline-flex h-12 px-6 rounded-full bg-cinnabar text-white font-semibold items-center gap-2 hover:scale-[1.02]">홈으로<iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></a>
+    </div>
+  </main>
+
+  <div data-shell="footer"></div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/common.js"></script>
+  <script src="assets/profile.js"></script>
+  <script>
+    const { D, $, monkUrl, monkCover } = YW;
+    const P = YW.profile;
+    YW.mountShell({ active: 'monk' });
+
+    const m = YW.monkById(new URLSearchParams(location.search).get('id'));
+    if (!m) {
+      $('#page').remove(); $('#notFound').classList.remove('hidden'); $('#notFound').classList.add('flex');
+    } else {
+      document.title = `${m.name} 스님 소개 · ${m.temple} | 염원 念願`;
+      document.querySelector('meta[name=description]').setAttribute('content', `${m.name} 스님(${m.temple})이 걸어온 길과 모시는 방식, 청련사를 소개합니다.`);
+
+      // 1. 히어로
+      $('#backLink').href = monkUrl(m.id); $('#backText').textContent = `${m.name} 스님 페이지`;
+      $('#portrait').innerHTML = m.photo
+        ? YW.photo(m.photo, `${m.name} 스님`, 'absolute inset-0 w-full h-full object-cover object-[center_20%]')
+        : `<div class="absolute inset-0">${monkCover(m)}</div><div class="absolute inset-0 flex items-center justify-center">${YW.monkAvatar(m, 'w-32 h-32 text-4xl')}</div>`;
+      $('#hanjaV').textContent = m.hanja;
+      $('#eyebrow').innerHTML = P.eyebrow(`${m.hanja} · 스님 소개`);
+      $('#name').textContent = `${m.name} 스님`;
+      $('#meta').textContent = `${P.metaLine(m)} · ${m.area}`;
+      $('#tagline').textContent = `“${m.tagline}”`;
+      $('#intro').textContent = m.intro;
+      $('#tags').innerHTML = m.specialties.map(t => `<span class="rounded-full px-3 py-1.5 text-xs bg-edge/[0.04] border border-edge/10 text-fg2">${t}</span>`).join('');
+      $('#ctaCharm').href = `${monkUrl(m.id)}#charms`;
+      $('#ctaRite').href = `${monkUrl(m.id)}#rituals`;
+      if (!m.charms.length) $('#ctaCharm').remove();
+
+      // 2~5. 섹션 (내용이 없으면 섹션째 숨김)
+      const fill = (sec, el, html) => { if (html) $(el).innerHTML = html; else $(sec).remove(); };
+      $('#historyEyebrow').innerHTML = P.eyebrow('道 · 걸어온 길');
+      fill('#historySec', '#history', P.history(m));
+      $('#interviewEyebrow').innerHTML = P.eyebrow('問 · 스님의 말');
+      fill('#interviewSec', '#interview', P.interview(m));
+      if ($('#storyPhoto')) {
+        if (m.storyPhoto) $('#storyPhoto').innerHTML = YW.photo(m.storyPhoto, `기도하는 ${m.name} 스님`, 'absolute inset-0 w-full h-full object-cover');
+        else $('#storyPhoto').remove();
+      }
+      $('#wayEyebrow').innerHTML = P.eyebrow('心 · 모시는 방식');
+      $('#wayTitle').textContent = `${m.name} 스님은 이렇게 모십니다`;
+      fill('#waySec', '#ways', P.ways(m));
+      $('#templeEyebrow').innerHTML = P.eyebrow('寺 · 계신 곳');
+      $('#templeTitle').textContent = m.temple;
+      $('#templeIntro').textContent = m.templeIntro || `${m.area}에 있는 절입니다.`;
+      $('#templeInfo').innerHTML = P.templeInfo(m);
+      $('#gallery').innerHTML = P.gallery(m);
+
+      // 6. 마무리
+      $('#endTitle').textContent = `${m.name} 스님께 정성을 맡기시겠어요?`;
+      $('#endCta').href = monkUrl(m.id);
+
+      YW.observeReveals();
+    }
+  </script>
+</body>
+</html>

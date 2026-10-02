@@ -42,7 +42,7 @@
               <p id="stStats" class="mt-3 text-sm flex flex-wrap items-center gap-x-4 gap-y-1.5"></p>
             </div>
             <div class="flex gap-2 shrink-0">
-              <a href="#story" class="ease-spring h-11 px-4 rounded-full bg-edge/5 border border-edge/10 text-sm font-semibold flex items-center gap-1.5 hover:bg-edge/10"><iconify-icon icon="solar:user-linear" width="16"></iconify-icon>스님 이야기</a>
+              <a data-profile class="ease-spring h-11 px-4 rounded-full bg-edge/5 border border-edge/10 text-sm font-semibold flex items-center gap-1.5 hover:bg-edge/10"><iconify-icon icon="solar:user-linear" width="16"></iconify-icon>스님 이야기</a>
               <button type="button" data-ask class="ease-spring h-11 px-4 rounded-full bg-fg text-page text-sm font-semibold flex items-center gap-1.5 hover:scale-[1.02] active:scale-[0.98]"><iconify-icon icon="solar:chat-round-dots-linear" width="16"></iconify-icon>상담 문의</button>
             </div>
           </div>
@@ -80,6 +80,7 @@
           <p id="syTagline" class="mt-6 font-serif font-extrabold text-2xl md:text-3xl leading-snug"></p>
           <p id="syIntro" class="mt-5 text-muted leading-relaxed max-w-[60ch]"></p>
           <div id="syTags" class="mt-6 flex flex-wrap gap-2"></div>
+          <a data-profile class="ease-spring mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-cinnabar-soft hover:gap-2.5">스님 소개 자세히 보기<iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon></a>
         </div>
         <div class="lg:col-span-5 space-y-3">
           <div id="syPhoto" class="relative aspect-[4/3] rounded-[1.5rem] overflow-hidden ring-1 ring-edge/10"></div>
@@ -112,6 +113,7 @@
             <p id="pfTemple" class="reveal mt-2 text-muted" style="--index:3"></p>
             <p id="pfTagline" class="reveal mt-8 font-serif font-extrabold text-2xl md:text-3xl leading-snug text-fg" style="--index:3"></p>
             <p id="pfIntro" class="reveal mt-5 text-base md:text-lg text-muted leading-relaxed max-w-[62ch]" style="--index:4"></p>
+            <a data-profile class="reveal ease-spring mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-cinnabar-soft hover:gap-2.5" style="--index:4">걸어온 길 · 사찰까지, 스님 소개 자세히 보기<iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon></a>
             <div id="pfTags" class="reveal mt-6 flex flex-wrap gap-2" style="--index:5"></div>
           </div>
 
@@ -170,20 +172,6 @@
       </div>
     </section>
 
-    <!-- 사찰 풍경 (스님별 gallery 데이터) -->
-    <section id="gallerySec" class="py-24 md:py-32 scroll-mt-36">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-          <div>
-            <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">寺 · 사찰 풍경</span>
-            <h2 id="galleryTitle" class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug" style="--index:1"></h2>
-          </div>
-          <p id="galleryNote" class="reveal text-muted leading-relaxed max-w-sm" style="--index:2"></p>
-        </div>
-        <div id="galleryGrid" class="mt-12 grid grid-cols-2 md:grid-cols-12 auto-rows-[10rem] md:auto-rows-[13rem] gap-3 md:gap-4"></div>
-      </div>
-    </section>
-
     <!-- 후기 -->
     <section id="reviews" class="yw-review py-24 md:py-32 lg:py-40 scroll-mt-36">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -198,22 +186,6 @@
           </div>
         </div>
         <div id="reviewGrid" class="lg:col-span-8 columns-1 md:columns-2 gap-5"></div>
-      </div>
-    </section>
-
-    <!-- 사찰 안내 -->
-    <section id="temple" class="pb-24 md:pb-32 scroll-mt-36">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="reveal rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10">
-          <div class="rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
-            <div class="p-8 md:p-12">
-              <span class="inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">寺 · 사찰 안내</span>
-              <h2 id="templeTitle" class="mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug"></h2>
-              <dl id="templeInfo" class="mt-8 space-y-5 text-sm"></dl>
-            </div>
-            <div class="relative min-h-[280px] bg-deep" id="templeMap"></div>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -247,6 +219,33 @@
       <a href="#charms" id="barCharm" class="flex-1 h-12 rounded-full bg-cinnabar text-white text-sm font-semibold flex items-center justify-center gap-2 active:scale-[0.98] ease-spring"><iconify-icon icon="solar:bag-4-linear" width="18"></iconify-icon>부적 고르기</a>
       <a href="#rituals" class="flex-1 h-12 rounded-full bg-edge/5 text-sm font-semibold flex items-center justify-center gap-2 active:scale-[0.98] ease-spring"><iconify-icon icon="solar:calendar-linear" width="18"></iconify-icon>예약하기</a>
     </div>
+  </div>
+
+  <!-- 스님 소개 옆 패널 (dev 옵션 profileView = panel) -->
+  <div id="profilePanel" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="ppName">
+    <div class="absolute inset-0 bg-scrim/50 backdrop-blur-md" data-close></div>
+    <aside id="ppPanel" class="ease-spring absolute inset-x-0 bottom-0 md:inset-y-0 md:left-auto md:right-0 h-[92dvh] md:h-full w-full md:max-w-xl bg-surface md:border-l border-edge/10 rounded-t-[2rem] md:rounded-none overflow-y-auto translate-y-full md:translate-y-0 md:translate-x-full">
+      <div id="ppHero" class="relative h-56 md:h-64 overflow-hidden"></div>
+      <button type="button" data-close aria-label="닫기" class="absolute right-4 top-4 z-10 w-10 h-10 rounded-full bg-black/40 text-white backdrop-blur-sm flex items-center justify-center"><iconify-icon icon="solar:close-circle-linear" width="22"></iconify-icon></button>
+      <div class="px-6 md:px-8 pb-10 -mt-12 relative">
+        <div id="ppAvatar"></div>
+        <h2 id="ppName" class="mt-4 text-3xl font-bold tracking-tight"></h2>
+        <p id="ppMeta" class="mt-1 text-sm text-muted"></p>
+        <p id="ppTagline" class="mt-6 font-serif font-extrabold text-xl leading-snug"></p>
+        <p id="ppIntro" class="mt-3 text-sm text-muted leading-relaxed"></p>
+        <h3 class="mt-10 text-sm font-bold text-subtle tracking-[0.15em]">걸어온 길</h3>
+        <div id="ppHistory" class="mt-4"></div>
+        <h3 class="mt-10 text-sm font-bold text-subtle tracking-[0.15em]">스님의 말</h3>
+        <div id="ppInterview" class="mt-4"></div>
+        <h3 class="mt-10 text-sm font-bold text-subtle tracking-[0.15em]">이렇게 모십니다</h3>
+        <div id="ppWays" class="mt-4"></div>
+        <h3 id="ppTempleTitle" class="mt-10 text-sm font-bold text-subtle tracking-[0.15em]"></h3>
+        <p id="ppTempleIntro" class="mt-3 text-sm text-muted leading-relaxed"></p>
+        <div id="ppGallery" class="mt-4"></div>
+        <div id="ppTempleInfo" class="mt-6"></div>
+        <a id="ppFull" class="ease-spring mt-10 flex items-center justify-center gap-2 h-12 rounded-full border border-edge/15 text-sm font-semibold hover:bg-edge/5">크게 보기 (스님 소개 페이지)<iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon></a>
+      </div>
+    </aside>
   </div>
 
   <!-- 부적 상세 모달 -->
@@ -318,6 +317,7 @@
   <script src="assets/data.js"></script>
   <script src="assets/common.js"></script>
   <script src="assets/booking.js"></script>
+  <script src="assets/profile.js"></script>
   <script>
     const { D, $, $$, won, manwon, esc, hash, monkUrl, monkAvatar, landscapeSVG, charmSVG, stars } = YW;
 
@@ -428,7 +428,6 @@
         m.charms.length && { id: 'charms', label: `부적 ${m.charms.length}` },
         { id: 'rituals', label: `제례 · 기도 ${m.services.length}` },
         YW.showReviews() && { id: 'reviews', label: `후기 ${reviews.length}` },
-        { id: 'temple', label: '사찰 안내' },
       ].filter(Boolean);
       $('#tabs').innerHTML = tabs.map(t => `<a href="#${t.id}" data-tab="${t.id}" class="ease-spring shrink-0 h-10 px-4 rounded-full text-sm font-medium flex items-center text-muted hover:text-fg">${t.label}</a>`).join('');
       const setActiveTab = id => $$('#tabs [data-tab]').forEach(a => {
@@ -608,47 +607,36 @@
           </div>
         </figure>`).join('') : '<p class="text-subtle">아직 후기가 없습니다.</p>';
 
-      // ---------- 사찰 풍경 ----------
-      if (!m.gallery || !m.gallery.length) $('#gallerySec').remove();
-      else {
-        $('#galleryTitle').textContent = `${m.temple} 풍경`;
-        $('#galleryNote').textContent = `${m.name} 스님이 부적을 쓰고 재를 올리는 곳입니다. 직접 오셔서 함께하셔도 좋습니다.`;
-        // 큰 사진 한 장 + 작은 사진들
-        const spans = ['col-span-2 row-span-2 md:col-span-7', 'md:col-span-5', 'md:col-span-5', 'md:col-span-4', 'md:col-span-4', 'col-span-2 md:col-span-4'];
-        $('#galleryGrid').innerHTML = m.gallery.map((g, i) => `
-          <figure class="reveal group relative overflow-hidden rounded-[1.5rem] ring-1 ring-edge/10 ${spans[i] || 'md:col-span-4'}" style="--index:${i % 3}">
-            ${YW.photo(g.src, g.cap, 'absolute inset-0 w-full h-full object-cover ease-spring group-hover:scale-105')}
-            <span class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 ease-spring"></span>
-            <figcaption class="absolute left-4 bottom-3 text-sm text-white font-medium opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 ease-spring">${g.cap}</figcaption>
-          </figure>`).join('');
+      // ---------- 스님 소개 (dev 옵션 profileView: page 별도 페이지 | panel 옆 패널) ----------
+      const P = YW.profile;
+      $$('[data-profile]').forEach(a => { a.href = P.profileUrl(m.id); });
+      if (YW.devOpt('profileView') === 'panel') {
+        const PP_HIDE = window.innerWidth >= 768 ? ['md:translate-x-full'] : ['translate-y-full'];
+        let filled = false;
+        const openProfile = () => {
+          if (!filled) {
+            filled = true;
+            $('#ppHero').innerHTML = `${YW.monkCover(m)}<span class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></span>`;
+            $('#ppAvatar').innerHTML = monkAvatar(m, 'w-24 h-24 text-2xl ring-4 ring-surface');
+            $('#ppName').textContent = `${m.name} 스님`;
+            $('#ppMeta').textContent = `${P.metaLine(m)} · ${m.area}`;
+            $('#ppTagline').textContent = `“${m.tagline}”`;
+            $('#ppIntro').textContent = m.intro;
+            $('#ppHistory').innerHTML = P.history(m, { compact: true }) || '<p class="text-sm text-subtle">준비 중입니다.</p>';
+            $('#ppInterview').innerHTML = P.interview(m, { compact: true }) || '<p class="text-sm text-subtle">준비 중입니다.</p>';
+            $('#ppWays').innerHTML = P.ways(m, { compact: true });
+            $('#ppTempleTitle').textContent = m.temple;
+            $('#ppTempleIntro').textContent = m.templeIntro || '';
+            $('#ppGallery').innerHTML = P.gallery(m, { compact: true });
+            $('#ppTempleInfo').innerHTML = P.templeInfo(m);
+            $('#ppFull').href = P.profileUrl(m.id);
+            $$('#profilePanel .reveal').forEach(el => el.classList.add('in'));
+          }
+          YW.openLayer($('#profilePanel'), $('#ppPanel'), PP_HIDE);
+        };
+        $$('[data-profile]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); openProfile(); }));
+        $('#profilePanel').addEventListener('click', e => { if (e.target.closest('[data-close]')) YW.closeLayer($('#profilePanel')); });
       }
-
-      // ---------- 사찰 안내 ----------
-      $('#templeTitle').innerHTML = `${m.temple}<span class="block text-base font-medium text-subtle mt-2">${m.area}</span>`;
-      const info = (icon, label, value) => `<div class="flex gap-4"><iconify-icon icon="${icon}" width="20" class="text-cinnabar shrink-0 mt-0.5"></iconify-icon><div><dt class="text-xs text-subtle">${label}</dt><dd class="mt-1 text-fg leading-relaxed">${value}</dd></div></div>`;
-      $('#templeInfo').innerHTML = [
-        info('solar:map-point-linear', '주소', m.address),
-        info('solar:delivery-linear', '오시는 길', m.directions),
-        info('solar:clock-circle-linear', '참배 · 상담 시간', m.hours),
-        info('solar:chat-round-dots-linear', '상담 응답', m.reply),
-      ].join('');
-      // 사찰 사진이 있으면 사진, 없으면 약도 그림
-      $('#templeMap').innerHTML = m.templePhoto ? `
-        ${YW.photo(m.templePhoto, `${m.temple} 전경`, 'absolute inset-0 w-full h-full object-cover')}
-        <span class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></span>
-        <span class="absolute left-5 bottom-5 inline-flex items-center gap-1.5 rounded-full bg-white/90 text-[#1f1b18] px-4 py-2 text-sm font-semibold"><iconify-icon icon="solar:map-point-linear" width="16" class="text-cinnabar"></iconify-icon>${m.temple}</span>` : `
-        <svg viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice" class="absolute inset-0 w-full h-full" aria-hidden="true">
-          <rect width="600" height="400" style="fill:var(--map-bg)"/>
-          ${Array.from({ length: 13 }, (_, i) => `<line x1="${i * 50}" y1="0" x2="${i * 50}" y2="400" style="stroke:rgb(var(--c-edge))" stroke-opacity="0.05"/>`).join('')}
-          ${Array.from({ length: 9 }, (_, i) => `<line x1="0" y1="${i * 50}" x2="600" y2="${i * 50}" style="stroke:rgb(var(--c-edge))" stroke-opacity="0.05"/>`).join('')}
-          <path d="M-20 ${300 - m.seed} C 120 ${260 - m.seed}, 220 340, 360 300 S 560 220, 640 250" fill="none" style="stroke:var(--map-river)" stroke-opacity=".6" stroke-width="22"/>
-          <path d="M80 -10 C 140 120, 260 160, 300 200 S 420 330, 470 420" fill="none" style="stroke:var(--map-road)" stroke-width="6"/>
-          <path d="M-10 120 L 300 200 L 610 150" fill="none" style="stroke:var(--map-road)" stroke-width="4"/>
-          <circle cx="300" cy="200" r="46" style="fill:rgb(var(--c-cin))" fill-opacity=".14"/>
-          <circle cx="300" cy="200" r="9" style="fill:rgb(var(--c-cin))"/>
-        </svg>
-        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[calc(100%+1.25rem)] rounded-full bg-fg text-page px-4 py-2 text-sm font-semibold whitespace-nowrap shadow-[0_15px_40px_-10px_var(--drop)]">${m.temple}</div>
-        <span class="absolute right-4 bottom-4 text-[11px] text-subtle">약도 예시</span>`;
 
       // ---------- 다른 스님 ----------
       const others = D.MONKS.filter(x => x.id !== m.id);
