@@ -700,6 +700,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
 
   // ---------- 개발용 테마 패널 (?dev=1 로 켜고 ?dev=0 으로 끔) ----------
   const THEMES = [
+    { id: 'white', name: '화이트', sw: ['#ffffff', '#f6f4f0', '#1f1b18', '#b2442e'] },
     { id: 'hanji', name: '한지 미색', sw: ['#f1ebe0', '#faf6ef', '#2a2420', '#b4472f'] },
     { id: 'dawn', name: '새벽 안개', sw: ['#e8e2dc', '#f5f1ec', '#2b2528', '#b0503a'] },
     { id: 'dark', name: '먹색 (이전)', sw: ['#0c0a09', '#1c1917', '#f5f5f4', '#c8553d'] },

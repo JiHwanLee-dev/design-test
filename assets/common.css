@@ -40,6 +40,20 @@
   --map-bg: #ded6cf; --map-river: #c7bab7; --map-road: #b0a3a2;
   color-scheme: light;
 }
+/* D. 화이트 (흰 바탕 + 옅은 따뜻한 회색 섹션 + 따뜻한 먹색 글씨) */
+[data-theme="white"] {
+  --c-page: 255 255 255;  --c-surface: 255 255 255; --c-deep: 246 244 240;
+  --c-fg: 31 27 24;       --c-fg2: 68 61 55;        --c-muted: 107 99 92;
+  --c-subtle: 140 132 124; --c-faint: 184 177 170;
+  --c-edge: 58 46 36;     --c-scrim: 31 27 24;
+  --c-cin: 178 68 46;     --c-cin-soft: 160 58 38;
+  --drop: rgba(58, 46, 36, 0.16);
+  --grain: 0.02;
+  --ls-sky1: #faf8f5; --ls-sky2: #f1ede7; --ls-mist: #ffffff;
+  --ls-m1: #e2dcd3; --ls-m2: #cfc6ba; --ls-m3: #b7ac9e; --ls-m4: #9d9183;
+  --map-bg: #f3f0eb; --map-river: #d9d1c6; --map-road: #c4b9ab;
+  color-scheme: light;
+}
 
 html { scroll-behavior: smooth; }
 body { background: rgb(var(--c-page)); color: rgb(var(--c-fg)); -webkit-font-smoothing: antialiased; transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), color 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
