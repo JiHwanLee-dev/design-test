@@ -159,7 +159,7 @@
     </section>
 
     <!-- 후기 -->
-    <section id="reviews" class="py-24 md:py-32 lg:py-40 bg-deep/40 border-y border-edge/5 scroll-mt-20">
+    <section id="reviews" class="yw-review py-24 md:py-32 lg:py-40 bg-deep/40 border-y border-edge/5 scroll-mt-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>
@@ -308,7 +308,7 @@
     </section>
 
     <!-- 구매 후기 -->
-    <section class="py-12 md:py-16 bg-deep/40 border-y border-edge/5">
+    <section class="yw-review py-12 md:py-16 bg-deep/40 border-y border-edge/5">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-end justify-between gap-4">
           <h2 class="text-2xl md:text-3xl font-bold tracking-tight">구매 · 예약 후기</h2>
@@ -450,7 +450,7 @@
 
     const tagHtml = t => `<span class="rounded-full px-2.5 py-1 text-[11px] bg-edge/[0.04] border border-edge/10 text-muted">${t}</span>`;
     const priceLine = m => [m.minCharm && `부적 ${manwon(m.minCharm)}부터`, m.minService && `제례 · 기도 ${manwon(m.minService)}부터`].filter(Boolean).join(' · ');
-    const ratingHtml = (m, size = 13) => `<span class="flex items-center gap-1.5"><span class="flex text-cinnabar">${stars(m.rating, size)}</span><b>${m.rating}</b><span class="text-subtle">(${m.reviewCount.toLocaleString('ko-KR')})</span></span>`;
+    const ratingHtml = (m, size = 13) => `<span class="yw-review flex items-center gap-1.5"><span class="flex text-cinnabar">${stars(m.rating, size)}</span><b>${m.rating}</b><span class="text-subtle">(${m.reviewCount.toLocaleString('ko-KR')})</span></span>`;
 
     // 스님 카드 안 상품 미리보기: 진열이 아니라 '여기서 살 수 있다'는 신호만
     const previewHtml = m => {
@@ -614,7 +614,7 @@
           <div class="flex-1 min-w-0">
             <p class="font-bold flex items-center gap-1.5">${m.name} 스님 <iconify-icon icon="solar:verified-check-linear" width="16" class="text-cinnabar"></iconify-icon><span class="text-xs font-normal text-subtle">${m.temple} · ${m.area}</span></p>
             <p class="mt-1 text-sm text-muted truncate">“${m.tagline}”</p>
-            <p class="mt-2 text-xs text-subtle flex flex-wrap items-center gap-x-3 gap-y-1"><span class="flex items-center gap-1"><iconify-icon icon="solar:star-bold" width="12" class="text-cinnabar"></iconify-icon><b class="text-fg">${m.rating}</b> (${m.reviewCount.toLocaleString('ko-KR')})</span><span>부적 ${m.charms.length} · 제례 · 기도 ${m.services.length}</span><span>출가 ${m.years}년</span></p>
+            <p class="mt-2 text-xs text-subtle flex flex-wrap items-center gap-x-3 gap-y-1"><span class="yw-review flex items-center gap-1"><iconify-icon icon="solar:star-bold" width="12" class="text-cinnabar"></iconify-icon><b class="text-fg">${m.rating}</b> (${m.reviewCount.toLocaleString('ko-KR')})</span><span>부적 ${m.charms.length} · 제례 · 기도 ${m.services.length}</span><span>출가 ${m.years}년</span></p>
           </div>
           <iconify-icon icon="solar:alt-arrow-right-linear" width="20" class="text-subtle ease-spring group-hover:translate-x-1"></iconify-icon>
         </a>`).join('');

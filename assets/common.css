@@ -131,3 +131,6 @@ html.gate-pending::before { content: ""; position: fixed; inset: 0; z-index: 65;
 .yw-gate[data-phase="entering"] .yw-gate-scene { transform: scale(2.6); opacity: 0; }
 /* walk: 문짝은 닫힌 채로 장면만 커짐 */
 .yw-gate[data-mode="walk"] .yw-gate-door { transform: none; }
+
+/* 후기 · 평점 숨김 (dev 옵션 reviews = hide, assets/theme.js가 html에 data-reviews를 붙임) */
+[data-reviews="hide"] .yw-review { display: none !important; }

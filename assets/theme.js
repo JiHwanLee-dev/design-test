@@ -7,6 +7,10 @@
   let theme = DEFAULT_THEME;
   try { theme = localStorage.getItem('yw-theme') || DEFAULT_THEME; } catch (e) { }
   document.documentElement.dataset.theme = theme;
+  // 후기 · 평점 표시 (dev 옵션 reviews, 기본 숨김). 숨김이면 .yw-review 요소를 CSS로 가림
+  let reviews = 'hide';
+  try { reviews = JSON.parse(localStorage.getItem('yw-dev-opts') || '{}').reviews || 'hide'; } catch (e) { }
+  document.documentElement.dataset.reviews = reviews;
 
   const v = name => `rgb(var(--c-${name}) / <alpha-value>)`;
   tailwind.config = {

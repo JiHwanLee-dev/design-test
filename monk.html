@@ -185,7 +185,7 @@
     </section>
 
     <!-- 후기 -->
-    <section id="reviews" class="py-24 md:py-32 lg:py-40 scroll-mt-36">
+    <section id="reviews" class="yw-review py-24 md:py-32 lg:py-40 scroll-mt-36">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12">
         <div class="lg:col-span-4">
           <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">緣 · 후기</span>
@@ -344,17 +344,13 @@
       $('#pfHanjaBig').textContent = m.hanja;
       $('#pfAvatar').innerHTML = monkAvatar(m, 'w-24 h-24 md:w-28 md:h-28 text-2xl md:text-3xl ring-[6px] ring-page');
       $('#pfName').textContent = `${m.name} 스님`;
-      $('#pfTemple').innerHTML = `<span class="font-serif text-fg2">${m.hanja}</span> · ${m.temple} · ${m.area}`;
+      $('#pfTemple').innerHTML = `<span class="font-serif text-fg2">${m.hanja}</span> · ${m.temple} · ${m.area} · 출가 ${m.years}년`;
       $('#pfTagline').textContent = `“${m.tagline}”`;
       $('#pfIntro').textContent = m.intro;
       $('#pfTags').innerHTML = m.specialties.map(t => `<span class="rounded-full px-3 py-1.5 text-xs bg-edge/[0.04] border border-edge/10 text-fg2">${t}</span>`).join('');
-      const stat = (label, value) => `<div><dt class="text-xs text-subtle">${label}</dt><dd class="mt-1 text-lg font-bold tracking-tight">${value}</dd></div>`;
-      $('#pfStats').innerHTML = [
-        stat('평점', `<span class="text-cinnabar">★</span> ${m.rating}`),
-        stat('후기', `${m.reviewCount.toLocaleString('ko-KR')}건`),
-        stat('출가', `${m.years}년`),
-        stat('상담 응답', `<span class="text-sm font-semibold">${m.reply}</span>`),
-      ].join('');
+      // 정보 카드: 소속 · 주로 모시는 의식 · 상담 시간 · 참여 방식
+      $('#pfStats').className = 'space-y-3';
+      $('#pfStats').innerHTML = YW.monkInfo(m).map(([k, v]) => `<div class="flex gap-4 text-sm"><dt class="w-9 shrink-0 text-subtle">${k}</dt><dd class="font-semibold leading-snug">${v}</dd></div>`).join('');
       if (!m.charms.length) { $('#pfCharmBtn').remove(); $('#barCharm').remove(); }
       $('#askBtn').addEventListener('click', () => YW.toast('시안에서는 상담 창이 열리지 않습니다'));
 
@@ -384,8 +380,8 @@
         $('#stName').innerHTML = `${m.name} 스님 <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-medium bg-cinnabar/10 text-cinnabar-soft"><iconify-icon icon="solar:verified-check-linear" width="14"></iconify-icon>승적 · 사찰 확인</span>`;
         $('#stMeta').innerHTML = `<span class="font-serif">${m.hanja}</span> · ${m.temple} · ${m.area} · 출가 ${m.years}년`;
         $('#stStats').innerHTML = `
-          <a href="#reviews" class="flex items-center gap-1 hover:underline underline-offset-2"><iconify-icon icon="solar:star-bold" width="15" class="text-cinnabar"></iconify-icon><b>${m.rating}</b><span class="text-subtle">후기 ${m.reviewCount.toLocaleString('ko-KR')}</span></a>
-          <span class="flex items-center gap-1 text-fg2"><iconify-icon icon="solar:chat-round-dots-linear" width="15" class="text-subtle"></iconify-icon>${m.reply}</span>
+          <a href="#reviews" class="yw-review flex items-center gap-1 hover:underline underline-offset-2"><iconify-icon icon="solar:star-bold" width="15" class="text-cinnabar"></iconify-icon><b>${m.rating}</b><span class="text-subtle">후기 ${m.reviewCount.toLocaleString('ko-KR')}</span></a>
+          <span class="flex items-center gap-1 text-fg2"><iconify-icon icon="solar:clock-circle-linear" width="15" class="text-subtle"></iconify-icon>상담 ${m.hours}</span>
           <span class="flex items-center gap-1 text-fg2"><iconify-icon icon="solar:bag-4-linear" width="15" class="text-subtle"></iconify-icon>부적 ${nCharm} · 제례 · 기도 ${nRite}</span>`;
 
         // 스님 이야기
@@ -395,7 +391,7 @@
         const box = (k, v) => `<div class="rounded-2xl bg-surface ring-1 ring-edge/10 p-5"><dt class="text-xs text-subtle">${k}</dt><dd class="mt-1 text-lg font-bold tracking-tight">${v}</dd></div>`;
         if (m.storyPhoto) $('#syPhoto').innerHTML = YW.photo(m.storyPhoto, `기도하는 ${m.name} 스님`, 'absolute inset-0 w-full h-full object-cover');
         else $('#syPhoto').remove();
-        $('#syStats').innerHTML = [box('평점', `<span class="text-cinnabar">★</span> ${m.rating}`), box('후기', `${m.reviewCount.toLocaleString('ko-KR')}건`), box('출가', `${m.years}년`), box('상담 응답', `<span class="text-sm">${m.reply}</span>`)].join('');
+        $('#syStats').innerHTML = [['출가', `${m.years}년`], ...YW.monkInfo(m)].slice(0, 4).map(([k, v]) => box(k, `<span class="text-base">${v}</span>`)).join('');
 
         // 진열: 분류 + 정렬
         const st = { cat: location.hash === '#charms' ? 'charm' : location.hash === '#rituals' ? 'ritual' : 'all', sort: 'popular' };
@@ -412,6 +408,7 @@
             + (rites.length ? `<div class="${charms.length ? 'mt-16' : ''}">${head('제례 · 기도', rites.length, 'stRites')}<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${rites.map(p => YW.riteCard(p)).join('')}</div></div>` : '');
         };
         $('#stTabs').addEventListener('click', e => { const b = e.target.closest('[data-stcat]'); if (!b) return; st.cat = b.dataset.stcat; draw(); });
+        if (!YW.showReviews()) { $('#stSort option[value=rating]').remove(); $('#stSort option[value=popular]').textContent = '추천순'; }
         $('#stSort').addEventListener('change', e => { st.sort = e.target.value; draw(); });
         $('[data-ask]').addEventListener('click', () => YW.toast('시안에서는 상담 창이 열리지 않습니다'));
         draw();
@@ -430,7 +427,7 @@
       const tabs = [
         m.charms.length && { id: 'charms', label: `부적 ${m.charms.length}` },
         { id: 'rituals', label: `제례 · 기도 ${m.services.length}` },
-        { id: 'reviews', label: `후기 ${reviews.length}` },
+        YW.showReviews() && { id: 'reviews', label: `후기 ${reviews.length}` },
         { id: 'temple', label: '사찰 안내' },
       ].filter(Boolean);
       $('#tabs').innerHTML = tabs.map(t => `<a href="#${t.id}" data-tab="${t.id}" class="ease-spring shrink-0 h-10 px-4 rounded-full text-sm font-medium flex items-center text-muted hover:text-fg">${t.label}</a>`).join('');
@@ -665,7 +662,7 @@
               <p class="mt-3 font-bold text-lg tracking-tight">${x.name} 스님</p>
               <p class="text-xs text-subtle">${x.temple} · ${x.area}</p>
               <p class="mt-3 text-sm text-muted leading-relaxed line-clamp-2">${x.tagline}</p>
-              <p class="mt-3 text-xs flex items-center gap-1"><span class="text-cinnabar">★</span><b>${x.rating}</b><span class="text-subtle">(${x.reviewCount.toLocaleString('ko-KR')})</span></p>
+              <p class="yw-review mt-3 text-xs flex items-center gap-1"><span class="text-cinnabar">★</span><b>${x.rating}</b><span class="text-subtle">(${x.reviewCount.toLocaleString('ko-KR')})</span></p>
             </div>
           </div>
         </a>`).join('');

@@ -75,6 +75,21 @@ window.YW = (() => {
   // 이 부적의 후기 (후기의 '어떤 의식' 이름에 부적 이름이 들어 있으면)
   const charmReviews = (monkId, charmId) => D.REVIEWS.filter(r => r.monk === monkId && r.service.startsWith(D.CHARM_TYPES[charmId].name));
 
+  // 후기 · 평점을 보여줄지 (dev 옵션, 기본 숨김)
+  const showReviews = () => devOpt('reviews') === 'show';
+  // 스님 정보: 지어낸 숫자 대신 스님께 받으면 되는 정보만 (소속 · 주로 모시는 의식 · 상담 시간 · 참여 방식)
+  // 참여 방식은 짧게: 영상 관련(실시간 · 전달 · 원격)은 '영상 참여' 하나로 묶음
+  const MODE_SHORT = { visit: '직접 참석', live: '영상 참여', video: '영상 참여', remote: '영상 참여', outcall: '출장' };
+  function monkInfo(m) {
+    const modes = [...new Set(m.services.flatMap(s => D.SERVICE_TYPES[s.id].modes))];
+    return [
+      m.sect && ['소속', m.sect],
+      m.services.length && ['주로', m.services.slice(0, 2).map(s => D.SERVICE_TYPES[s.id].name).join(' · ')],
+      m.hours && ['상담', m.hours],
+      modes.length && ['참여', [...new Set(modes.map(k => MODE_SHORT[k]))].join(' · ')],
+    ].filter(Boolean);
+  }
+
   // 예약 가능 날짜 규칙 (예약 위젯과 같은 규칙. 시안용으로 '마감'을 무작위처럼 만듦)
   const dayKey = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   function dateStatus(monkId, key, d) {
@@ -110,7 +125,7 @@ window.YW = (() => {
     });
     return list;
   }
-  const ratingLine = p => `<span class="flex items-center gap-1 text-xs"><iconify-icon icon="solar:star-bold" width="13" class="text-cinnabar"></iconify-icon><b class="tabular-nums">${p.rating}</b><span class="text-subtle tabular-nums">(${p.reviews.toLocaleString('ko-KR')})</span></span>`;
+  const ratingLine = p => `<span class="yw-review flex items-center gap-1 text-xs"><iconify-icon icon="solar:star-bold" width="13" class="text-cinnabar"></iconify-icon><b class="tabular-nums">${p.rating}</b><span class="text-subtle tabular-nums">(${p.reviews.toLocaleString('ko-KR')})</span></span>`;
 
   // 부적 상품 카드 (쇼핑몰형 진열용, 촘촘하게)
   function charmCard(p, { best = false } = {}) {
@@ -167,7 +182,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
+  const DEV_DEFAULTS = { reviews: 'hide', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -739,6 +754,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
   }
   const DEV_OPTIONS = [
     { key: 'heroImage', label: '메인 히어로 사진', choices: [['eaves', '처마 풍경'], ['room', '다실 햇살'], ['incense', '향 연기']] },
+    { key: 'reviews', label: '후기 · 평점 (사이트 전체)', choices: [['hide', '숨김'], ['show', '표시']] },
     { key: 'mainLayout', label: '메인 구성 (헤더 포함)', choices: [['brand', '랜딩형'], ['shop', '쇼핑몰형']] },
     { key: 'monkLayout', label: '스님 페이지 구성', choices: [['mix', '혼합형'], ['store', '스토어형'], ['intro', '소개형']] },
     { key: 'gate', label: '스님 페이지 들어갈 때 산문', choices: [['once', '처음 한 번'], ['always', '매번'], ['walk', '걸어 들어가기'], ['none', '없음']] },
@@ -751,6 +767,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
   ];
   function setDevOpt(key, val) {
     const o = store.get('yw-dev-opts', {}); o[key] = val; store.set('yw-dev-opts', o);
+    if (key === 'reviews') document.documentElement.dataset.reviews = val;
     $$(`#ywDev [data-opt="${key}"]`).forEach(b => b.setAttribute('aria-pressed', b.dataset.val === val));
     renderNavRituals();
     // 페이지가 직접 다시 그리지 못하면 새로고침
@@ -860,7 +877,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
   return {
     D, $, $$, won, manwon, esc, hash, rng, monkById, monkUrl, phoneOk,
     ritualUrl, ritualInfo, visibleRituals, offeredBy, bookUrl, priceAt, devOpt, onDevChange,
-    charmUrl, charmSeed, charmUnit, charmPhotos, charmArt, charmCartItem, charmReviews, calc, riteUrl, serviceReviews,
+    charmUrl, charmSeed, charmUnit, charmPhotos, charmArt, showReviews, monkInfo, charmCartItem, charmReviews, calc, riteUrl, serviceReviews,
     dateStatus, earliestDate, shortDate, shopUrl, charmCard, riteCard, shopProducts,
     charmSVG, monkAvatar, landscapeSVG, monkCover, ritualImg, photo, stars,
     openLayer, closeLayer, toast, confirmDialog,

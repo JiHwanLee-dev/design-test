@@ -306,7 +306,7 @@
               <p class="text-sm text-subtle mt-0.5">${m.temple} · ${m.area} · 출가 ${m.years}년</p>
               <p class="mt-4 text-fg2 leading-relaxed">“${m.tagline}”</p>
               <div class="mt-6 pt-5 border-t border-edge/5 flex flex-wrap items-center justify-between gap-4">
-                <span class="text-sm flex items-center gap-1.5"><span class="flex text-cinnabar">${stars(m.rating, 13)}</span><b>${m.rating}</b><span class="text-subtle">(${m.reviewCount.toLocaleString('ko-KR')})</span></span>
+                <span class="yw-review text-sm flex items-center gap-1.5"><span class="flex text-cinnabar">${stars(m.rating, 13)}</span><b>${m.rating}</b><span class="text-subtle">(${m.reviewCount.toLocaleString('ko-KR')})</span></span>
                 <span class="ease-spring inline-flex items-center gap-2 rounded-full bg-cinnabar text-white pl-5 pr-1.5 py-1.5 text-sm font-semibold group-hover:scale-[1.03]">${won(YW.priceAt(m, r.key))}${isCharm ? '부터' : ''} · ${isCharm ? '주문하기' : '예약하기'}<span class="w-8 h-8 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-x-0.5 ease-spring"><iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon></span></span>
               </div>
             </div>

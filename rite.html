@@ -44,7 +44,7 @@
                 날짜 잡고 예약하기
                 <span class="ease-spring w-10 h-10 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-y-0.5"><iconify-icon icon="solar:calendar-linear" width="20"></iconify-icon></span>
               </a>
-              <a href="#reviews" id="reviewJump" class="group ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-edge/5 border border-edge/10 pl-8 pr-2 py-2 min-h-[56px] text-lg font-semibold hover:bg-edge/10 hover:scale-[1.02] active:scale-[0.98]"></a>
+              <a href="#reviews" id="reviewJump" class="yw-review group ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-edge/5 border border-edge/10 pl-8 pr-2 py-2 min-h-[56px] text-lg font-semibold hover:bg-edge/10 hover:scale-[1.02] active:scale-[0.98]"></a>
             </div>
           </div>
           <aside class="lg:col-span-5">
@@ -122,7 +122,7 @@
     </section>
 
     <!-- 후기 -->
-    <section id="reviews" class="py-24 md:py-32 bg-deep/40 border-y border-edge/5 scroll-mt-36">
+    <section id="reviews" class="yw-review py-24 md:py-32 bg-deep/40 border-y border-edge/5 scroll-mt-36">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">緣 · 후기</span>
         <h2 id="reviewTitle" class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug" style="--index:1"></h2>
@@ -223,7 +223,7 @@
       ].join('');
 
       // ---------- 탭 ----------
-      const tabs = [['way', '모시는 방식'], ['book', '예약'], ['process', '진행 순서'], ['reviews', `후기 ${reviews.length}`], ['visit', '오시는 길']];
+      const tabs = [['way', '모시는 방식'], ['book', '예약'], ['process', '진행 순서'], ['reviews', `후기 ${reviews.length}`], ['visit', '오시는 길']].filter(t => t[0] !== 'reviews' || YW.showReviews());
       $('#tabs').innerHTML = tabs.map(([id, label]) => `<a href="#${id}" data-tab="${id}" class="ease-spring shrink-0 h-10 px-4 rounded-full text-sm font-medium flex items-center text-muted hover:text-fg">${label}</a>`).join('');
       const setTab = id => $$('#tabs [data-tab]').forEach(a => { const on = a.dataset.tab === id; a.classList.toggle('bg-fg', on); a.classList.toggle('text-page', on); a.classList.toggle('text-muted', !on); });
       const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) setTab(en.target.id); }), { rootMargin: '-45% 0px -50% 0px' });

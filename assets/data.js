@@ -108,6 +108,7 @@ window.YW_DATA = (() => {
     {
       id: 'haewol', name: '해월', hanja: '海月', temple: '청련사', region: '서울', area: '서울 성북구', years: 31, seed: 7,
       // 사진 (임시 이미지). 없으면 수묵 그림과 한자 도장으로 대신 그림
+      sect: '대한불교조계종', // 소속 종단 (예시 값, 실제 확인 필요)
       photo: 'assets/images/monk-haewol.jpg', cover: 'assets/images/temple-panorama.jpg',
       storyPhoto: 'assets/images/monk-prayer.jpg', templePhoto: 'assets/images/gallery-1.jpg',
       // 사찰 풍경 (스님 페이지 갤러리). 없으면 섹션이 숨겨짐

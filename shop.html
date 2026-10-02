@@ -161,6 +161,7 @@
     $('#qClear').addEventListener('click', () => { st.q = ''; $('#q').value = ''; render(); $('#q').focus(); });
     $('#results').addEventListener('click', e => { if (e.target.closest('#reset')) { Object.assign(st, { cat: 'all', sub: '', q: '' }); $('#q').value = ''; render(); } });
 
+    if (!YW.showReviews()) { $('#sort option[value=rating]').remove(); $('#sort option[value=popular]').textContent = '추천순'; }
     render();
     if (params.get('search') === '1') $('#q').focus();
   </script>
