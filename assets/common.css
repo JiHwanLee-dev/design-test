@@ -134,3 +134,23 @@ html.gate-pending::before { content: ""; position: fixed; inset: 0; z-index: 65;
 
 /* 후기 · 평점 숨김 (dev 옵션 reviews = hide, assets/theme.js가 html에 data-reviews를 붙임) */
 [data-reviews="hide"] .yw-review { display: none !important; }
+
+/* ---------- 메인 히어로 사진 덮개 ----------
+ * 먹색 테마: 흰 글씨가 밝은 새벽 하늘 위에서 읽히도록 진하게 (이전과 동일)
+ * 밝은 테마(화이트 · 한지 · 새벽 안개): 사진이 바래지 않게 글씨 뒤에만 옅게 (2026-10-03) */
+.hero-ov { position: absolute; pointer-events: none; }
+.hero-ov-mob { inset: 0; background: rgb(var(--c-page) / 0.45); }
+.hero-ov-left { inset: 0; background: linear-gradient(to right, rgb(var(--c-page) / 0.95), rgb(var(--c-page) / 0.6) 50%, transparent); }
+.hero-ov-top { left: 0; right: 0; top: 0; height: 10rem; background: linear-gradient(to bottom, rgb(var(--c-page) / 0.7), transparent); }
+.hero-ov-bottom { left: 0; right: 0; bottom: 0; height: 66%; background: linear-gradient(to top, rgb(var(--c-page)), rgb(var(--c-page) / 0.6) 50%, transparent); }
+@media (min-width: 768px) {
+  .hero-ov-mob { background: transparent; }
+  .hero-ov-bottom { height: 33%; }
+}
+:is([data-theme="white"], [data-theme="hanji"], [data-theme="dawn"]) .hero-ov-mob { background: rgb(var(--c-page) / 0.55); } /* 모바일은 종이 글씨 뒤에 놓여 더 진하게 */
+:is([data-theme="white"], [data-theme="hanji"], [data-theme="dawn"]) .hero-ov-left { background: linear-gradient(to right, rgb(var(--c-page) / 0.72) 0%, rgb(var(--c-page) / 0.35) 34%, transparent 56%); }
+:is([data-theme="white"], [data-theme="hanji"], [data-theme="dawn"]) .hero-ov-top { display: none; }
+:is([data-theme="white"], [data-theme="hanji"], [data-theme="dawn"]) .hero-ov-bottom { height: 14%; background: linear-gradient(to top, rgb(var(--c-page)), transparent); }
+@media (min-width: 768px) {
+  :is([data-theme="white"], [data-theme="hanji"], [data-theme="dawn"]) .hero-ov-mob { background: transparent; }
+}
