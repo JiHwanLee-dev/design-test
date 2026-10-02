@@ -374,20 +374,7 @@
           $('#profile').after($('#store')); // 소개형 상단 바로 아래로
           $('#store').classList.remove('pt-28', 'md:pt-32'); $('#store').classList.add('pt-2');
           $('#profile').classList.replace('pb-16', 'pb-6');
-          // 진열 줄이 첫 화면 끝에 보이도록 상단을 줄임 (배너 · 여백 · 태그)
-          $('#pfCover').classList.replace('md:h-72', 'md:h-44');
-          $('#pfTagline').classList.replace('mt-8', 'mt-5');
-          $('#pfIntro').classList.replace('mt-5', 'mt-3');
-          $('#pfTags').classList.add('hidden'); // 전문 분야는 바로 아래 진열 분류와 겹침
-          $('#profile aside').classList.replace('lg:pt-20', 'lg:pt-14');
-          $('#stTools').classList.replace('mt-8', 'mt-5');
-          // 소개글은 두 줄로 줄이고 '더 보기'로 펼침
-          $('#pfIntro').classList.add('line-clamp-2');
-          $('#pfIntro').insertAdjacentHTML('afterend', '<button type="button" id="pfMore" class="reveal mt-1 text-sm text-cinnabar-soft hover:underline underline-offset-2">더 보기</button>');
-          $('#pfMore').addEventListener('click', () => {
-            const clamped = $('#pfIntro').classList.toggle('line-clamp-2');
-            $('#pfMore').textContent = clamped ? '더 보기' : '접기';
-          });
+          // 상단(히어로)은 소개형과 같은 크기 그대로 둠 (2026-10-03 결정: 진열은 스크롤 · 상단 버튼으로 이동)
         }
         const products = YW.shopProducts().filter(p => p.monk.id === m.id);
         const nCharm = products.filter(p => p.kind === 'charm').length, nRite = products.length - nCharm;
