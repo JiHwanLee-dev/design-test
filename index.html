@@ -249,6 +249,7 @@
     // dev 옵션: cardLink = detail(상세만) | both(상세 + 바로 예약), emptyRitual = hide | soon
     function renderServices() {
       const both = YW.devOpt('cardLink') === 'both';
+      const showPrice = YW.devOpt('cardPrice') === 'show'; // 숨기면 소요 시간만 표시
       const items = YW.visibleRituals();
       $('#serviceGrid').innerHTML = items.map((r, i) => {
         const big = i === 0 && r.key === 'charm';
@@ -266,7 +267,7 @@
               </h3>
               <p class="mt-2 text-sm text-muted leading-relaxed max-w-[46ch]">${r.desc || r.summary}</p>
               <div class="mt-auto pt-6 flex flex-wrap items-center justify-between gap-3">
-                <p class="text-sm flex flex-wrap gap-x-3 gap-y-1">${r.active ? `<b class="tabular-nums">${manwon(r.min)}부터</b>` : '<b class="text-subtle">모실 스님을 찾고 있습니다</b>'}<span class="text-subtle">${r.dur}</span></p>
+                <p class="text-sm flex flex-wrap gap-x-3 gap-y-1">${!r.active ? '<b class="text-subtle">모실 스님을 찾고 있습니다</b>' : showPrice ? `<b class="tabular-nums">${manwon(r.min)}부터</b>` : ''}<span class="${showPrice || !r.active ? 'text-subtle' : 'text-muted'} flex items-center gap-1.5">${showPrice || !r.active ? '' : '<iconify-icon icon="solar:clock-circle-linear" width="16"></iconify-icon>'}${r.dur}</span></p>
                 <div class="flex items-center gap-2">
                   ${both && r.active ? `<a href="${quick}" class="relative z-10 ease-spring h-10 px-4 rounded-full bg-cinnabar text-white text-sm font-semibold flex items-center gap-1.5 hover:scale-[1.03] active:scale-[0.97]"><iconify-icon icon="solar:calendar-linear" width="16"></iconify-icon>${r.key === 'charm' ? '바로 주문' : '바로 예약'}</a>` : ''}
                   <span class="ease-spring w-10 h-10 shrink-0 rounded-full bg-edge/5 border border-edge/10 flex items-center justify-center group-hover:bg-cinnabar group-hover:border-cinnabar group-hover:text-white group-hover:translate-x-1" aria-hidden="true"><iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></span>

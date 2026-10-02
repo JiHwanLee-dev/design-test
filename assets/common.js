@@ -38,7 +38,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { cardLink: 'detail', emptyRitual: 'hide' };
+  const DEV_DEFAULTS = { cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -566,6 +566,7 @@ window.YW = (() => {
   const DEV_OPTIONS = [
     { key: 'cardLink', label: '메인 의식 카드 클릭', choices: [['detail', '상세 페이지만'], ['both', '상세 + 바로 예약']] },
     { key: 'emptyRitual', label: '모시는 스님이 없는 의식', choices: [['hide', '숨김'], ['soon', '준비 중 표시']] },
+    { key: 'cardPrice', label: '의식 카드 가격', choices: [['hide', '숨김'], ['show', '표시']] },
   ];
   function setDevOpt(key, val) {
     const o = store.get('yw-dev-opts', {}); o[key] = val; store.set('yw-dev-opts', o);
