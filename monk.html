@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스님 페이지 | 염원 念願</title>
+  <meta name="description" content="스님이 직접 쓰는 부적을 주문하고 제례와 기도를 예약하세요.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+  <script src="assets/theme.js"></script>
+  <link rel="stylesheet" href="assets/common.css">
+</head>
+<body class="grain font-sans break-keep-all selection:bg-cinnabar/40">
+
+  <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div class="orb absolute -top-40 -left-32 w-[42rem] h-[42rem] rounded-full" style="background: radial-gradient(circle, rgba(200,85,61,0.14), transparent 65%);"></div>
+  </div>
+
+  <div data-shell="header"></div>
+
+  <main id="page">
+    <!-- 프로필 -->
+    <section id="profile" class="pt-28 md:pt-32 pb-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <a href="index.html#monks" class="reveal ease-spring inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg group">
+          <iconify-icon icon="solar:alt-arrow-left-linear" width="18" class="ease-spring group-hover:-translate-x-1"></iconify-icon>염원 홈
+        </a>
+
+        <div class="reveal mt-6 rounded-[2.25rem] p-1.5 bg-edge/5 ring-1 ring-edge/10" style="--index:1">
+          <div class="relative h-48 md:h-72 rounded-[calc(2.25rem-0.375rem)] overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]" id="pfCover">
+            <div class="absolute inset-0 bg-gradient-to-t from-page/80 via-transparent to-transparent"></div>
+            <span id="pfHanjaBig" class="absolute right-6 md:right-10 bottom-4 md:bottom-6 font-serif font-extrabold text-6xl md:text-8xl text-edge/10 select-none"></span>
+          </div>
+        </div>
+
+        <div class="relative -mt-14 md:-mt-16 px-2 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <div class="lg:col-span-8">
+            <div class="reveal" style="--index:2" id="pfAvatar"></div>
+            <div class="reveal mt-5 flex flex-wrap items-center gap-3" style="--index:2">
+              <h1 id="pfName" class="text-4xl md:text-5xl font-bold tracking-tight leading-tight"></h1>
+              <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-cinnabar/10 text-cinnabar-soft"><iconify-icon icon="solar:verified-check-linear" width="16"></iconify-icon>승적 · 사찰 확인</span>
+            </div>
+            <p id="pfTemple" class="reveal mt-2 text-muted" style="--index:3"></p>
+            <p id="pfTagline" class="reveal mt-8 font-serif font-extrabold text-2xl md:text-3xl leading-snug text-fg" style="--index:3"></p>
+            <p id="pfIntro" class="reveal mt-5 text-base md:text-lg text-muted leading-relaxed max-w-[62ch]" style="--index:4"></p>
+            <div id="pfTags" class="reveal mt-6 flex flex-wrap gap-2" style="--index:5"></div>
+          </div>
+
+          <aside class="lg:col-span-4 lg:pt-20">
+            <div class="reveal rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10" style="--index:3">
+              <div class="rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-6">
+                <dl id="pfStats" class="grid grid-cols-2 gap-y-5 gap-x-4"></dl>
+                <div class="mt-6 grid grid-cols-1 gap-2">
+                  <a href="#charms" id="pfCharmBtn" class="group ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-cinnabar text-white pl-6 pr-2 py-2 min-h-[52px] font-semibold hover:scale-[1.02] active:scale-[0.98] hover:shadow-[0_0_30px_rgba(200,85,61,0.25)]">
+                    부적 고르기
+                    <span class="ease-spring w-9 h-9 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></span>
+                  </a>
+                  <a href="#rituals" class="group ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-edge/5 border border-edge/10 pl-6 pr-2 py-2 min-h-[52px] font-semibold hover:bg-edge/10 hover:scale-[1.02] active:scale-[0.98]">
+                    제례 · 기도 예약
+                    <span class="ease-spring w-9 h-9 rounded-full bg-edge/5 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:calendar-linear" width="18"></iconify-icon></span>
+                  </a>
+                  <button id="askBtn" class="ease-spring h-12 rounded-full text-sm text-muted hover:text-fg flex items-center justify-center gap-2"><iconify-icon icon="solar:chat-round-dots-linear" width="18"></iconify-icon>스님께 상담 문의</button>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- 고정 탭 -->
+    <div class="sticky top-[5.25rem] z-30 px-4">
+      <nav id="tabs" class="mx-auto max-w-7xl flex gap-1 overflow-x-auto no-scrollbar rounded-full p-1.5 backdrop-blur-xl bg-deep/70 border border-edge/10 w-max max-w-full" aria-label="스님 페이지 메뉴"></nav>
+    </div>
+
+    <!-- 부적 -->
+    <section id="charms" class="py-24 md:py-32 scroll-mt-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+          <div class="max-w-xl">
+            <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">符 · 부적</span>
+            <h2 id="charmTitle" class="reveal mt-5 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-snug" style="--index:1"></h2>
+          </div>
+          <p class="reveal text-muted leading-relaxed max-w-md" style="--index:2">주문자 성함으로 축원한 뒤 한지 봉투에 밀봉해 등기로 보내 드립니다. 수기본은 스님이 그날 아침 직접 씁니다.</p>
+        </div>
+        <div id="charmGrid" class="mt-14 grid gap-4 lg:gap-5"></div>
+      </div>
+    </section>
+
+    <!-- 제례 · 기도 예약 -->
+    <section id="rituals" class="relative py-24 md:py-32 lg:py-40 bg-deep/40 border-y border-edge/5 scroll-mt-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10">
+        <div class="lg:col-span-5">
+          <div class="lg:sticky lg:top-40">
+            <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">祭 · 제례 · 기도 예약</span>
+            <h2 id="ritualTitle" class="reveal mt-5 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-snug" style="--index:1"></h2>
+            <p class="reveal mt-5 text-muted leading-relaxed" style="--index:2">의식을 고르고 날짜를 정해 주세요. 예약을 담으면 스님이 직접 확인 전화를 드립니다.</p>
+            <div id="serviceList" class="mt-10 flex flex-col gap-2" role="radiogroup" aria-label="의식 종류"></div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7">
+          <div class="reveal rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10">
+            <div class="rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-5 sm:p-8">
+              <div id="serviceDetail"></div>
+
+              <div class="mt-8">
+                <div class="flex items-center justify-between">
+                  <p class="text-sm font-semibold text-fg2 flex items-center gap-2"><iconify-icon icon="solar:calendar-linear" width="18" class="text-cinnabar"></iconify-icon><span id="dateLabel">날짜</span> 선택</p>
+                  <div class="flex items-center gap-1">
+                    <button id="calPrev" aria-label="이전 달" class="ease-spring w-10 h-10 rounded-full flex items-center justify-center hover:bg-edge/5 disabled:opacity-30 disabled:pointer-events-none"><iconify-icon icon="solar:alt-arrow-left-linear" width="18"></iconify-icon></button>
+                    <span id="calLabel" class="text-sm font-semibold tabular-nums w-24 text-center"></span>
+                    <button id="calNext" aria-label="다음 달" class="ease-spring w-10 h-10 rounded-full flex items-center justify-center hover:bg-edge/5 disabled:opacity-30 disabled:pointer-events-none"><iconify-icon icon="solar:alt-arrow-right-linear" width="18"></iconify-icon></button>
+                  </div>
+                </div>
+                <div class="mt-4 grid grid-cols-7 text-center text-[11px] text-subtle font-medium">
+                  <span class="text-cinnabar-soft">일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+                </div>
+                <div id="calGrid" class="mt-2 grid grid-cols-7 gap-1"></div>
+                <div class="mt-3 flex flex-wrap gap-4 text-[11px] text-subtle">
+                  <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-fg2"></span>예약 가능</span>
+                  <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-cinnabar"></span>선택됨</span>
+                  <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-faint"></span>마감 · 준비 기간</span>
+                </div>
+                <div id="scheduleNote" class="mt-4"></div>
+              </div>
+
+              <div id="slotWrap" class="mt-8">
+                <p class="text-sm font-semibold text-fg2 flex items-center gap-2"><iconify-icon icon="solar:clock-circle-linear" width="18" class="text-cinnabar"></iconify-icon> 시간 선택</p>
+                <div id="slotGrid" class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
+              </div>
+
+              <div class="mt-8">
+                <p class="text-sm font-semibold text-fg2 flex items-center gap-2"><iconify-icon icon="solar:videocamera-record-linear" width="18" class="text-cinnabar"></iconify-icon> 참여 방식</p>
+                <div id="modeGrid" class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2"></div>
+              </div>
+
+              <div id="tierWrap" class="mt-8">
+                <p class="text-sm font-semibold text-fg2 flex items-center gap-2"><iconify-icon icon="solar:hand-heart-linear" width="18" class="text-cinnabar"></iconify-icon> <span id="tierLabel"></span></p>
+                <div id="tierGrid" class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2"></div>
+              </div>
+
+              <form id="ritualForm" class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3" novalidate>
+                <label class="block">
+                  <span class="text-xs text-muted">신청자 성함</span>
+                  <input name="applicant" autocomplete="name" class="ease-spring mt-1.5 w-full h-12 rounded-xl bg-edge/[0.04] border border-edge/10 px-4 text-sm placeholder:text-faint focus:outline-none focus:border-cinnabar/60 focus:bg-edge/[0.06]" placeholder="예) 오예린">
+                </label>
+                <label class="block">
+                  <span class="text-xs text-muted">연락처</span>
+                  <input name="phone" inputmode="tel" autocomplete="tel" class="ease-spring mt-1.5 w-full h-12 rounded-xl bg-edge/[0.04] border border-edge/10 px-4 text-sm placeholder:text-faint focus:outline-none focus:border-cinnabar/60 focus:bg-edge/[0.06]" placeholder="010-0000-0000">
+                </label>
+                <label class="block deceased-field">
+                  <span class="text-xs text-muted">영가 (고인) 성함</span>
+                  <input name="deceased" class="ease-spring mt-1.5 w-full h-12 rounded-xl bg-edge/[0.04] border border-edge/10 px-4 text-sm placeholder:text-faint focus:outline-none focus:border-cinnabar/60 focus:bg-edge/[0.06]" placeholder="위패에 올릴 함자">
+                </label>
+                <label class="block deceased-field">
+                  <span class="text-xs text-muted">고인과의 관계</span>
+                  <select name="relation" class="ease-spring mt-1.5 w-full h-12 rounded-xl bg-edge/[0.04] border border-edge/10 px-4 text-sm focus:outline-none focus:border-cinnabar/60">
+                    <option>부친</option><option>모친</option><option>조부</option><option>조모</option><option>배우자</option><option>자녀</option><option>기타</option>
+                  </select>
+                </label>
+                <label class="block sm:col-span-2">
+                  <span class="text-xs text-muted" id="memoLabel">요청 사항 <span class="text-faint">(선택)</span></span>
+                  <textarea name="memo" rows="2" class="ease-spring mt-1.5 w-full rounded-xl bg-edge/[0.04] border border-edge/10 px-4 py-3 text-sm placeholder:text-faint focus:outline-none focus:border-cinnabar/60 focus:bg-edge/[0.06] resize-none"></textarea>
+                </label>
+              </form>
+
+              <div class="mt-8 rounded-2xl bg-edge/[0.03] border border-edge/10 p-5 flex flex-col sm:flex-row sm:items-center gap-5 justify-between">
+                <div class="text-sm leading-relaxed">
+                  <p id="ritualSummary" class="text-muted"></p>
+                  <p class="mt-1 text-2xl font-bold tracking-tight tabular-nums" id="ritualTotal">0원</p>
+                </div>
+                <button id="ritualSubmit" class="group ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-cinnabar text-white pl-7 pr-2 py-2 min-h-[56px] text-base font-semibold hover:scale-[1.02] active:scale-[0.98] hover:shadow-[0_0_30px_rgba(200,85,61,0.25)] disabled:opacity-40 disabled:pointer-events-none">
+                  예약 담기
+                  <span class="ease-spring w-10 h-10 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:arrow-right-linear" width="20"></iconify-icon></span>
+                </button>
+              </div>
+              <p id="ritualError" class="mt-3 text-sm text-cinnabar-soft hidden" role="alert"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 후기 -->
+    <section id="reviews" class="py-24 md:py-32 lg:py-40 scroll-mt-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div class="lg:col-span-4">
+          <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">緣 · 후기</span>
+          <h2 id="reviewTitle" class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug" style="--index:1"></h2>
+          <div class="reveal mt-8" style="--index:2">
+            <p class="text-6xl font-bold tracking-tight tabular-nums" id="rvAvg"></p>
+            <div class="mt-2 flex text-cinnabar" id="rvStars"></div>
+            <p class="mt-1 text-sm text-subtle" id="rvCount"></p>
+            <div id="rvBars" class="mt-6 space-y-2"></div>
+          </div>
+        </div>
+        <div id="reviewGrid" class="lg:col-span-8 columns-1 md:columns-2 gap-5"></div>
+      </div>
+    </section>
+
+    <!-- 사찰 안내 -->
+    <section id="temple" class="pb-24 md:pb-32 scroll-mt-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="reveal rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10">
+          <div class="rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
+            <div class="p-8 md:p-12">
+              <span class="inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">寺 · 사찰 안내</span>
+              <h2 id="templeTitle" class="mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug"></h2>
+              <dl id="templeInfo" class="mt-8 space-y-5 text-sm"></dl>
+            </div>
+            <div class="relative min-h-[280px] bg-deep" id="templeMap"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 다른 스님 -->
+    <section id="others" class="pb-24 md:pb-32">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-end justify-between gap-6">
+          <h2 class="reveal text-2xl md:text-3xl font-bold tracking-tight">다른 스님도 둘러보세요</h2>
+          <a href="index.html#monks" class="reveal ease-spring text-sm text-muted hover:text-fg flex items-center gap-1 shrink-0">전체 보기<iconify-icon icon="solar:alt-arrow-right-linear" width="16"></iconify-icon></a>
+        </div>
+        <div id="otherMonks" class="mt-8 flex gap-4 overflow-x-auto no-scrollbar -mx-4 px-4 lg:mx-0 lg:px-0 snap-x"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 없는 스님 -->
+  <main id="notFound" class="hidden min-h-[100dvh] flex items-center justify-center px-4">
+    <div class="text-center">
+      <span class="font-serif text-7xl font-extrabold text-edge/10">無</span>
+      <h1 class="mt-6 text-2xl font-bold">찾으시는 스님 페이지가 없습니다</h1>
+      <p class="mt-3 text-subtle">주소가 바뀌었거나 입점이 종료되었을 수 있습니다.</p>
+      <a href="index.html#monks" class="ease-spring mt-8 inline-flex h-12 px-6 rounded-full bg-cinnabar text-white font-semibold items-center gap-2 hover:scale-[1.02]">스님 목록으로<iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></a>
+    </div>
+  </main>
+
+  <div data-shell="footer"></div>
+
+  <!-- 모바일 하단 고정 바 -->
+  <div id="stickyBar" class="md:hidden fixed bottom-0 inset-x-0 z-40 px-4 pb-4 translate-y-full opacity-0 ease-spring">
+    <div class="flex gap-2 rounded-full p-1.5 bg-deep/80 backdrop-blur-xl border border-edge/10">
+      <a href="#charms" id="barCharm" class="flex-1 h-12 rounded-full bg-cinnabar text-white text-sm font-semibold flex items-center justify-center gap-2 active:scale-[0.98] ease-spring"><iconify-icon icon="solar:bag-4-linear" width="18"></iconify-icon>부적 고르기</a>
+      <a href="#rituals" class="flex-1 h-12 rounded-full bg-edge/5 text-sm font-semibold flex items-center justify-center gap-2 active:scale-[0.98] ease-spring"><iconify-icon icon="solar:calendar-linear" width="18"></iconify-icon>예약하기</a>
+    </div>
+  </div>
+
+  <!-- 부적 상세 모달 -->
+  <div id="productModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
+    <div class="absolute inset-0 bg-scrim/50 backdrop-blur-md" data-close></div>
+    <div class="relative h-full overflow-y-auto flex items-end md:items-center justify-center md:p-6">
+      <div id="pmPanel" class="ease-spring relative w-full max-w-4xl rounded-t-[2rem] md:rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 translate-y-8 opacity-0">
+        <div class="rounded-t-[calc(2rem-0.375rem)] md:rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] grid grid-cols-1 md:grid-cols-2">
+          <div class="p-6 md:p-10 flex items-center justify-center bg-edge/[0.02] md:rounded-l-[calc(2rem-0.375rem)]">
+            <div id="pmArt" class="w-40 md:w-64"></div>
+          </div>
+          <div class="p-6 md:p-10 flex flex-col">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p id="pmCat" class="text-xs text-cinnabar-soft font-medium"></p>
+                <h3 id="pmTitle" class="mt-2 text-2xl md:text-3xl font-bold tracking-tight"></h3>
+              </div>
+              <button data-close aria-label="닫기" class="ease-spring w-10 h-10 shrink-0 rounded-full bg-edge/5 flex items-center justify-center hover:bg-edge/10"><iconify-icon icon="solar:close-circle-linear" width="22"></iconify-icon></button>
+            </div>
+            <p id="pmDesc" class="mt-4 text-sm text-muted leading-relaxed"></p>
+
+            <p class="mt-8 text-xs font-semibold text-fg2">제작 방식</p>
+            <div id="pmMaterial" class="mt-2 grid grid-cols-1 gap-2"></div>
+
+            <label class="mt-5 flex items-center gap-3 rounded-xl bg-edge/[0.03] border border-edge/10 px-4 py-3 cursor-pointer ease-spring hover:bg-edge/[0.06]">
+              <input id="pmBless" type="checkbox" class="w-4 h-4 accent-[#c8553d]">
+              <span class="flex-1 text-sm">이름 축원 봉인 <span class="text-subtle">· 성함으로 축원 후 밀봉</span></span>
+              <span class="text-sm tabular-nums text-fg2" id="pmBlessPrice"></span>
+            </label>
+
+            <label class="mt-5 block">
+              <span class="text-xs font-semibold text-fg2">축원 받으실 분 성함 <span class="text-faint font-normal">(선택)</span></span>
+              <input id="pmName" maxlength="20" class="ease-spring mt-2 w-full h-12 rounded-xl bg-edge/[0.04] border border-edge/10 px-4 text-sm placeholder:text-faint focus:outline-none focus:border-cinnabar/60" placeholder="예) 한지원">
+            </label>
+
+            <div class="mt-8 pt-6 border-t border-edge/10 flex items-center justify-between gap-4">
+              <div class="flex items-center gap-2 rounded-full bg-edge/[0.04] border border-edge/10 p-1">
+                <button id="pmMinus" aria-label="수량 줄이기" class="ease-spring w-10 h-10 rounded-full flex items-center justify-center hover:bg-edge/10"><iconify-icon icon="solar:minus-circle-linear" width="20"></iconify-icon></button>
+                <span id="pmQty" class="w-6 text-center tabular-nums font-semibold">1</span>
+                <button id="pmPlus" aria-label="수량 늘리기" class="ease-spring w-10 h-10 rounded-full flex items-center justify-center hover:bg-edge/10"><iconify-icon icon="solar:add-circle-linear" width="20"></iconify-icon></button>
+              </div>
+              <p id="pmTotal" class="text-2xl font-bold tracking-tight tabular-nums"></p>
+            </div>
+            <button id="pmAdd" class="group ease-spring mt-5 inline-flex items-center justify-between gap-4 rounded-full bg-cinnabar text-white pl-8 pr-2 py-2 min-h-[56px] text-base font-semibold hover:scale-[1.02] active:scale-[0.98] hover:shadow-[0_0_30px_rgba(200,85,61,0.25)]">
+              장바구니에 담기
+              <span class="ease-spring w-10 h-10 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:cart-large-2-linear" width="20"></iconify-icon></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/common.js"></script>
+  <script>
+    const { D, $, $$, won, manwon, esc, hash, monkUrl, monkAvatar, landscapeSVG, charmSVG, stars } = YW;
+
+    YW.mountShell({ active: 'monk' });
+
+    const monk = YW.monkById(new URLSearchParams(location.search).get('id'));
+
+    if (!monk) {
+      $('#page').remove();
+      $('#stickyBar').remove();
+      $('#notFound').classList.remove('hidden');
+      $('#notFound').classList.add('flex');
+    } else {
+      initMonkPage(monk);
+    }
+
+    function initMonkPage(m) {
+      document.title = `${m.name} 스님 · ${m.temple} | 염원 念願`;
+      const reviews = D.REVIEWS.filter(r => r.monk === m.id);
+      const charmSeed = id => hash(m.id, id) % 997 + 1;
+
+      // ---------- 프로필 ----------
+      $('#pfCover').insertAdjacentHTML('afterbegin', landscapeSVG(m.seed));
+      $('#pfHanjaBig').textContent = m.hanja;
+      $('#pfAvatar').innerHTML = monkAvatar(m, 'w-24 h-24 md:w-28 md:h-28 text-2xl md:text-3xl ring-[6px] ring-page');
+      $('#pfName').textContent = `${m.name} 스님`;
+      $('#pfTemple').innerHTML = `<span class="font-serif text-fg2">${m.hanja}</span> · ${m.temple} · ${m.area}`;
+      $('#pfTagline').textContent = `“${m.tagline}”`;
+      $('#pfIntro').textContent = m.intro;
+      $('#pfTags').innerHTML = m.specialties.map(t => `<span class="rounded-full px-3 py-1.5 text-xs bg-edge/[0.04] border border-edge/10 text-fg2">${t}</span>`).join('');
+      const stat = (label, value) => `<div><dt class="text-xs text-subtle">${label}</dt><dd class="mt-1 text-lg font-bold tracking-tight">${value}</dd></div>`;
+      $('#pfStats').innerHTML = [
+        stat('평점', `<span class="text-cinnabar">★</span> ${m.rating}`),
+        stat('후기', `${m.reviewCount.toLocaleString('ko-KR')}건`),
+        stat('출가', `${m.years}년`),
+        stat('상담 응답', `<span class="text-sm font-semibold">${m.reply}</span>`),
+      ].join('');
+      if (!m.charms.length) { $('#pfCharmBtn').remove(); $('#barCharm').remove(); }
+      $('#askBtn').addEventListener('click', () => YW.toast('시안에서는 상담 창이 열리지 않습니다'));
+
+      // ---------- 탭 ----------
+      const tabs = [
+        m.charms.length && { id: 'charms', label: `부적 ${m.charms.length}` },
+        { id: 'rituals', label: `제례 · 기도 ${m.services.length}` },
+        { id: 'reviews', label: `후기 ${reviews.length}` },
+        { id: 'temple', label: '사찰 안내' },
+      ].filter(Boolean);
+      $('#tabs').innerHTML = tabs.map(t => `<a href="#${t.id}" data-tab="${t.id}" class="ease-spring shrink-0 h-10 px-4 rounded-full text-sm font-medium flex items-center text-muted hover:text-fg">${t.label}</a>`).join('');
+      const setActiveTab = id => $$('#tabs [data-tab]').forEach(a => {
+        const on = a.dataset.tab === id;
+        a.classList.toggle('bg-fg', on); a.classList.toggle('text-page', on); a.classList.toggle('text-muted', !on);
+      });
+      const tabIO = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) setActiveTab(en.target.id); }), { rootMargin: '-45% 0px -50% 0px' });
+      tabs.forEach(t => tabIO.observe($('#' + t.id)));
+      setActiveTab(tabs[0].id);
+
+      // ---------- 부적 ----------
+      if (!m.charms.length) {
+        $('#charms').remove();
+      } else {
+        $('#charmTitle').innerHTML = `${m.name} 스님이 쓰는<br>부적 ${m.charms.length}가지`;
+        const n = m.charms.length;
+        const useFeatured = n >= 5 && (n - 1) % 4 === 0;
+        const colCls = { 1: 'lg:grid-cols-2', 2: 'lg:grid-cols-2', 3: 'lg:grid-cols-3' }[n] || 'lg:grid-cols-4';
+        $('#charmGrid').classList.add('grid-cols-2', colCls);
+        $('#charmGrid').innerHTML = m.charms.map((ci, i) => {
+          const c = D.CHARM_TYPES[ci.id];
+          const big = useFeatured && i === 0;
+          return `
+          <article class="reveal group ${big ? 'col-span-2 lg:row-span-2' : ''} rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-edge/20" style="--index:${i % 4}">
+            <div class="h-full rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] flex flex-col overflow-hidden">
+              <button data-open="${ci.id}" aria-label="${c.name} 자세히 보기" class="relative flex items-center justify-center bg-gradient-to-b from-edge/[0.04] to-transparent ${big ? 'p-10 pt-14 lg:p-14 flex-1' : 'px-6 pt-12 pb-6 sm:px-8 sm:pt-14 sm:pb-8'}">
+                <div class="ease-spring ${big ? 'w-40 lg:w-52' : 'w-24 sm:w-28'} group-hover:-translate-y-1 group-hover:rotate-[-2deg] shadow-[0_25px_50px_-20px_var(--drop)] rounded-[1rem]">${charmSVG(c, charmSeed(ci.id))}</div>
+                ${big ? '<span class="absolute top-4 left-4 rounded-full px-2.5 py-1 text-[11px] font-medium bg-edge/5 border border-edge/10 text-fg2">가장 많이 찾으심</span>' : ''}
+              </button>
+              <div class="p-4 sm:p-5 flex flex-col gap-1 mt-auto">
+                <p class="text-xs text-cinnabar-soft font-medium">${c.cat}</p>
+                <h3 class="${big ? 'text-2xl' : 'text-base sm:text-lg'} font-bold tracking-tight">${c.name}</h3>
+                ${big ? `<p class="mt-2 text-sm text-muted leading-relaxed max-w-[44ch]">${c.desc}</p>` : ''}
+                <div class="mt-4 flex ${big ? 'flex-row items-center' : 'flex-col items-stretch sm:flex-row sm:items-center'} justify-between gap-3">
+                  <p class="font-semibold tabular-nums">${won(ci.price)}<span class="text-subtle text-xs font-normal">부터</span></p>
+                  <button data-open="${ci.id}" class="ease-spring h-11 px-4 justify-center rounded-full bg-edge/5 border border-edge/10 text-sm font-semibold flex items-center gap-1.5 hover:bg-cinnabar hover:border-cinnabar hover:text-white active:scale-[0.97]">
+                    <iconify-icon icon="solar:cart-large-2-linear" width="16"></iconify-icon>담기
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>`;
+        }).join('');
+        $('#charmGrid').addEventListener('click', e => { const b = e.target.closest('[data-open]'); if (b) openProduct(b.dataset.open); });
+      }
+
+      // ---------- 부적 모달 ----------
+      const pm = { id: null, price: 0, material: 'print', bless: false, qty: 1 };
+      const PM_HIDE = ['translate-y-8', 'opacity-0'];
+      $('#pmBlessPrice').textContent = '+' + won(D.BLESS_PRICE);
+      function openProduct(id) {
+        const ci = m.charms.find(x => x.id === id), c = D.CHARM_TYPES[id];
+        Object.assign(pm, { id, price: ci.price, material: 'print', bless: false, qty: 1 });
+        $('#pmArt').innerHTML = charmSVG(c, charmSeed(id));
+        $('#pmCat').textContent = `${c.cat} · ${m.name} 스님`;
+        $('#pmTitle').textContent = c.name;
+        $('#pmDesc').textContent = c.desc;
+        $('#pmBless').checked = false;
+        $('#pmName').value = '';
+        renderPm();
+        YW.openLayer($('#productModal'), $('#pmPanel'), PM_HIDE);
+      }
+      const pmUnit = () => pm.price + D.MATERIALS.find(x => x.id === pm.material).add + (pm.bless ? D.BLESS_PRICE : 0);
+      function renderPm() {
+        $('#pmMaterial').innerHTML = D.MATERIALS.map(x => `
+          <button data-mat="${x.id}" class="ease-spring flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-left border ${pm.material === x.id ? 'border-cinnabar/70 bg-cinnabar/10' : 'border-edge/10 bg-edge/[0.03] hover:bg-edge/[0.06]'}">
+            <span><span class="block text-sm font-semibold">${x.name}</span><span class="block text-xs text-subtle mt-0.5">${x.note}</span></span>
+            <span class="text-sm tabular-nums ${pm.material === x.id ? 'text-cinnabar-soft' : 'text-muted'}">${x.add ? '+' + won(x.add) : '기본'}</span>
+          </button>`).join('');
+        $('#pmQty').textContent = pm.qty;
+        $('#pmTotal').textContent = won(pmUnit() * pm.qty);
+      }
+      $('#pmMaterial').addEventListener('click', e => { const b = e.target.closest('[data-mat]'); if (b) { pm.material = b.dataset.mat; renderPm(); } });
+      $('#pmBless').addEventListener('change', e => { pm.bless = e.target.checked; renderPm(); });
+      $('#pmMinus').addEventListener('click', () => { pm.qty = Math.max(1, pm.qty - 1); renderPm(); });
+      $('#pmPlus').addEventListener('click', () => { pm.qty = Math.min(9, pm.qty + 1); renderPm(); });
+      $('#pmAdd').addEventListener('click', async () => {
+        const c = D.CHARM_TYPES[pm.id];
+        const mat = D.MATERIALS.find(x => x.id === pm.material);
+        const who = $('#pmName').value.trim();
+        const opts = [mat.name, pm.bless ? '축원 봉인' : null, who ? `축원: ${who}` : null].filter(Boolean).join(' · ');
+        const ok = await YW.addToCart(m.id, {
+          key: ['charm', m.id, pm.id, pm.material, pm.bless, who].join('|'),
+          type: 'charm', ref: pm.id, seed: charmSeed(pm.id), name: c.name, opts, unit: pmUnit(), qty: pm.qty,
+        });
+        if (!ok) return;
+        YW.closeLayer($('#productModal'));
+        YW.toast(`${c.name}을 담았습니다`);
+      });
+      $('#productModal').addEventListener('click', e => { if (e.target.closest('[data-close]')) YW.closeLayer($('#productModal')); });
+
+      // ---------- 제례 · 기도 예약 ----------
+      $('#ritualTitle').innerHTML = `${m.name} 스님이<br>모시는 의식`;
+      const services = m.services.map(s => ({ ...D.SERVICE_TYPES[s.id], id: s.id, price: s.price }));
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      // 메인에서 특정 의식을 눌러 들어오면 그 의식을 먼저 선택 (?svc=sasipgu)
+      const svcParam = new URLSearchParams(location.search).get('svc');
+      const firstSvc = services.find(s => s.id === svcParam) || services[0];
+      const rv = { svc: firstSvc, date: null, slot: null, mode: firstSvc.modes[0], tier: null, calY: today.getFullYear(), calM: today.getMonth() };
+      const DOW = ['일', '월', '화', '수', '목', '금', '토'];
+      const dKey = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const fmt = d => `${d.getMonth() + 1}월 ${d.getDate()}일(${DOW[d.getDay()]})`;
+      const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+      const resetTier = () => { rv.tier = rv.svc.tiers ? rv.svc.tiers[0].id : null; };
+      resetTier();
+
+      function dateStatus(d) {
+        if (Math.round((d - today) / 86400000) < 3) return 'prep';
+        if (hash(dKey(d), m.id, rv.svc.id) % 6 === 0) return 'full';
+        return 'open';
+      }
+      const slotFull = (d, s) => hash(dKey(d), s, m.id, rv.svc.id) % 4 === 0;
+
+      function renderServices() {
+        $('#serviceList').innerHTML = services.map((s, i) => {
+          const on = rv.svc.id === s.id;
+          return `
+          <button role="radio" aria-checked="${on}" data-svc="${s.id}" class="reveal ease-spring group flex items-center gap-4 rounded-2xl px-4 py-4 text-left border ${on ? 'bg-edge/[0.06] border-edge/15' : 'border-transparent hover:bg-edge/[0.03]'}" style="--index:${i}">
+            <span class="font-serif font-extrabold text-lg w-12 shrink-0 ${on ? 'text-cinnabar' : 'text-faint group-hover:text-muted'} ease-spring">${s.hanja}</span>
+            <span class="flex-1">
+              <span class="block font-semibold ${on ? 'text-fg' : 'text-fg2'}">${s.name}</span>
+              <span class="block text-xs text-subtle mt-0.5">${s.dur} · ${manwon(s.price)}부터</span>
+            </span>
+            <iconify-icon icon="solar:alt-arrow-right-linear" width="18" class="ease-spring ${on ? 'text-cinnabar' : 'text-faint -translate-x-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-0'}"></iconify-icon>
+          </button>`;
+        }).join('');
+        YW.observeReveals();
+      }
+      function renderDetail() {
+        const s = rv.svc;
+        $('#serviceDetail').innerHTML = `
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <p class="text-xs text-cinnabar-soft font-medium">${s.dur}</p>
+              <h3 class="mt-1 text-2xl md:text-3xl font-bold tracking-tight">${s.name}</h3>
+            </div>
+            <span class="font-serif font-extrabold text-4xl text-edge/10">${s.hanja}</span>
+          </div>
+          <p class="mt-3 text-sm text-muted leading-relaxed">${s.desc}</p>
+          <a href="${YW.ritualUrl(s.id)}" class="ease-spring mt-2 inline-flex items-center gap-1 text-sm text-cinnabar-soft hover:gap-2">절차 · 준비물 자세히 보기 <iconify-icon icon="solar:arrow-right-linear" width="14"></iconify-icon></a>
+          ${s.note ? `<p class="mt-3 text-sm text-fg2 flex gap-2"><iconify-icon icon="solar:clock-circle-linear" width="18" class="text-cinnabar shrink-0 mt-0.5"></iconify-icon>${s.note}</p>` : ''}
+          <ul class="mt-4 flex flex-wrap gap-2">${s.includes.map(t => `<li class="flex items-center gap-1.5 rounded-full bg-edge/[0.04] border border-edge/10 px-3 py-1.5 text-xs text-fg2"><iconify-icon icon="solar:check-circle-bold" width="14" class="text-cinnabar"></iconify-icon>${t}</li>`).join('')}</ul>`;
+        $('#dateLabel').textContent = s.dateLabel;
+        $$('.deceased-field').forEach(el => el.classList.toggle('hidden', !s.deceased));
+        $('#slotWrap').classList.toggle('hidden', !s.slots);
+        $('#tierWrap').classList.toggle('hidden', !s.tiers);
+        if (s.tiers) $('#tierLabel').textContent = s.tierLabel;
+        const f = $('#ritualForm');
+        $('#memoLabel').innerHTML = s.deceased ? '요청 사항 <span class="text-faint">(선택)</span>' : '발원 내용 <span class="text-faint">(선택)</span>';
+        f.memo.placeholder = s.deceased ? '생전에 즐기시던 음식, 고향 상차림 방식 등을 적어 주세요' : '축원 받으실 분과 바라는 일을 적어 주세요. 예) 아들 한도윤 임용 시험 합격';
+      }
+      function renderCalendar() {
+        const first = new Date(rv.calY, rv.calM, 1);
+        const days = new Date(rv.calY, rv.calM + 1, 0).getDate();
+        $('#calLabel').textContent = `${rv.calY}. ${String(rv.calM + 1).padStart(2, '0')}`;
+        const ahead = (rv.calY - today.getFullYear()) * 12 + rv.calM - today.getMonth();
+        $('#calPrev').disabled = ahead <= 0;
+        $('#calNext').disabled = ahead >= 3;
+        let html = '';
+        for (let i = 0; i < first.getDay(); i++) html += '<span></span>';
+        for (let d = 1; d <= days; d++) {
+          const dt = new Date(rv.calY, rv.calM, d);
+          const st = dateStatus(dt);
+          const sel = rv.date && dKey(rv.date) === dKey(dt);
+          const isToday = dKey(dt) === dKey(today);
+          let cls = 'ease-spring relative aspect-square sm:aspect-auto sm:h-11 rounded-xl text-sm tabular-nums flex items-center justify-center ';
+          if (sel) cls += 'bg-cinnabar text-white font-semibold';
+          else if (st === 'open') cls += `hover:bg-edge/10 ${dt.getDay() === 0 ? 'text-cinnabar-soft' : 'text-fg'}`;
+          else cls += 'text-faint cursor-not-allowed';
+          html += `<button ${st !== 'open' ? 'disabled' : ''} data-day="${d}" class="${cls}" aria-label="${rv.calM + 1}월 ${d}일 ${st === 'open' ? '예약 가능' : st === 'full' ? '마감' : '준비 기간'}">
+            ${d}${st === 'full' ? '<span class="absolute bottom-1 text-[9px] leading-none text-faint">마감</span>' : ''}${isToday ? '<span class="absolute top-1 right-1.5 w-1 h-1 rounded-full bg-muted"></span>' : ''}
+          </button>`;
+        }
+        $('#calGrid').innerHTML = html;
+        renderScheduleNote();
+      }
+      function renderScheduleNote() {
+        const el = $('#scheduleNote');
+        if (!rv.date) { el.innerHTML = ''; return; }
+        if (rv.svc.id === 'sasipgu') {
+          const names = ['초재', '이재', '삼재', '사재', '오재', '육재', '막재'];
+          el.innerHTML = `<div class="rounded-2xl bg-edge/[0.03] border border-edge/10 p-4">
+            <p class="text-xs text-muted">일곱 번의 재 일정</p>
+            <ol class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">${names.map((n, i) => `<li class="rounded-xl px-3 py-2 ${i === 6 ? 'bg-cinnabar/10 text-cinnabar-soft' : 'bg-edge/[0.03] text-fg2'}"><b class="block">${n}</b>${fmt(addDays(rv.date, i * 7))}</li>`).join('')}</ol>
+          </div>`;
+        } else if (rv.svc.id === 'baegil') {
+          el.innerHTML = `<p class="text-sm text-muted">입재 ${fmt(rv.date)} → 회향 <b class="text-fg">${fmt(addDays(rv.date, 99))}</b></p>`;
+        } else if (rv.svc.id === 'deung') {
+          el.innerHTML = `<p class="text-sm text-muted">입등 ${fmt(rv.date)} → 소등 <b class="text-fg">${fmt(addDays(rv.date, 364))}</b></p>`;
+        } else el.innerHTML = '';
+      }
+      function renderSlots() {
+        $('#slotGrid').innerHTML = D.SLOTS.map(s => {
+          const full = rv.date ? slotFull(rv.date, s) : false;
+          const on = rv.slot === s, disabled = !rv.date || full;
+          return `<button data-slot="${s}" ${disabled ? 'disabled' : ''} class="ease-spring h-12 rounded-xl text-sm font-medium tabular-nums border ${on ? 'bg-cinnabar border-cinnabar text-white' : disabled ? 'border-edge/5 text-faint cursor-not-allowed' : 'border-edge/10 bg-edge/[0.03] hover:bg-edge/[0.08]'}">${s}${full ? ' <span class="text-[11px]">마감</span>' : ''}</button>`;
+        }).join('');
+      }
+      function renderModes() {
+        $('#modeGrid').innerHTML = rv.svc.modes.map(k => {
+          const md = D.MODES[k], on = rv.mode === k;
+          return `<button data-mode="${k}" class="ease-spring flex items-start gap-3 rounded-xl px-4 py-3 text-left border ${on ? 'border-cinnabar/70 bg-cinnabar/10' : 'border-edge/10 bg-edge/[0.03] hover:bg-edge/[0.06]'}">
+            <iconify-icon icon="${md.icon}" width="18" class="mt-0.5 ${on ? 'text-cinnabar' : 'text-subtle'}"></iconify-icon>
+            <span><span class="block text-sm font-semibold">${md.name}</span><span class="block text-xs text-subtle mt-0.5">${md.note}${md.add ? ' · +' + won(md.add) : ''}</span></span>
+          </button>`;
+        }).join('');
+      }
+      function renderTiers() {
+        if (!rv.svc.tiers) { $('#tierGrid').innerHTML = ''; return; }
+        $('#tierGrid').innerHTML = rv.svc.tiers.map(t => {
+          const on = rv.tier === t.id;
+          return `<button data-tier="${t.id}" class="ease-spring rounded-xl px-4 py-3 text-left border ${on ? 'border-cinnabar/70 bg-cinnabar/10' : 'border-edge/10 bg-edge/[0.03] hover:bg-edge/[0.06]'}">
+            <span class="block text-sm font-semibold">${t.name} <span class="font-normal text-xs ${on ? 'text-cinnabar-soft' : 'text-subtle'}">${t.add ? '+' + won(t.add) : '포함'}</span></span>
+            <span class="block text-xs text-subtle mt-0.5">${t.note}</span>
+          </button>`;
+        }).join('');
+      }
+      const ritualPrice = () => rv.svc.price + (D.MODES[rv.mode]?.add || 0) + (rv.svc.tiers ? rv.svc.tiers.find(t => t.id === rv.tier).add : 0);
+      const ready = () => rv.date && (!rv.svc.slots || rv.slot);
+      function renderSummary() {
+        const s = rv.svc;
+        if (ready()) $('#ritualSummary').innerHTML = `<b class="text-fg">${s.name}</b> · ${s.dateLabel} ${fmt(rv.date)}${rv.slot && s.slots ? ' ' + rv.slot : ''} · ${D.MODES[rv.mode].name}`;
+        else $('#ritualSummary').textContent = !rv.date ? `${s.dateLabel}을 선택해 주세요` : '시간을 선택해 주세요';
+        $('#ritualTotal').textContent = won(ritualPrice());
+        $('#ritualSubmit').disabled = !ready();
+      }
+      function renderRitual() { renderDetail(); renderCalendar(); renderSlots(); renderModes(); renderTiers(); renderSummary(); }
+
+      $('#serviceList').addEventListener('click', e => {
+        const b = e.target.closest('[data-svc]'); if (!b) return;
+        rv.svc = services.find(s => s.id === b.dataset.svc);
+        rv.mode = rv.svc.modes[0]; rv.slot = null; resetTier();
+        if (rv.date && dateStatus(rv.date) !== 'open') rv.date = null;
+        renderServices(); renderRitual();
+        if (window.innerWidth < 1024) $('#serviceDetail').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      $('#calGrid').addEventListener('click', e => {
+        const b = e.target.closest('[data-day]'); if (!b || b.disabled) return;
+        rv.date = new Date(rv.calY, rv.calM, +b.dataset.day);
+        if (rv.slot && slotFull(rv.date, rv.slot)) rv.slot = null;
+        renderCalendar(); renderSlots(); renderSummary();
+      });
+      $('#calPrev').addEventListener('click', () => { if (--rv.calM < 0) { rv.calM = 11; rv.calY--; } renderCalendar(); });
+      $('#calNext').addEventListener('click', () => { if (++rv.calM > 11) { rv.calM = 0; rv.calY++; } renderCalendar(); });
+      $('#slotGrid').addEventListener('click', e => { const b = e.target.closest('[data-slot]'); if (!b || b.disabled) return; rv.slot = b.dataset.slot; renderSlots(); renderSummary(); });
+      $('#modeGrid').addEventListener('click', e => { const b = e.target.closest('[data-mode]'); if (!b) return; rv.mode = b.dataset.mode; renderModes(); renderSummary(); });
+      $('#tierGrid').addEventListener('click', e => { const b = e.target.closest('[data-tier]'); if (!b) return; rv.tier = b.dataset.tier; renderTiers(); renderSummary(); });
+
+      $('#ritualSubmit').addEventListener('click', async () => {
+        const f = $('#ritualForm'), err = $('#ritualError'), s = rv.svc;
+        const fail = (msg, el) => { err.textContent = msg; err.classList.remove('hidden'); el.focus(); };
+        const applicant = f.applicant.value.trim(), phone = f.phone.value.trim();
+        if (!applicant) return fail('신청자 성함을 입력해 주세요.', f.applicant);
+        if (!YW.phoneOk(phone)) return fail('연락처를 010-0000-0000 형식으로 입력해 주세요.', f.phone);
+        if (s.deceased && !f.deceased.value.trim()) return fail('위패에 올릴 영가 성함을 입력해 주세요.', f.deceased);
+        err.classList.add('hidden');
+        const parts = [`${s.dateLabel} ${rv.date.getFullYear()}.${rv.date.getMonth() + 1}.${rv.date.getDate()}(${DOW[rv.date.getDay()]})${s.slots ? ' ' + rv.slot : ''}`, D.MODES[rv.mode].name];
+        if (s.tiers) parts.push(s.tiers.find(t => t.id === rv.tier).name);
+        if (s.deceased) parts.push(`${f.relation.value} ${f.deceased.value.trim()} 영가`);
+        const ok = await YW.addToCart(m.id, {
+          key: 'ritual|' + Date.now(), type: 'ritual', ref: s.id, name: s.name, opts: parts.join(' · '),
+          unit: ritualPrice(), qty: 1, applicant, phone, memo: f.memo.value.trim(),
+        });
+        if (!ok) return;
+        YW.toast(`${s.name} 예약을 담았습니다`);
+        rv.slot = null; renderSlots(); renderSummary();
+        YW.openCart();
+      });
+
+      renderServices(); renderRitual();
+
+      // ---------- 후기 ----------
+      $('#reviewTitle').innerHTML = `${m.name} 스님께<br>맡기신 분들의 이야기`;
+      $('#rvAvg').textContent = m.rating.toFixed(2);
+      $('#rvStars').innerHTML = stars(m.rating, 18);
+      $('#rvCount').textContent = `후기 ${m.reviewCount.toLocaleString('ko-KR')}건`;
+      const five = Math.round((m.rating - 4) * 100) - 4;
+      const dist = [five, 100 - five - 5, 4, 1, 0];
+      $('#rvBars').innerHTML = dist.map((p, i) => `
+        <div class="flex items-center gap-3 text-xs">
+          <span class="w-6 text-subtle tabular-nums">${5 - i}점</span>
+          <span class="flex-1 h-1.5 rounded-full bg-edge/5 overflow-hidden"><span class="block h-full rounded-full bg-cinnabar origin-left" style="transform: scaleX(${p / 100})"></span></span>
+          <span class="w-8 text-right text-subtle tabular-nums">${p}%</span>
+        </div>`).join('');
+      $('#reviewGrid').innerHTML = reviews.length ? reviews.map((r, i) => `
+        <figure class="reveal break-inside-avoid mb-5 rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10" style="--index:${i % 2}">
+          <div class="rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-6 md:p-7">
+            <div class="flex items-center justify-between gap-3">
+              <div class="flex text-cinnabar">${stars(r.stars)}</div>
+              <span class="text-[11px] text-faint tabular-nums">${r.date}</span>
+            </div>
+            <blockquote class="mt-4 text-fg leading-relaxed">${r.body}</blockquote>
+            <figcaption class="mt-6 text-sm"><b class="text-fg">${r.name}</b> <span class="text-subtle">· ${r.service}</span></figcaption>
+          </div>
+        </figure>`).join('') : '<p class="text-subtle">아직 후기가 없습니다.</p>';
+
+      // ---------- 사찰 안내 ----------
+      $('#templeTitle').innerHTML = `${m.temple}<span class="block text-base font-medium text-subtle mt-2">${m.area}</span>`;
+      const info = (icon, label, value) => `<div class="flex gap-4"><iconify-icon icon="${icon}" width="20" class="text-cinnabar shrink-0 mt-0.5"></iconify-icon><div><dt class="text-xs text-subtle">${label}</dt><dd class="mt-1 text-fg leading-relaxed">${value}</dd></div></div>`;
+      $('#templeInfo').innerHTML = [
+        info('solar:map-point-linear', '주소', m.address),
+        info('solar:delivery-linear', '오시는 길', m.directions),
+        info('solar:clock-circle-linear', '참배 · 상담 시간', m.hours),
+        info('solar:chat-round-dots-linear', '상담 응답', m.reply),
+      ].join('');
+      $('#templeMap').innerHTML = `
+        <svg viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice" class="absolute inset-0 w-full h-full" aria-hidden="true">
+          <rect width="600" height="400" style="fill:var(--map-bg)"/>
+          ${Array.from({ length: 13 }, (_, i) => `<line x1="${i * 50}" y1="0" x2="${i * 50}" y2="400" style="stroke:rgb(var(--c-edge))" stroke-opacity="0.05"/>`).join('')}
+          ${Array.from({ length: 9 }, (_, i) => `<line x1="0" y1="${i * 50}" x2="600" y2="${i * 50}" style="stroke:rgb(var(--c-edge))" stroke-opacity="0.05"/>`).join('')}
+          <path d="M-20 ${300 - m.seed} C 120 ${260 - m.seed}, 220 340, 360 300 S 560 220, 640 250" fill="none" style="stroke:var(--map-river)" stroke-opacity=".6" stroke-width="22"/>
+          <path d="M80 -10 C 140 120, 260 160, 300 200 S 420 330, 470 420" fill="none" style="stroke:var(--map-road)" stroke-width="6"/>
+          <path d="M-10 120 L 300 200 L 610 150" fill="none" style="stroke:var(--map-road)" stroke-width="4"/>
+          <circle cx="300" cy="200" r="46" style="fill:rgb(var(--c-cin))" fill-opacity=".14"/>
+          <circle cx="300" cy="200" r="9" style="fill:rgb(var(--c-cin))"/>
+        </svg>
+        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[calc(100%+1.25rem)] rounded-full bg-fg text-page px-4 py-2 text-sm font-semibold whitespace-nowrap shadow-[0_15px_40px_-10px_var(--drop)]">${m.temple}</div>
+        <span class="absolute right-4 bottom-4 text-[11px] text-subtle">약도 예시</span>`;
+
+      // ---------- 다른 스님 ----------
+      const others = D.MONKS.filter(x => x.id !== m.id);
+      if (!others.length) $('#others').remove();
+      else $('#otherMonks').innerHTML = others.map((x, i) => `
+        <a href="${monkUrl(x.id)}" class="reveal group snap-start shrink-0 w-72 rounded-[1.75rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-edge/25" style="--index:${i}">
+          <div class="rounded-[calc(1.75rem-0.375rem)] bg-surface overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
+            <div class="relative h-24 overflow-hidden"><div class="absolute inset-0 ease-spring group-hover:scale-105">${landscapeSVG(x.seed)}</div></div>
+            <div class="px-5 pb-5 -mt-7 relative">
+              ${monkAvatar(x, 'w-14 h-14 text-base ring-4 ring-surface')}
+              <p class="mt-3 font-bold text-lg tracking-tight">${x.name} 스님</p>
+              <p class="text-xs text-subtle">${x.temple} · ${x.area}</p>
+              <p class="mt-3 text-sm text-muted leading-relaxed line-clamp-2">${x.tagline}</p>
+              <p class="mt-3 text-xs flex items-center gap-1"><span class="text-cinnabar">★</span><b>${x.rating}</b><span class="text-subtle">(${x.reviewCount.toLocaleString('ko-KR')})</span></p>
+            </div>
+          </div>
+        </a>`).join('');
+
+      YW.observeReveals();
+      YW.stickyBar('#stickyBar', '#profile');
+
+      // 내용을 그린 뒤 #rituals 같은 주소의 위치로 다시 이동
+      if (location.hash && $(location.hash)) setTimeout(() => $(location.hash).scrollIntoView({ behavior: 'smooth' }), 150);
+    }
+  </script>
+</body>
+</html>

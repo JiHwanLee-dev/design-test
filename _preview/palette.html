@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>배경 색상 비교</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: Pretendard, sans-serif; word-break: keep-all; background: #1a1714; }
+    .serif { font-family: 'Nanum Myeongjo', serif; font-weight: 800; }
+    .opt { background: var(--bg); color: var(--text); }
+    .opt .muted { color: var(--muted); }
+    .opt .shell { background: var(--shell); box-shadow: 0 0 0 1px var(--line); }
+    .opt .core { background: var(--card); box-shadow: inset 0 1px 1px var(--hi); }
+    .opt .alt { background: var(--alt); }
+    .opt .chip { background: var(--chip); border: 1px solid var(--line); }
+    .opt .accent { color: var(--accent); }
+    .opt .btn { background: var(--accent); color: #fff; }
+    .opt .eyebrow { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); }
+    .swatch { width: 28px; height: 28px; border-radius: 999px; box-shadow: 0 0 0 1px rgba(128,128,128,.3); }
+  </style>
+</head>
+<body class="p-4 md:p-8 text-stone-200">
+  <h1 class="text-2xl font-bold">배경 색상 비교</h1>
+  <p class="mt-2 text-sm text-stone-400">각 시안은 실제 페이지의 섹션 하나를 줄여 놓은 것입니다. 히어로 이미지는 어느 시안에서도 그대로 씁니다.</p>
+
+  <div class="mt-8 grid grid-cols-1 xl:grid-cols-4 gap-6" id="grid"></div>
+
+  <script>
+    const OPTIONS = [
+      { key: '0', name: '지금 (먹색)', note: '비교용. 현재 사이트 색입니다.',
+        v: { bg: '#0c0a09', alt: '#161311', shell: 'rgba(255,255,255,.05)', card: '#0f0d0c', hi: 'rgba(255,255,255,.08)', chip: 'rgba(255,255,255,.04)', line: 'rgba(255,255,255,.1)', text: '#f5f5f4', muted: '#a8a29e', accent: '#c8553d' } },
+      { key: 'A', name: 'A. 한지 미색', note: '창호지처럼 따뜻한 미색 바탕에 먹색 글씨. 가장 밝고 차분합니다.',
+        v: { bg: '#f1ebe0', alt: '#e9e1d3', shell: 'rgba(60,45,30,.05)', card: '#faf6ef', hi: 'rgba(255,255,255,.9)', chip: 'rgba(60,45,30,.04)', line: 'rgba(60,45,30,.12)', text: '#2a2420', muted: '#6f655b', accent: '#b4472f' } },
+      { key: 'B', name: 'B. 새벽 안개', note: '히어로 이미지의 새벽 하늘에서 따온 회분홍빛 베이지. 사진과 가장 자연스럽게 이어집니다.',
+        v: { bg: '#e8e2dc', alt: '#ded6cf', shell: 'rgba(70,55,60,.05)', card: '#f5f1ec', hi: 'rgba(255,255,255,.85)', chip: 'rgba(70,55,60,.04)', line: 'rgba(70,55,60,.12)', text: '#2b2528', muted: '#6e6468', accent: '#b0503a' } },
+      { key: 'C', name: 'C. 고목 갈색', note: '어두운 톤은 유지하되 오래된 나무 기둥처럼 따뜻한 갈색으로 한 단계 밝힘. 변화가 가장 적습니다.',
+        v: { bg: '#2b2420', alt: '#332b26', shell: 'rgba(255,240,220,.06)', card: '#241e1a', hi: 'rgba(255,240,220,.08)', chip: 'rgba(255,240,220,.05)', line: 'rgba(255,240,220,.12)', text: '#f3ebe1', muted: '#b9ab9c', accent: '#d0664c' } },
+    ];
+    document.getElementById('grid').innerHTML = OPTIONS.map(o => `
+      <section class="opt rounded-3xl overflow-hidden" style="${Object.entries(o.v).map(([k, val]) => `--${k}:${val}`).join(';')}">
+        <div class="p-6">
+          <div class="flex items-center justify-between">
+            <p class="font-bold text-lg">${o.name}</p>
+            <div class="flex gap-1.5">${['bg', 'card', 'text', 'accent'].map(k => `<span class="swatch" style="background:${o.v[k]}" title="${k} ${o.v[k]}"></span>`).join('')}</div>
+          </div>
+          <p class="mt-2 text-sm muted leading-relaxed">${o.note}</p>
+
+          <span class="eyebrow mt-8 inline-block rounded-full px-3 py-1 text-[11px] tracking-[0.15em]">願 · 모실 수 있는 의식</span>
+          <h2 class="mt-4 text-2xl font-bold tracking-tight leading-snug">하고 싶은 일부터 고르세요</h2>
+
+          <div class="shell mt-6 rounded-[1.5rem] p-1.5">
+            <div class="core rounded-[calc(1.5rem-0.375rem)] p-5">
+              <div class="flex items-start justify-between">
+                <span class="serif text-3xl accent" style="opacity:.85">齋</span>
+                <span class="chip w-9 h-9 rounded-full flex items-center justify-center text-sm">→</span>
+              </div>
+              <p class="mt-6 font-bold text-lg">사십구재</p>
+              <p class="mt-1 text-sm muted leading-relaxed">49일 동안 7일마다 재를 올려 영가의 왕생을 빕니다.</p>
+              <p class="mt-4 text-sm"><b>280만 원부터</b> <span class="muted">· 7회</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="alt p-6">
+          <p class="serif text-xl leading-snug">“떠난 이와 남은 이 모두<br>편안해지도록”</p>
+          <div class="mt-4 flex flex-wrap gap-1.5 text-xs">
+            <span class="chip rounded-full px-2.5 py-1 muted">천도재</span><span class="chip rounded-full px-2.5 py-1 muted">사십구재</span><span class="chip rounded-full px-2.5 py-1 muted">기제사 위탁</span>
+          </div>
+          <button class="btn mt-6 rounded-full pl-6 pr-2 py-2 font-semibold flex items-center gap-4">주문 · 예약하러 가기 <span class="w-8 h-8 rounded-full bg-black/15 flex items-center justify-center">→</span></button>
+        </div>
+      </section>`).join('');
+  </script>
+</body>
+</html>

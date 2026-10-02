@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>염원 念願 | 믿고 맡기는 스님 부적 · 제례 예약</title>
+  <meta name="description" content="사찰과 승적을 확인한 스님께 수기 부적을 주문하고 천도재, 사십구재, 기제사 위탁, 등 공양을 예약하세요.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+  <script src="assets/theme.js"></script>
+  <link rel="stylesheet" href="assets/common.css">
+  <style>
+    @keyframes heroZoom { from { transform: scale(1.08); } to { transform: scale(1); } }
+    .hero-img { animation: heroZoom 2.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  </style>
+</head>
+<body class="grain font-sans break-keep-all selection:bg-cinnabar/40">
+
+  <div data-shell="header"></div>
+
+  <main>
+    <!-- 히어로: 전체 화면 이미지 + 왼쪽 문구 -->
+    <section id="hero" class="relative min-h-[100dvh] flex items-end md:items-center overflow-hidden">
+      <img src="assets/images/hero-scene.jpg" alt="해 뜨는 산자락을 배경으로 사찰 처마 끝에 매달린 풍경" class="hero-img absolute inset-0 w-full h-full object-cover object-[78%_center] md:object-center" fetchpriority="high" decoding="async">
+      <div aria-hidden="true" class="absolute inset-0 bg-page/45 md:bg-transparent"></div>
+      <div aria-hidden="true" class="absolute inset-0 bg-gradient-to-r from-page/95 via-page/60 to-transparent"></div>
+      <div aria-hidden="true" class="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-page/70 to-transparent"></div>
+      <div aria-hidden="true" class="absolute inset-x-0 bottom-0 h-2/3 md:h-1/3 bg-gradient-to-t from-page via-page/60 to-transparent"></div>
+
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-40 pb-16 md:py-32">
+        <div class="max-w-2xl">
+          <span class="reveal inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-page/40 border border-edge/10 text-fg2 backdrop-blur-sm" style="--index:0">
+            <span class="w-1.5 h-1.5 rounded-full bg-cinnabar"></span> 승적과 사찰을 확인한 스님만 모십니다
+          </span>
+          <h1 class="reveal mt-6 text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight text-fg" style="--index:1">
+            당신의 염원,<br>
+            믿고 맡길 <span class="text-cinnabar-soft">스님</span>께 올리세요
+          </h1>
+          <p class="reveal mt-6 text-base md:text-lg text-fg2 leading-relaxed max-w-[48ch]" style="--index:2">
+            스님이 직접 부적을 쓰고 천도재, 사십구재, 기제사를 모십니다. 스님 페이지에서 바로 주문하고 날짜를 잡으세요.
+          </p>
+          <div class="reveal mt-10 flex flex-col sm:flex-row gap-3" style="--index:3">
+            <a id="heroMonkBtn" href="#monks" class="group ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-cinnabar text-white pl-8 pr-2 py-2 min-h-[56px] text-lg font-semibold hover:scale-[1.02] active:scale-[0.98] hover:shadow-[0_0_30px_rgba(200,85,61,0.3)] focus:outline-none focus-visible:ring-2 focus-visible:ring-edge/60">
+              스님 만나보기
+              <span class="ease-spring w-10 h-10 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:arrow-right-linear" width="20"></iconify-icon></span>
+            </a>
+            <a href="#services" class="group ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-page/40 backdrop-blur-sm border border-edge/15 text-fg pl-8 pr-2 py-2 min-h-[56px] text-lg font-semibold hover:bg-page/60 hover:scale-[1.02] active:scale-[0.98]">
+              모실 수 있는 의식
+              <span class="ease-spring w-10 h-10 rounded-full bg-edge/10 flex items-center justify-center group-hover:translate-y-0.5"><iconify-icon icon="solar:alt-arrow-down-linear" width="20"></iconify-icon></span>
+            </a>
+          </div>
+          <ul class="reveal mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm text-fg2" style="--index:4">
+            <li class="flex items-center gap-2"><iconify-icon icon="solar:verified-check-linear" width="18" class="text-cinnabar-soft"></iconify-icon>승적 · 사찰 방문 확인</li>
+            <li class="flex items-center gap-2"><iconify-icon icon="solar:shield-check-linear" width="18" class="text-cinnabar-soft"></iconify-icon>봉행 후 정산</li>
+            <li class="flex items-center gap-2"><iconify-icon icon="solar:wallet-linear" width="18" class="text-cinnabar-soft"></iconify-icon>발송 전 전액 환불</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 모실 수 있는 의식 -->
+    <section id="services" class="py-24 md:py-32 scroll-mt-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">願 · 모실 수 있는 의식</span>
+            <h2 class="reveal mt-5 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-snug" style="--index:1">하고 싶은 일부터 고르세요</h2>
+          </div>
+          <p class="reveal text-muted leading-relaxed max-w-sm" style="--index:2">의식마다 절차, 비용, 준비하실 것을 정리해 두었습니다.</p>
+        </div>
+        <div id="serviceGrid" class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5"></div>
+      </div>
+    </section>
+
+    <!-- 모시는 스님 -->
+    <section id="monks" class="py-24 md:py-32 bg-deep/40 border-y border-edge/5 scroll-mt-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">僧 · 모시는 스님</span>
+        <h2 id="monkTitle" class="reveal mt-5 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-snug" style="--index:1"></h2>
+        <div id="monkGrid" class="mt-10 grid gap-5"></div>
+      </div>
+    </section>
+
+    <!-- 이용 방법 -->
+    <section id="how" class="py-24 md:py-32 lg:py-40 scroll-mt-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl">
+          <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">順 · 이용 방법</span>
+          <h2 class="reveal mt-5 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-snug" style="--index:1">스님 페이지에서<br>주문부터 예약까지</h2>
+        </div>
+        <ol class="mt-16 grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6">
+          <li class="reveal md:pr-6" style="--index:0">
+            <span class="font-serif text-6xl font-extrabold text-edge/10">01</span>
+            <div class="mt-4 h-px bg-gradient-to-r from-cinnabar/60 to-transparent"></div>
+            <h3 class="mt-6 text-lg font-semibold flex items-center gap-2"><iconify-icon icon="solar:user-linear" width="20" class="text-cinnabar"></iconify-icon>스님과 의식 고르기</h3>
+            <p class="mt-3 text-sm text-muted leading-relaxed">모시고 싶은 의식을 고르고, 스님의 이야기와 후기를 읽어 보세요.</p>
+          </li>
+          <li class="reveal md:pr-6" style="--index:1">
+            <span class="font-serif text-6xl font-extrabold text-edge/10">02</span>
+            <div class="mt-4 h-px bg-gradient-to-r from-cinnabar/60 to-transparent"></div>
+            <h3 class="mt-6 text-lg font-semibold flex items-center gap-2"><iconify-icon icon="solar:calendar-linear" width="20" class="text-cinnabar"></iconify-icon>부적 · 날짜 선택</h3>
+            <p class="mt-3 text-sm text-muted leading-relaxed">스님 페이지에서 부적을 담거나, 가능한 날짜와 시간을 골라 예약하세요.</p>
+          </li>
+          <li class="reveal md:pr-6" style="--index:2">
+            <span class="font-serif text-6xl font-extrabold text-edge/10">03</span>
+            <div class="mt-4 h-px bg-gradient-to-r from-cinnabar/60 to-transparent"></div>
+            <h3 class="mt-6 text-lg font-semibold flex items-center gap-2"><iconify-icon icon="solar:phone-linear" width="20" class="text-cinnabar"></iconify-icon>결제 · 확인 전화</h3>
+            <p class="mt-3 text-sm text-muted leading-relaxed">결제하시면 스님이 사연을 읽고 직접 확인 전화를 드립니다.</p>
+          </li>
+          <li class="reveal md:pr-6" style="--index:3">
+            <span class="font-serif text-6xl font-extrabold text-edge/10">04</span>
+            <div class="mt-4 h-px bg-gradient-to-r from-cinnabar/60 to-transparent"></div>
+            <h3 class="mt-6 text-lg font-semibold flex items-center gap-2"><iconify-icon icon="solar:delivery-linear" width="20" class="text-cinnabar"></iconify-icon>발송 · 영상 전달</h3>
+            <p class="mt-3 text-sm text-muted leading-relaxed">부적은 밀봉해 등기로, 제례와 기도는 봉행 영상으로 받아 보십니다.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 안심 장치 (벤토) -->
+    <section class="pb-24 md:pb-32 lg:pb-40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-5">
+          <div class="reveal lg:col-span-2 lg:row-span-2 rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10">
+            <div class="relative h-full overflow-hidden rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-8 md:p-12 flex flex-col">
+              <span aria-hidden="true" class="absolute -right-6 -bottom-16 font-serif font-extrabold text-[16rem] leading-none text-edge/[0.03] select-none">信</span>
+              <span class="inline-flex w-max items-center gap-2 rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">信 · 안심하고 맡기세요</span>
+              <h2 class="mt-6 text-3xl md:text-4xl font-bold tracking-tight leading-snug">모시기 전에<br>사찰과 승적을 직접 확인합니다</h2>
+              <p class="mt-5 text-muted leading-relaxed max-w-[48ch]">염원 담당자가 사찰을 찾아가 스님을 직접 만납니다. 아래 네 가지를 모두 확인한 스님만 모십니다.</p>
+              <ul class="relative mt-auto pt-10 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                <li class="flex items-center gap-3 rounded-2xl bg-edge/[0.03] border border-edge/10 px-4 py-3"><iconify-icon icon="solar:verified-check-linear" width="20" class="text-cinnabar"></iconify-icon>승적 · 소속 종단 확인</li>
+                <li class="flex items-center gap-3 rounded-2xl bg-edge/[0.03] border border-edge/10 px-4 py-3"><iconify-icon icon="solar:map-point-linear" width="20" class="text-cinnabar"></iconify-icon>사찰 실재 · 주소 방문 확인</li>
+                <li class="flex items-center gap-3 rounded-2xl bg-edge/[0.03] border border-edge/10 px-4 py-3"><iconify-icon icon="solar:pen-linear" width="20" class="text-cinnabar"></iconify-icon>수기 부적 시연 확인</li>
+                <li class="flex items-center gap-3 rounded-2xl bg-edge/[0.03] border border-edge/10 px-4 py-3"><iconify-icon icon="solar:chat-round-dots-linear" width="20" class="text-cinnabar"></iconify-icon>후기 정기 점검</li>
+              </ul>
+            </div>
+          </div>
+          <div class="reveal rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10" style="--index:1">
+            <div class="h-full rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-8">
+              <iconify-icon icon="solar:shield-check-linear" width="28" class="text-cinnabar"></iconify-icon>
+              <h3 class="mt-5 text-xl font-bold tracking-tight">봉행이 끝나야 정산됩니다</h3>
+              <p class="mt-3 text-sm text-muted leading-relaxed">결제 금액은 염원이 보관하고 있다가, 부적 발송과 제례 봉행이 확인된 뒤 스님께 전달합니다.</p>
+            </div>
+          </div>
+          <div class="reveal rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10" style="--index:2">
+            <div class="h-full rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-8">
+              <iconify-icon icon="solar:wallet-linear" width="28" class="text-cinnabar"></iconify-icon>
+              <h3 class="mt-5 text-xl font-bold tracking-tight">발송 전 전액 환불</h3>
+              <p class="mt-3 text-sm text-muted leading-relaxed">부적은 발송 전까지, 제례는 봉행 3일 전까지 이유를 묻지 않고 전액 돌려 드립니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 후기 -->
+    <section id="reviews" class="py-24 md:py-32 lg:py-40 bg-deep/40 border-y border-edge/5 scroll-mt-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">緣 · 이용 후기</span>
+            <h2 class="reveal mt-5 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-snug" style="--index:1">먼저 맡기신 분들의 이야기</h2>
+          </div>
+          <div class="reveal flex items-center gap-3" style="--index:2">
+            <div class="flex text-cinnabar" id="avgStars"></div>
+            <p class="text-sm text-muted" id="avgText"></p>
+          </div>
+        </div>
+        <div id="reviewGrid" class="mt-14 columns-1 md:columns-2 lg:columns-3 gap-5"></div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-24 md:py-32 lg:py-40 scroll-mt-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div class="lg:col-span-4">
+          <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">問 · 자주 묻는 질문</span>
+          <h2 class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug" style="--index:1">처음 오신 분들이<br>많이 물으십니다</h2>
+          <p class="reveal mt-5 text-muted leading-relaxed" style="--index:2">결제, 배송, 환불, 영상 참여에 대한 질문은 고객센터에 모두 모아 두었습니다.</p>
+          <a href="help.html" class="reveal group ease-spring mt-8 inline-flex items-center gap-3 rounded-full bg-edge/5 border border-edge/10 pl-6 pr-2 py-2 min-h-[52px] font-semibold hover:bg-edge/10 hover:scale-[1.02] active:scale-[0.98]" style="--index:3">
+            고객센터에서 전체 보기
+            <span class="ease-spring w-9 h-9 rounded-full bg-edge/5 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></span>
+          </a>
+        </div>
+        <div id="faqList" class="lg:col-span-8 divide-y divide-edge/10 border-y border-edge/10"></div>
+      </div>
+    </section>
+
+    <!-- CTA + 입점 -->
+    <section id="join" class="px-4 sm:px-6 lg:px-8 pb-24 md:pb-32 scroll-mt-20">
+      <div class="reveal max-w-7xl mx-auto rounded-[2.5rem] p-1.5 bg-edge/5 ring-1 ring-edge/10">
+        <div class="relative overflow-hidden rounded-[calc(2.5rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)]">
+          <div aria-hidden="true" class="absolute -right-24 -top-24 w-[30rem] h-[30rem] rounded-full" style="background: radial-gradient(circle, rgba(200,85,61,0.28), transparent 65%);"></div>
+          <span aria-hidden="true" class="absolute right-6 md:right-16 top-6 font-serif font-extrabold text-[11rem] md:text-[18rem] leading-none text-edge/[0.03] select-none">願</span>
+          <div class="relative px-6 py-20 md:px-16 md:py-24 max-w-2xl">
+            <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">미뤄 둔 정성,<br>오늘 스님께 맡기세요</h2>
+            <p class="mt-6 text-muted text-base md:text-lg leading-relaxed max-w-[48ch]">첫 주문 고객께는 축원 봉인을 무료로 올려 드립니다. 상담만 받으셔도 괜찮습니다.</p>
+            <a id="ctaMonkBtn" href="#monks" class="group ease-spring mt-10 inline-flex items-center justify-between gap-4 rounded-full bg-cinnabar text-white pl-8 pr-2 py-2 min-h-[56px] text-lg font-semibold hover:scale-[1.02] active:scale-[0.98] hover:shadow-[0_0_30px_rgba(200,85,61,0.25)]">
+              스님 만나보기
+              <span class="ease-spring w-10 h-10 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:arrow-right-linear" width="20"></iconify-icon></span>
+            </a>
+          </div>
+          <div class="relative border-t border-edge/10 px-6 md:px-16 py-8 flex flex-col md:flex-row md:items-center justify-between gap-5">
+            <div class="flex items-center gap-4">
+              <span class="w-12 h-12 shrink-0 rounded-full bg-edge/5 border border-edge/10 flex items-center justify-center font-serif font-extrabold text-hanji">僧</span>
+              <div>
+                <p class="font-semibold">스님이신가요?</p>
+                <p class="text-sm text-subtle">함께하실 스님을 소수로 모시고 있습니다. 담당자가 사찰로 찾아갑니다.</p>
+              </div>
+            </div>
+            <button id="joinBtn" class="group ease-spring inline-flex items-center gap-3 rounded-full bg-edge/5 border border-edge/10 pl-6 pr-2 py-2 min-h-[52px] font-semibold hover:bg-edge/10 hover:scale-[1.02] active:scale-[0.98] w-max">
+              입점 문의하기
+              <span class="ease-spring w-9 h-9 rounded-full bg-edge/5 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div data-shell="footer"></div>
+
+  <!-- 모바일 하단 고정 바 -->
+  <div id="stickyBar" class="md:hidden fixed bottom-0 inset-x-0 z-40 px-4 pb-4 translate-y-full opacity-0 ease-spring">
+    <div class="flex gap-2 rounded-full p-1.5 bg-deep/80 backdrop-blur-xl border border-edge/10">
+      <a id="barMonkBtn" href="#monks" class="flex-1 h-12 rounded-full bg-cinnabar text-white text-sm font-semibold flex items-center justify-center gap-2 active:scale-[0.98] ease-spring"><iconify-icon icon="solar:user-linear" width="18"></iconify-icon>스님 만나보기</a>
+      <button data-open-cart class="flex-1 h-12 rounded-full bg-edge/5 text-sm font-semibold flex items-center justify-center gap-2 active:scale-[0.98] ease-spring"><iconify-icon icon="solar:bag-4-linear" width="18"></iconify-icon>장바구니 <span data-cart-count class="text-cinnabar-soft">0</span></button>
+    </div>
+  </div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/common.js"></script>
+  <script>
+    const { D, $, $$, manwon, monkUrl, monkAvatar, landscapeSVG, charmSVG, stars } = YW;
+    const MONKS = D.MONKS;
+    const single = MONKS.length === 1;
+
+    YW.mountShell();
+
+    // 스님이 한 분이면 "스님 만나보기"는 바로 스님 페이지로
+    if (single) ['#heroMonkBtn', '#ctaMonkBtn', '#barMonkBtn'].forEach(s => { $(s).href = monkUrl(MONKS[0].id); });
+
+
+    // ---------- 모실 수 있는 의식 ----------
+    // dev 옵션: cardLink = detail(상세만) | both(상세 + 바로 예약), emptyRitual = hide | soon
+    function renderServices() {
+      const both = YW.devOpt('cardLink') === 'both';
+      const items = YW.visibleRituals();
+      $('#serviceGrid').innerHTML = items.map((r, i) => {
+        const big = i === 0 && r.key === 'charm';
+        const quick = r.by.length === 1 ? YW.bookUrl(r.by[0], r.key) : `${YW.ritualUrl(r.key)}#monks`;
+        return `
+        <article class="reveal group relative ${big ? 'sm:col-span-2' : ''} rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-cinnabar/50" style="--index:${i % 3}">
+          <div class="${r.active ? '' : 'opacity-70'} relative h-full overflow-hidden rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-7 md:p-8 flex ${big ? 'flex-col sm:flex-row sm:items-center gap-8' : 'flex-col'}">
+            <div class="flex-1 flex flex-col h-full">
+              <div class="flex items-start justify-between gap-4">
+                <span class="font-serif font-extrabold text-4xl text-edge/20 ease-spring group-hover:text-cinnabar">${r.mark}</span>
+                ${r.active ? '' : '<span class="rounded-full px-2.5 py-1 text-[11px] bg-edge/5 border border-edge/10 text-subtle">준비 중</span>'}
+              </div>
+              <h3 class="mt-8 text-xl font-bold tracking-tight">
+                <a href="${YW.ritualUrl(r.key)}" class="after:absolute after:inset-0 after:content-[''] focus:outline-none">${r.name}</a>
+              </h3>
+              <p class="mt-2 text-sm text-muted leading-relaxed max-w-[46ch]">${r.desc || r.summary}</p>
+              <div class="mt-auto pt-6 flex flex-wrap items-center justify-between gap-3">
+                <p class="text-sm flex flex-wrap gap-x-3 gap-y-1">${r.active ? `<b class="tabular-nums">${manwon(r.min)}부터</b>` : '<b class="text-subtle">모실 스님을 찾고 있습니다</b>'}<span class="text-subtle">${r.dur}</span></p>
+                <div class="flex items-center gap-2">
+                  ${both && r.active ? `<a href="${quick}" class="relative z-10 ease-spring h-10 px-4 rounded-full bg-cinnabar text-white text-sm font-semibold flex items-center gap-1.5 hover:scale-[1.03] active:scale-[0.97]"><iconify-icon icon="solar:calendar-linear" width="16"></iconify-icon>${r.key === 'charm' ? '바로 주문' : '바로 예약'}</a>` : ''}
+                  <span class="ease-spring w-10 h-10 shrink-0 rounded-full bg-edge/5 border border-edge/10 flex items-center justify-center group-hover:bg-cinnabar group-hover:border-cinnabar group-hover:text-white group-hover:translate-x-1" aria-hidden="true"><iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></span>
+                </div>
+              </div>
+            </div>
+            ${big ? `<div class="hidden sm:flex shrink-0 gap-3 pr-2">
+              ${r.by[0].charms.slice(0, 2).map((ci, k) => `<div class="w-24 md:w-28 ease-spring ${k ? 'translate-y-6 rotate-[5deg] group-hover:rotate-[2deg]' : '-rotate-[4deg] group-hover:-rotate-[1deg]'} shadow-[0_25px_50px_-20px_var(--drop)] rounded-[1rem]">${charmSVG(D.CHARM_TYPES[ci.id], YW.hash(r.by[0].id, ci.id) % 997 + 1)}</div>`).join('')}
+            </div>` : ''}
+          </div>
+        </article>`;
+      }).join('');
+      YW.observeReveals();
+    }
+    renderServices();
+    YW.onDevChange(renderServices);
+
+    // ---------- 모시는 스님 (인원수에 따라 배치가 바뀜) ----------
+    $('#monkTitle').innerHTML = single ? '정성을 올릴 스님을<br>소개합니다' : `스님 ${MONKS.length}분을 모시고 있습니다`;
+
+    const tagHtml = t => `<span class="rounded-full px-2.5 py-1 text-[11px] bg-edge/[0.04] border border-edge/10 text-muted">${t}</span>`;
+    const priceLine = m => [m.minCharm && `부적 ${manwon(m.minCharm)}부터`, m.minService && `제례 · 기도 ${manwon(m.minService)}부터`].filter(Boolean).join(' · ');
+    const ratingHtml = (m, size = 13) => `<span class="flex items-center gap-1.5"><span class="flex text-cinnabar">${stars(m.rating, size)}</span><b>${m.rating}</b><span class="text-subtle">(${m.reviewCount.toLocaleString('ko-KR')})</span></span>`;
+
+    // 1분: 크게 한 장
+    const featureCard = m => `
+      <a href="${monkUrl(m.id)}" class="reveal group block rounded-[2.25rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-edge/25">
+        <article class="rounded-[calc(2.25rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+          <div class="relative h-64 sm:h-80 lg:h-auto lg:min-h-[32rem] overflow-hidden">
+            <div class="absolute inset-0 ease-spring group-hover:scale-105">${landscapeSVG(m.seed)}</div>
+            <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"></div>
+            <span aria-hidden="true" class="absolute right-6 top-4 font-serif font-extrabold text-7xl lg:text-9xl text-edge/10 [writing-mode:vertical-rl]">${m.hanja}</span>
+            <div class="absolute left-6 bottom-6 lg:left-10 lg:bottom-10 flex items-end gap-4">
+              ${monkAvatar(m, 'w-24 h-24 lg:w-28 lg:h-28 text-2xl lg:text-3xl ring-4 ring-surface')}
+              <span class="mb-2 rounded-full px-3 py-1 text-xs bg-surface/70 border border-edge/10 text-fg2">${m.area}</span>
+            </div>
+          </div>
+          <div class="p-8 md:p-12 flex flex-col">
+            <div class="flex flex-wrap items-center gap-3">
+              <h3 class="text-3xl md:text-4xl font-bold tracking-tight">${m.name} 스님</h3>
+              <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-cinnabar/10 text-cinnabar-soft"><iconify-icon icon="solar:verified-check-linear" width="16"></iconify-icon>승적 · 사찰 확인</span>
+            </div>
+            <p class="mt-2 text-muted">${m.temple} · 출가 ${m.years}년</p>
+            <p class="mt-8 font-serif font-extrabold text-2xl leading-snug text-fg">“${m.tagline}”</p>
+            <p class="mt-4 text-muted leading-relaxed">${m.intro}</p>
+            <div class="mt-6 flex flex-wrap gap-1.5">${m.specialties.map(tagHtml).join('')}</div>
+            <div class="mt-auto pt-8 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+              <div class="text-sm space-y-1.5">${ratingHtml(m, 15)}<p class="text-muted">${priceLine(m)}</p></div>
+              <span class="ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-cinnabar text-white pl-7 pr-2 py-2 min-h-[56px] font-semibold group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(200,85,61,0.25)] w-max">
+                주문 · 예약하러 가기
+                <span class="ease-spring w-10 h-10 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:arrow-right-linear" width="20"></iconify-icon></span>
+              </span>
+            </div>
+          </div>
+        </article>
+      </a>`;
+
+    // 2분: 가로형 카드 2열
+    const rowCard = (m, i) => `
+      <a href="${monkUrl(m.id)}" class="reveal group block rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-edge/25" style="--index:${i}">
+        <article class="h-full rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] overflow-hidden grid grid-cols-1 sm:grid-cols-[13rem_1fr]">
+          <div class="relative h-36 sm:h-auto overflow-hidden">
+            <div class="absolute inset-0 ease-spring group-hover:scale-105">${landscapeSVG(m.seed)}</div>
+            <div class="absolute inset-0 flex items-center justify-center">${monkAvatar(m, 'w-20 h-20 text-xl ring-4 ring-surface/80')}</div>
+          </div>
+          <div class="p-6 flex flex-col">
+            <h3 class="text-xl font-bold tracking-tight flex items-center gap-1.5">${m.name} 스님 <iconify-icon icon="solar:verified-check-linear" width="18" class="text-cinnabar"></iconify-icon></h3>
+            <p class="text-sm text-subtle mt-0.5">${m.temple} · ${m.area}</p>
+            <p class="mt-4 text-fg2 leading-relaxed">“${m.tagline}”</p>
+            <div class="mt-4 flex flex-wrap gap-1.5">${m.specialties.slice(0, 4).map(tagHtml).join('')}</div>
+            <div class="mt-5 pt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-sm border-t border-edge/5">${ratingHtml(m)}<span class="text-muted text-xs">${priceLine(m)}</span></div>
+          </div>
+        </article>
+      </a>`;
+
+    // 3–5분: 세로형 카드 그리드
+    const colCard = (m, i) => `
+      <a href="${monkUrl(m.id)}" class="reveal group block rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-edge/25" style="--index:${i % 3}">
+        <article class="h-full rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] overflow-hidden flex flex-col">
+          <div class="relative h-36 overflow-hidden"><div class="absolute inset-0 ease-spring group-hover:scale-105">${landscapeSVG(m.seed)}</div></div>
+          <div class="px-6 pb-6 -mt-9 relative flex flex-col flex-1">
+            ${monkAvatar(m, 'w-[4.5rem] h-[4.5rem] text-lg ring-4 ring-surface')}
+            <h3 class="mt-4 text-xl font-bold tracking-tight flex items-center gap-1.5">${m.name} 스님 <iconify-icon icon="solar:verified-check-linear" width="18" class="text-cinnabar"></iconify-icon></h3>
+            <p class="text-sm text-subtle mt-0.5">${m.temple} · ${m.area}</p>
+            <p class="mt-4 text-fg2 leading-relaxed">“${m.tagline}”</p>
+            <div class="mt-4 flex flex-wrap gap-1.5">${m.specialties.slice(0, 3).map(tagHtml).join('')}</div>
+            <div class="mt-auto pt-5 text-sm space-y-1 border-t border-edge/5 mt-5">${ratingHtml(m)}<p class="text-muted text-xs">${priceLine(m)}</p></div>
+          </div>
+        </article>
+      </a>`;
+
+    function renderMonks() {
+      const list = MONKS;
+      const grid = $('#monkGrid');
+      grid.className = 'mt-10 grid gap-5 ' + (list.length === 1 ? 'grid-cols-1' : list.length === 2 ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3');
+      grid.innerHTML = list.length === 1 ? featureCard(list[0]) : list.map(list.length === 2 ? rowCard : colCard).join('');
+      YW.observeReveals();
+    }
+    // ---------- 후기 ----------
+    const activeIds = new Set(MONKS.map(m => m.id));
+    const reviews = D.REVIEWS.filter(r => activeIds.has(r.monk)).slice(0, 6);
+    const totalCount = MONKS.reduce((a, m) => a + m.reviewCount, 0);
+    const avg = MONKS.reduce((a, m) => a + m.rating * m.reviewCount, 0) / totalCount;
+    $('#avgStars').innerHTML = stars(avg, 18);
+    $('#avgText').innerHTML = `<b class="text-fg">${avg.toFixed(2)}</b> · 후기 ${totalCount.toLocaleString('ko-KR')}건`;
+    $('#reviewGrid').innerHTML = reviews.map((r, i) => {
+      const m = YW.monkById(r.monk);
+      return `
+      <figure class="reveal break-inside-avoid mb-5 rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10" style="--index:${i % 3}">
+        <div class="rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-6 md:p-7">
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex text-cinnabar">${stars(r.stars)}</div>
+            <span class="text-[11px] text-faint tabular-nums">${r.date}</span>
+          </div>
+          <blockquote class="mt-4 text-fg leading-relaxed">${r.body}</blockquote>
+          <figcaption class="mt-6 text-sm"><b class="text-fg">${r.name}</b> <span class="text-subtle">· ${r.service}</span></figcaption>
+          ${single ? '' : `<a href="${monkUrl(m.id)}" class="ease-spring mt-4 flex items-center gap-3 rounded-2xl bg-edge/[0.03] border border-edge/10 px-3 py-2.5 hover:bg-edge/[0.07]">
+            ${monkAvatar(m, 'w-8 h-8 text-[10px]')}
+            <span class="flex-1 text-xs text-muted"><b class="text-fg">${m.name} 스님</b> · ${m.temple}</span>
+            <iconify-icon icon="solar:alt-arrow-right-linear" width="16" class="text-subtle"></iconify-icon>
+          </a>`}
+        </div>
+      </figure>`;
+    }).join('');
+
+    // ---------- FAQ ----------
+    // 메인에는 대표 질문만, 전체는 고객센터에서
+    YW.renderFaq($('#faqList'), D.FAQS.filter(f => f.top && (!f.multi || MONKS.length > 1)));
+
+    $('#joinBtn').addEventListener('click', () => YW.toast('시안에서는 입점 문의 창이 열리지 않습니다'));
+
+    renderMonks();
+    YW.observeReveals();
+    YW.stickyBar('#stickyBar', '#hero');
+  </script>
+</body>
+</html>

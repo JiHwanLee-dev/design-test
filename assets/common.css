@@ -1,0 +1,79 @@
+/* ---------- 테마 색상 (RGB 숫자 3개로 적어야 Tailwind의 /50 같은 투명도가 동작합니다) ---------- */
+:root, [data-theme="dark"] {
+  --c-page: 12 10 9;      --c-surface: 12 10 9;   --c-deep: 28 25 23;
+  --c-fg: 245 245 244;    --c-fg2: 214 211 209;   --c-muted: 168 162 158;
+  --c-subtle: 120 113 108; --c-faint: 87 83 78;
+  --c-edge: 255 255 255;  --c-scrim: 12 10 9;
+  --c-cin: 200 85 61;     --c-cin-soft: 217 116 94;
+  --drop: rgba(0, 0, 0, 0.7);
+  --grain: 0.05;
+  --ls-sky1: #1c1917; --ls-sky2: #292524; --ls-mist: #d6d3d1;
+  --ls-m1: #3a3430; --ls-m2: #2a2522; --ls-m3: #1d1917; --ls-m4: #141110;
+  --map-bg: #1c1917; --map-river: #57534e; --map-road: #44403c;
+  color-scheme: dark;
+}
+/* A. 한지 미색 */
+[data-theme="hanji"] {
+  --c-page: 241 235 224;  --c-surface: 250 246 239; --c-deep: 233 225 211;
+  --c-fg: 42 36 32;       --c-fg2: 74 64 56;        --c-muted: 111 101 91;
+  --c-subtle: 140 129 117; --c-faint: 176 166 153;
+  --c-edge: 60 45 30;     --c-scrim: 40 32 26;
+  --c-cin: 180 71 47;     --c-cin-soft: 165 64 42;
+  --drop: rgba(60, 45, 30, 0.22);
+  --grain: 0.035;
+  --ls-sky1: #f4ede2; --ls-sky2: #ebe2d3; --ls-mist: #ffffff;
+  --ls-m1: #d6cbb9; --ls-m2: #c4b7a3; --ls-m3: #ad9f8a; --ls-m4: #968873;
+  --map-bg: #e9e1d3; --map-river: #c9bdac; --map-road: #b5a896;
+  color-scheme: light;
+}
+/* B. 새벽 안개 */
+[data-theme="dawn"] {
+  --c-page: 232 226 220;  --c-surface: 245 241 236; --c-deep: 222 214 207;
+  --c-fg: 43 37 40;       --c-fg2: 72 63 67;        --c-muted: 110 100 104;
+  --c-subtle: 138 128 132; --c-faint: 172 163 165;
+  --c-edge: 70 55 60;     --c-scrim: 43 37 40;
+  --c-cin: 176 80 58;     --c-cin-soft: 160 70 50;
+  --drop: rgba(70, 55, 60, 0.22);
+  --grain: 0.035;
+  --ls-sky1: #efe6e4; --ls-sky2: #e6d9d6; --ls-mist: #ffffff;
+  --ls-m1: #d3c6c6; --ls-m2: #bfb0b2; --ls-m3: #a69699; --ls-m4: #8d7e82;
+  --map-bg: #ded6cf; --map-river: #c7bab7; --map-road: #b0a3a2;
+  color-scheme: light;
+}
+
+html { scroll-behavior: smooth; }
+body { background: rgb(var(--c-page)); color: rgb(var(--c-fg)); -webkit-font-smoothing: antialiased; transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), color 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+.break-keep-all { word-break: keep-all; }
+.ease-spring { transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+
+.grain::after {
+  content: ""; position: fixed; inset: 0; z-index: 60; pointer-events: none; opacity: var(--grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(2rem); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+.reveal { opacity: 0; }
+.reveal.in { animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: calc(var(--index, 0) * 80ms); }
+
+@keyframes float { 0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); } 50% { transform: translateY(-14px) rotate(var(--rot, 0deg)); } }
+.float { animation: float 7s ease-in-out infinite; }
+
+@keyframes orb { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(30px, -20px) scale(1.08); } }
+.orb { animation: orb 14s ease-in-out infinite; }
+
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee { animation: marquee 38s linear infinite; }
+
+@keyframes menuIn { from { opacity: 0; transform: translateY(2rem); } to { opacity: 1; transform: translateY(0); } }
+.menu-open .menu-link { animation: menuIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: calc(var(--index) * 70ms); }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+.faq-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+.faq-open .faq-body { grid-template-rows: 1fr; }
+.faq-open .faq-icon { transform: rotate(180deg); }
+
