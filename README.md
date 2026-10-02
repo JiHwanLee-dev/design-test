@@ -35,10 +35,17 @@ python3 -m http.server 8000   # → http://localhost:8000
 | `assets/theme.js` | Tailwind 설정, 기본 테마 (`DEFAULT_THEME`) |
 | `assets/common.css` | 테마별 색 (CSS 변수), 애니메이션 |
 
+## 이미지
+
+`assets/images/`의 사진은 `../temple/public/images/`에서 가져와 JPG로 줄인 **임시 이미지**입니다.
+스님 사진·표지는 `data.js`의 `photo`, `cover`, `storyPhoto`, `templePhoto`, 의식별 사진은 `RITUAL_IMAGES`, 메인 갤러리는 `GALLERY`에서 바꿉니다.
+사진이 없는 스님은 수묵 그림과 한자 도장으로 자동 대체됩니다.
+
 ## DEV 패널
 
 주소 끝에 `?dev=1`을 붙이면 왼쪽 아래에 패널이 뜹니다. `?dev=0`으로 끕니다.
 
+- 메인 히어로 사진: 처마 풍경 / 다실 햇살 / 향 연기
 - 메인 구성: 랜딩형 / 쇼핑몰형 (헤더 메뉴도 함께 바뀜)
 - 스님 페이지 구성: 스토어형 / 소개형
 - 배경색: 화이트 / 한지 미색 / 새벽 안개 / 먹색

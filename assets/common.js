@@ -3,6 +3,13 @@
 window.YW = (() => {
   const D = window.YW_DATA;
 
+  // 스님 표지 (사진이 없으면 수묵 그림)
+  const monkCover = (m, cls = 'absolute inset-0 w-full h-full') => m.cover
+    ? `<img src="${m.cover}" alt="${m.temple} 전경" class="${cls} object-cover" loading="lazy" decoding="async">`
+    : landscapeSVG(m.seed, cls);
+  const ritualImg = key => D.RITUAL_IMAGES[key];
+  const photo = (src, alt, cls = '') => `<img src="${src}" alt="${alt}" class="${cls}" loading="lazy" decoding="async">`;
+
   // ---------- 저장소 ----------
   const store = {
     get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
@@ -123,7 +130,11 @@ window.YW = (() => {
     return `
     <a href="${p.url}" class="group flex flex-col rounded-[1.5rem] bg-surface ring-1 ring-edge/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-5 ease-spring hover:ring-cinnabar/50">
       <div class="flex items-start gap-4">
-        <span class="w-14 h-14 shrink-0 rounded-2xl bg-deep/70 ring-1 ring-edge/10 flex items-center justify-center font-serif font-extrabold text-lg text-cinnabar ease-spring group-hover:bg-cinnabar group-hover:text-white">${t.hanja}</span>
+        <span class="relative w-16 h-16 shrink-0 rounded-2xl overflow-hidden ring-1 ring-edge/10 bg-deep">
+          ${photo(ritualImg(p.id), t.name, 'absolute inset-0 w-full h-full object-cover ease-spring group-hover:scale-110')}
+          <span class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></span>
+          <span class="absolute left-1.5 bottom-1 font-serif font-extrabold text-xs text-white">${t.hanja}</span>
+        </span>
         <div class="min-w-0 flex-1">
           <p class="text-[11px] text-subtle truncate">${p.monk.name} 스님 · ${p.monk.temple}</p>
           <h3 class="mt-0.5 font-semibold leading-snug">${t.name}</h3>
@@ -141,7 +152,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { mainLayout: 'brand', monkLayout: 'store', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
+  const DEV_DEFAULTS = { heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'store', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -187,6 +198,7 @@ window.YW = (() => {
 
   // 스님 법명 낙관(도장) 아바타
   function monkAvatar(m, cls = 'w-12 h-12 text-sm') {
+    if (m.photo) return `<span class="${cls} shrink-0 block rounded-full overflow-hidden bg-deep ring-1 ring-edge/10"><img src="${m.photo}" alt="${m.name} 스님" class="w-full h-full object-cover object-top" loading="lazy" decoding="async"></span>`;
     return `<span class="${cls} shrink-0 rounded-full bg-gradient-to-br from-stone-700 to-stone-900 ring-1 ring-edge/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.12)] flex items-center justify-center font-serif font-extrabold text-hanji tracking-tight" aria-hidden="true">${m.hanja}</span>`;
   }
 
@@ -711,6 +723,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     $$('#ywDev [data-theme-id]').forEach(b => b.setAttribute('aria-pressed', b.dataset.themeId === id));
   }
   const DEV_OPTIONS = [
+    { key: 'heroImage', label: '메인 히어로 사진', choices: [['eaves', '처마 풍경'], ['room', '다실 햇살'], ['incense', '향 연기']] },
     { key: 'mainLayout', label: '메인 구성 (헤더 포함)', choices: [['brand', '랜딩형'], ['shop', '쇼핑몰형']] },
     { key: 'monkLayout', label: '스님 페이지 구성', choices: [['store', '스토어형'], ['intro', '소개형']] },
     { key: 'cardLink', label: '메인 의식 카드 클릭', choices: [['detail', '상세 페이지만'], ['both', '상세 + 바로 예약']] },
@@ -757,7 +770,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
           </div>
           ${DEV_OPTIONS.map(o => `
             <p class="mt-3 px-1 text-[11px] text-[#a8a29e]">${o.label}</p>
-            <div class="mt-1 grid grid-cols-2 gap-1">
+            <div class="mt-1 grid ${o.choices.length === 3 ? 'grid-cols-3' : 'grid-cols-2'} gap-1">
               ${o.choices.map(([val, name]) => `<button data-opt="${o.key}" data-val="${val}" aria-pressed="${devOpt(o.key) === val}" class="${btn} px-2.5 py-2 text-center text-[12px]">${name}</button>`).join('')}
             </div>`).join('')}
           <p class="mt-3 px-1 text-[11px] text-[#78716c] leading-relaxed">고른 값은 이 브라우저에 저장되어 다른 페이지에서도 유지됩니다.</p>
@@ -832,7 +845,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     ritualUrl, ritualInfo, visibleRituals, offeredBy, bookUrl, priceAt, devOpt, onDevChange,
     charmUrl, charmSeed, charmUnit, charmCartItem, charmReviews, calc, riteUrl, serviceReviews,
     dateStatus, earliestDate, shortDate, shopUrl, charmCard, riteCard, shopProducts,
-    charmSVG, monkAvatar, landscapeSVG, stars,
+    charmSVG, monkAvatar, landscapeSVG, monkCover, ritualImg, photo, stars,
     openLayer, closeLayer, toast, confirmDialog,
     addToCart, openCart, openCheckout, mountShell, observeReveals, observeCounters, stickyBar, renderFaq,
   };
