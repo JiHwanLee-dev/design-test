@@ -16,7 +16,8 @@ python3 -m http.server 8000   # → http://localhost:8000
 
 | 파일 | 내용 |
 |---|---|
-| `index.html` | 메인 (의식 안내 요약, 모시는 스님, 이용 방법, 후기, FAQ) |
+| `index.html` | 메인. 쇼핑몰형(상품 진열) / 브랜드형(이야기 중심)을 dev 패널로 전환 |
+| `shop.html?cat=charm` | 상품 목록 (분류 탭 · 세부 분류 · 정렬 · 검색, `cat=all\|charm\|rite\|pray`) |
 | `monk.html?id=haewol` | 스님 페이지 (부적 주문, 제례·기도 예약). `&svc=sasipgu`로 의식 미리 선택 |
 | `ritual.html?id=sasipgu` | 의식 상세 (절차, 비용, 준비물, 모시는 스님) |
 | `charm.html?monk=haewol&id=pyeongan` | 부적 상세 (옵션·담기, 받아 보시기까지, 배송·환불, 후기) |
@@ -38,6 +39,7 @@ python3 -m http.server 8000   # → http://localhost:8000
 
 주소 끝에 `?dev=1`을 붙이면 왼쪽 아래에 패널이 뜹니다. `?dev=0`으로 끕니다.
 
+- 메인 구성: 쇼핑몰형 / 브랜드형 (헤더 메뉴도 함께 바뀜)
 - 배경색: 먹색 / 한지 미색 / 새벽 안개
 - 메인 의식 카드 클릭: 상세 페이지만 / 상세 + 바로 예약
 - 모시는 스님이 없는 의식: 숨김 / 준비 중 표시

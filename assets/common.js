@@ -55,12 +55,93 @@ window.YW = (() => {
   // 이 부적의 후기 (후기의 '어떤 의식' 이름에 부적 이름이 들어 있으면)
   const charmReviews = (monkId, charmId) => D.REVIEWS.filter(r => r.monk === monkId && r.service.startsWith(D.CHARM_TYPES[charmId].name));
 
+  // 예약 가능 날짜 규칙 (예약 위젯과 같은 규칙. 시안용으로 '마감'을 무작위처럼 만듦)
+  const dayKey = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  function dateStatus(monkId, key, d) {
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    if (Math.round((d - today) / 86400000) < 3) return 'prep';
+    if (hash(dayKey(d), monkId, key) % 6 === 0) return 'full';
+    return 'open';
+  }
+  function earliestDate(monkId, key) {
+    const d = new Date(); d.setHours(0, 0, 0, 0);
+    for (let i = 0; i < 120; i++, d.setDate(d.getDate() + 1)) if (dateStatus(monkId, key, d) === 'open') return new Date(d);
+    return null;
+  }
+  const shortDate = d => `${d.getMonth() + 1}월 ${d.getDate()}일(${'일월화수목금토'[d.getDay()]})`;
+
+  // ---------- 쇼핑몰형: 상품 목록 · 카드 ----------
+  const shopUrl = (cat, extra = '') => `shop.html?cat=${cat}${extra}`;
+  const groupOf = key => key === 'charm' ? 'charm' : (D.SHOP_CATS.find(c => (c.services || []).includes(key)) || {}).key;
+  // 운영 중인 스님들의 부적 · 의식을 상품 하나하나로 펼침
+  function shopProducts() {
+    const list = [];
+    D.MONKS.forEach(m => {
+      m.charms.forEach(ci => {
+        const c = D.CHARM_TYPES[ci.id];
+        list.push({ kind: 'charm', group: 'charm', monk: m, id: ci.id, name: c.name, sub: c.cat, price: ci.price,
+          rating: ci.rating ?? m.rating, reviews: ci.reviews ?? 0, url: charmUrl(m.id, ci.id), text: [c.name, c.cat, c.desc].join(' ') });
+      });
+      m.services.forEach(s => {
+        const t = D.SERVICE_TYPES[s.id];
+        list.push({ kind: 'rite', group: groupOf(s.id), monk: m, id: s.id, name: t.name, sub: t.dur, price: s.price,
+          rating: s.rating ?? m.rating, reviews: s.reviews ?? 0, url: riteUrl(m.id, s.id), text: [t.name, t.desc, D.RITUAL_DETAILS[s.id].summary].join(' ') });
+      });
+    });
+    return list;
+  }
+  const ratingLine = p => `<span class="flex items-center gap-1 text-xs"><iconify-icon icon="solar:star-bold" width="13" class="text-cinnabar"></iconify-icon><b class="tabular-nums">${p.rating}</b><span class="text-subtle tabular-nums">(${p.reviews.toLocaleString('ko-KR')})</span></span>`;
+
+  // 부적 상품 카드 (쇼핑몰형 진열용, 촘촘하게)
+  function charmCard(p, { best = false } = {}) {
+    const c = D.CHARM_TYPES[p.id];
+    return `
+    <article class="group relative flex flex-col">
+      <div class="relative">
+        <a href="${p.url}" class="block aspect-[4/5] rounded-[1.25rem] bg-deep/60 ring-1 ring-edge/10 overflow-hidden flex items-center justify-center ease-spring group-hover:ring-cinnabar/40" aria-label="${c.name} 자세히 보기">
+          <span class="w-[46%] ease-spring group-hover:-translate-y-1 group-hover:-rotate-2 shadow-[0_20px_40px_-18px_var(--drop)] rounded-[0.75rem]">${charmSVG(c, charmSeed(p.monk.id, p.id))}</span>
+        </a>
+        <div class="absolute left-2.5 top-2.5 flex flex-wrap gap-1 pointer-events-none">
+          ${best ? '<span class="rounded-md px-1.5 py-0.5 text-[10px] font-bold bg-cinnabar text-white">BEST</span>' : ''}
+          <span class="rounded-md px-1.5 py-0.5 text-[10px] font-medium bg-surface/90 text-fg2 ring-1 ring-edge/10">수기 가능</span>
+        </div>
+        <button type="button" data-quick-add="${p.monk.id}|${p.id}" aria-label="${c.name} 바로 담기" class="ease-spring absolute right-2.5 bottom-2.5 w-10 h-10 rounded-full bg-surface/95 ring-1 ring-edge/15 text-fg flex items-center justify-center hover:bg-cinnabar hover:text-white hover:ring-cinnabar active:scale-95 shadow-[0_8px_20px_-8px_var(--drop)]"><iconify-icon icon="solar:cart-large-2-linear" width="18"></iconify-icon></button>
+      </div>
+      <div class="mt-3 px-0.5">
+        <p class="text-[11px] text-subtle truncate">${p.monk.name} 스님 · ${p.monk.temple}</p>
+        <h3 class="mt-0.5 text-sm sm:text-[15px] font-semibold leading-snug"><a href="${p.url}" class="hover:underline underline-offset-2">${c.name}</a></h3>
+        <p class="mt-1 font-bold tabular-nums">${won(p.price)}<span class="ml-0.5 text-[11px] font-normal text-subtle">부터</span></p>
+        <div class="mt-1">${ratingLine(p)}</div>
+      </div>
+    </article>`;
+  }
+
+  // 제례 · 기도 상품 카드 (가장 빠른 예약일 포함)
+  function riteCard(p) {
+    const t = D.SERVICE_TYPES[p.id];
+    const early = earliestDate(p.monk.id, p.id);
+    return `
+    <a href="${p.url}" class="group flex flex-col rounded-[1.5rem] bg-surface ring-1 ring-edge/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-5 ease-spring hover:ring-cinnabar/50">
+      <div class="flex items-start gap-4">
+        <span class="w-14 h-14 shrink-0 rounded-2xl bg-deep/70 ring-1 ring-edge/10 flex items-center justify-center font-serif font-extrabold text-lg text-cinnabar ease-spring group-hover:bg-cinnabar group-hover:text-white">${t.hanja}</span>
+        <div class="min-w-0 flex-1">
+          <p class="text-[11px] text-subtle truncate">${p.monk.name} 스님 · ${p.monk.temple}</p>
+          <h3 class="mt-0.5 font-semibold leading-snug">${t.name}</h3>
+          <p class="text-xs text-subtle">${t.dur}</p>
+        </div>
+      </div>
+      <p class="mt-4 font-bold tabular-nums">${won(p.price)}<span class="ml-0.5 text-[11px] font-normal text-subtle">부터</span></p>
+      <div class="mt-1">${ratingLine(p)}</div>
+      <p class="mt-4 pt-3 border-t border-edge/10 text-xs flex items-center gap-1.5 text-fg2"><iconify-icon icon="solar:calendar-linear" width="15" class="text-cinnabar"></iconify-icon>${early ? `가장 빠른 날 <b>${shortDate(early)}</b>` : '예약 문의'}</p>
+    </a>`;
+  }
+
   // 메뉴·목록에 보여줄 의식 (dev 옵션 '준비 중 표시'면 모시는 스님이 없는 의식도 포함)
   const visibleRituals = () => D.CATEGORIES.map(c => ritualInfo(c.key)).filter(r => r && (r.active || devOpt('emptyRitual') === 'soon'))
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
+  const DEV_DEFAULTS = { mainLayout: 'shop', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -402,14 +483,18 @@ window.YW = (() => {
     const single = D.MONKS.length === 1;
     const monkHref = single ? monkUrl(D.MONKS[0].id) : 'index.html#monks';
     const navCls = on => `ease-spring px-3 py-2 rounded-full ${on ? 'text-fg bg-edge/5' : 'hover:text-fg hover:bg-edge/5'}`;
-    const header = `
-      <header class="fixed top-4 inset-x-0 z-40 px-4">
-        <nav class="mx-auto w-full md:w-max flex items-center justify-between md:justify-start gap-2 md:gap-8 rounded-full pl-5 pr-2 py-2 backdrop-blur-xl bg-deep/60 border border-edge/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" aria-label="주 메뉴">
-          <a href="index.html" class="flex items-center gap-2 shrink-0" aria-label="염원 홈">
-            <span class="font-serif text-lg font-extrabold text-cinnabar">念願</span>
-            <span class="text-sm font-semibold tracking-tight text-fg">염원</span>
-          </a>
-          <div class="hidden md:flex items-center gap-1 text-sm text-muted">
+    // 메인 구성 dev 옵션: shop이면 상품 분류 중심 메뉴
+    const shop = devOpt('mainLayout') === 'shop';
+    const here = (() => {
+      const q = new URLSearchParams(location.search), page = location.pathname.split('/').pop();
+      if (page === 'shop.html') return q.get('cat') || 'charm';
+      if (page === 'charm.html') return 'charm';
+      if (page === 'rite.html' || page === 'ritual.html') return groupOf(q.get('id')) || 'charm';
+      if (page === 'monk.html') return 'monk';
+      if (page === 'help.html') return 'help';
+      return '';
+    })();
+    const brandNav = `          <div class="hidden md:flex items-center gap-1 text-sm text-muted">
             <div class="relative" id="ywRitualWrap">
               <button id="ywRitualBtn" aria-expanded="false" aria-controls="ywRitualMenu" class="${navCls(active === 'ritual')} flex items-center gap-1">
                 의식 안내 <iconify-icon icon="solar:alt-arrow-down-linear" width="14" class="ease-spring" id="ywRitualChev"></iconify-icon>
@@ -423,7 +508,25 @@ window.YW = (() => {
             <a href="index.html#how" class="${navCls(false)}">이용 방법</a>
             <a href="help.html" class="${navCls(active === 'help')}">고객센터</a>
           </div>
-          <div class="flex items-center gap-1">
+`;
+    const shopNav = `
+          <div class="hidden md:flex items-center gap-1 text-sm text-muted">
+            ${D.SHOP_CATS.map(c => `<a href="${shopUrl(c.key)}" class="${navCls(here === c.key)}">${c.name}</a>`).join('')}
+            <a href="${monkHref}" class="${navCls(here === 'monk')}">스님</a>
+            <a href="help.html" class="${navCls(here === 'help')}">고객센터</a>
+            <span class="w-px h-4 bg-edge/15 mx-1"></span>
+            <a href="shop.html?cat=all&search=1" aria-label="상품 검색" class="${navCls(false)} flex items-center"><iconify-icon icon="solar:magnifer-linear" width="18"></iconify-icon></a>
+            <button type="button" data-order-lookup aria-label="주문 조회" class="${navCls(false)} flex items-center gap-1.5"><iconify-icon icon="solar:bill-list-linear" width="18"></iconify-icon><span class="hidden lg:inline">주문 조회</span></button>
+          </div>
+`;
+    const header = `
+      <header class="fixed top-4 inset-x-0 z-40 px-4">
+        <nav class="mx-auto w-full md:w-max flex items-center justify-between md:justify-start gap-2 md:gap-8 rounded-full pl-5 pr-2 py-2 backdrop-blur-xl bg-deep/60 border border-edge/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" aria-label="주 메뉴">
+          <a href="index.html" class="flex items-center gap-2 shrink-0" aria-label="염원 홈">
+            <span class="font-serif text-lg font-extrabold text-cinnabar">念願</span>
+            <span class="text-sm font-semibold tracking-tight text-fg">염원</span>
+          </a>
+${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
             <button data-open-cart aria-label="장바구니 열기" class="ease-spring relative flex items-center gap-2 rounded-full bg-fg text-page pl-4 pr-3 h-11 text-sm font-semibold hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-cinnabar">
               <iconify-icon icon="solar:bag-4-linear" width="18"></iconify-icon>
               <span class="hidden sm:inline">장바구니</span>
@@ -441,13 +544,21 @@ window.YW = (() => {
             <span class="font-serif text-xl font-extrabold text-cinnabar">念願</span>
             <button id="ywMenuClose" aria-label="메뉴 닫기" class="w-11 h-11 rounded-full flex items-center justify-center bg-edge/5 text-fg"><iconify-icon icon="solar:close-circle-linear" width="24"></iconify-icon></button>
           </div>
+          ${shop ? `
+          <a href="shop.html?cat=all&search=1" class="mt-10 flex items-center gap-3 h-12 px-4 rounded-full bg-edge/5 border border-edge/10 text-subtle menu-link" style="--index:0"><iconify-icon icon="solar:magnifer-linear" width="18"></iconify-icon>부적, 의식 이름으로 찾기</a>
+          <div class="mt-10 flex flex-col gap-5 text-3xl font-bold tracking-tight">
+            ${D.SHOP_CATS.map((c, i) => `<a href="${shopUrl(c.key)}" class="menu-link flex items-center gap-3" style="--index:${i + 1}"><span class="font-serif text-cinnabar text-2xl w-8">${c.hanja}</span>${c.name}</a>`).join('')}
+            <a href="${monkHref}" class="menu-link" style="--index:4">스님</a>
+            <a href="help.html" class="menu-link" style="--index:5">고객센터</a>
+            <button type="button" data-order-lookup class="menu-link text-left" style="--index:6">주문 조회</button>
+          </div>` : `
           <p class="mt-12 text-xs tracking-[0.15em] text-subtle menu-link" style="--index:0">의식 안내</p>
           <div id="ywMenuRituals" class="mt-3 flex flex-col menu-link" style="--index:1"></div>
           <div class="mt-10 flex flex-col gap-5 text-3xl font-bold tracking-tight">
             <a href="${monkHref}" class="menu-link" style="--index:2">스님</a>
             <a href="index.html#how" class="menu-link" style="--index:3">이용 방법</a>
             <a href="help.html" class="menu-link" style="--index:4">고객센터</a>
-          </div>
+          </div>`}
           <p class="mt-auto pt-10 text-sm text-subtle menu-link" style="--index:5">고객센터 1644-3071 · 매일 09:00 – 21:00</p>
         </div>
       </div>`;
@@ -546,9 +657,22 @@ window.YW = (() => {
       $('#ywRitualBtn').setAttribute('aria-expanded', open);
       $('#ywRitualChev').classList.toggle('rotate-180', open);
     };
-    $('#ywRitualBtn').addEventListener('click', e => { e.stopPropagation(); setRitualMenu($('#ywRitualMenu').classList.contains('hidden')); });
-    document.addEventListener('click', e => { if (!e.target.closest('#ywRitualWrap')) setRitualMenu(false); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') setRitualMenu(false); });
+    if ($('#ywRitualBtn')) {
+      $('#ywRitualBtn').addEventListener('click', e => { e.stopPropagation(); setRitualMenu($('#ywRitualMenu').classList.contains('hidden')); });
+      document.addEventListener('click', e => { if (!e.target.closest('#ywRitualWrap')) setRitualMenu(false); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') setRitualMenu(false); });
+    }
+
+    // 목록에서 바로 담기 (기본 옵션: 한지 인쇄본, 1개)
+    document.addEventListener('click', async e => {
+      const q = e.target.closest('[data-quick-add]');
+      if (q) {
+        const [mid, cid] = q.dataset.quickAdd.split('|');
+        const m = monkById(mid);
+        if (await addToCart(mid, charmCartItem(m, cid, {}))) toast(`${D.CHARM_TYPES[cid].name}(한지 인쇄본)을 담았습니다`);
+      }
+      if (e.target.closest('[data-order-lookup]')) toast('시안에서는 주문 조회가 열리지 않습니다');
+    });
     renderNavRituals();
 
     $('#ywCart').addEventListener('click', e => {
@@ -586,6 +710,7 @@ window.YW = (() => {
     $$('#ywDev [data-theme-id]').forEach(b => b.setAttribute('aria-pressed', b.dataset.themeId === id));
   }
   const DEV_OPTIONS = [
+    { key: 'mainLayout', label: '메인 구성 (헤더 포함)', choices: [['shop', '쇼핑몰형'], ['brand', '브랜드형']] },
     { key: 'cardLink', label: '메인 의식 카드 클릭', choices: [['detail', '상세 페이지만'], ['both', '상세 + 바로 예약']] },
     { key: 'emptyRitual', label: '모시는 스님이 없는 의식', choices: [['hide', '숨김'], ['soon', '준비 중 표시']] },
     { key: 'cardPrice', label: '의식 카드 가격', choices: [['hide', '숨김'], ['show', '표시']] },
@@ -704,6 +829,7 @@ window.YW = (() => {
     D, $, $$, won, manwon, esc, hash, rng, monkById, monkUrl, phoneOk,
     ritualUrl, ritualInfo, visibleRituals, offeredBy, bookUrl, priceAt, devOpt, onDevChange,
     charmUrl, charmSeed, charmUnit, charmCartItem, charmReviews, calc, riteUrl, serviceReviews,
+    dateStatus, earliestDate, shortDate, shopUrl, charmCard, riteCard, shopProducts,
     charmSVG, monkAvatar, landscapeSVG, stars,
     openLayer, closeLayer, toast, confirmDialog,
     addToCart, openCart, openCheckout, mountShell, observeReveals, observeCounters, stickyBar, renderFaq,

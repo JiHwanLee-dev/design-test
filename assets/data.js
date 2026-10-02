@@ -85,6 +85,13 @@ window.YW_DATA = (() => {
     },
   };
 
+  // 쇼핑몰형 분류: 부적 / 제례·재 / 기도·축원
+  const SHOP_CATS = [
+    { key: 'charm', name: '부적', hanja: '符' },
+    { key: 'rite', name: '제례 · 재', hanja: '祭', services: ['gije', 'cheondo', 'sasipgu'] },
+    { key: 'pray', name: '기도 · 축원', hanja: '祈', services: ['baegil', 'deung', 'gaeeop'] },
+  ];
+
   // 메인 카테고리 바로가기 (key: 'charm' 또는 SERVICE_TYPES 키)
   const CATEGORIES = [
     { key: 'charm',   hanja: '符',  name: '부적' },
@@ -104,13 +111,23 @@ window.YW_DATA = (() => {
       tagline: '떠난 이와 남은 이 모두 편안해지도록',
       intro: '출가 31년째, 성북동 골목 끝 작은 절에서 천도재와 사십구재를 주로 모십니다. 유가족과 먼저 충분히 이야기를 나눈 뒤 재를 올립니다. 영가의 생전 이야기를 듣고 축원문을 한 줄씩 직접 씁니다.',
       hours: '매일 06:00 – 19:00', address: '서울 성북구 성북로 (예시 주소)', directions: '4호선 한성대입구역 6번 출구에서 마을버스 03번, 종점 하차 후 도보 5분',
-      charms: [{ id: 'pyeongan', price: 31000 }, { id: 'geongang', price: 33000 }, { id: 'sowon', price: 36000 }],
+      // rating · reviews: 상품별 평점과 후기 수 (예시 값)
+      charms: [
+        { id: 'pyeongan', price: 31000, rating: 4.94, reviews: 412 },
+        { id: 'geongang', price: 33000, rating: 4.92, reviews: 287 },
+        { id: 'sowon', price: 36000, rating: 4.88, reviews: 356 },
+        { id: 'jaemul', price: 39000, rating: 4.9, reviews: 521 },
+        { id: 'hapgyeok', price: 29000, rating: 4.95, reviews: 198 },
+        { id: 'samjae', price: 42000, rating: 4.87, reviews: 143 },
+        { id: 'inyeon', price: 36000, rating: 4.83, reviews: 109 },
+        { id: 'yeohaeng', price: 27000, rating: 4.91, reviews: 76 },
+      ],
       // way: 이 스님이 그 의식을 모시는 방식 (예시 문구)
       services: [
-        { id: 'cheondo', price: 1200000, way: ['재를 올리기 전 유가족과 고인의 이야기를 충분히 나눕니다.', '들은 이야기로 축원문을 한 줄씩 직접 씁니다.', '직접 오시기 어려우면 법당 앞자리에 영정을 모시고 영상으로 함께합니다.'] },
-        { id: 'sasipgu', price: 2800000, way: ['일곱 번의 재를 모두 같은 시간에 모십니다.', '회차가 끝나면 짧은 영상과 다음 재 일정을 문자로 보내 드립니다.', '막재에는 고인이 아끼던 옷을 함께 태워 보내 드립니다.'] },
-        { id: 'gije', price: 290000, way: ['위패를 법당에 모셔 두고 해마다 같은 자리에서 모십니다.', '고향 상차림 방식을 미리 여쭙고 그대로 차립니다.'] },
-        { id: 'deung', price: 50000, way: ['등에 다는 명패는 스님이 붓으로 씁니다.', '석 달마다 법당에 밝힌 등 사진을 보내 드립니다.'] },
+        { id: 'cheondo', price: 1200000, rating: 4.96, reviews: 184, way: ['재를 올리기 전 유가족과 고인의 이야기를 충분히 나눕니다.', '들은 이야기로 축원문을 한 줄씩 직접 씁니다.', '직접 오시기 어려우면 법당 앞자리에 영정을 모시고 영상으로 함께합니다.'] },
+        { id: 'sasipgu', price: 2800000, rating: 4.95, reviews: 231, way: ['일곱 번의 재를 모두 같은 시간에 모십니다.', '회차가 끝나면 짧은 영상과 다음 재 일정을 문자로 보내 드립니다.', '막재에는 고인이 아끼던 옷을 함께 태워 보내 드립니다.'] },
+        { id: 'gije', price: 290000, rating: 4.9, reviews: 167, way: ['위패를 법당에 모셔 두고 해마다 같은 자리에서 모십니다.', '고향 상차림 방식을 미리 여쭙고 그대로 차립니다.'] },
+        { id: 'deung', price: 50000, rating: 4.89, reviews: 94, way: ['등에 다는 명패는 스님이 붓으로 씁니다.', '석 달마다 법당에 밝힌 등 사진을 보내 드립니다.'] },
       ],
     },
   ];
@@ -341,5 +358,5 @@ window.YW_DATA = (() => {
     if (m.charms.length) m.specialties.unshift('부적');
   });
 
-  return { CHARM_TYPES, MATERIALS, BLESS_PRICE, MODES, SERVICE_TYPES, CATEGORIES, MONKS, EXAMPLE_MONKS, REVIEWS, SLOTS, RITUAL_DETAILS, FAQ_CATS, FAQS, REFUND_RULES };
+  return { CHARM_TYPES, MATERIALS, BLESS_PRICE, MODES, SERVICE_TYPES, CATEGORIES, SHOP_CATS, MONKS, EXAMPLE_MONKS, REVIEWS, SLOTS, RITUAL_DETAILS, FAQ_CATS, FAQS, REFUND_RULES };
 })();

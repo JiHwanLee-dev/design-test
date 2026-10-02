@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>부적 · 제례 · 기도 | 염원 念願</title>
+  <meta name="description" content="스님이 직접 쓰는 부적과 예약 가능한 제례·기도를 한눈에 보고 고르세요.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+  <script src="assets/theme.js"></script>
+  <link rel="stylesheet" href="assets/common.css">
+</head>
+<body class="grain font-sans break-keep-all selection:bg-cinnabar/40">
+
+  <div data-shell="header"></div>
+
+  <main class="pt-28 md:pt-32 pb-24 md:pb-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- 제목 · 검색 -->
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
+        <div>
+          <nav aria-label="현재 위치" class="flex items-center gap-1.5 text-sm text-subtle">
+            <a href="index.html" class="ease-spring hover:text-fg">홈</a>
+            <iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon>
+            <span id="crumb" class="text-fg2"></span>
+          </nav>
+          <h1 id="title" class="mt-3 text-3xl md:text-4xl font-bold tracking-tight"></h1>
+        </div>
+        <form id="searchForm" role="search" class="w-full md:w-80">
+          <label class="flex items-center gap-2.5 h-12 px-4 rounded-full bg-surface ring-1 ring-edge/10 focus-within:ring-cinnabar/60 ease-spring">
+            <iconify-icon icon="solar:magnifer-linear" width="18" class="text-subtle shrink-0"></iconify-icon>
+            <span class="sr-only">상품 검색</span>
+            <input id="q" class="w-full bg-transparent text-sm placeholder:text-faint focus:outline-none" placeholder="부적, 의식 이름으로 찾기">
+            <button type="button" id="qClear" class="hidden text-subtle hover:text-fg" aria-label="검색어 지우기"><iconify-icon icon="solar:close-circle-linear" width="18"></iconify-icon></button>
+          </label>
+        </form>
+      </div>
+
+      <!-- 분류 탭 -->
+      <div id="catTabs" role="tablist" aria-label="분류" class="mt-8 flex gap-1 border-b border-edge/10 overflow-x-auto no-scrollbar"></div>
+
+      <!-- 세부 분류 · 정렬 -->
+      <div class="mt-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div id="subChips" class="flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0"></div>
+        <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0">
+          <p id="count" class="text-sm text-subtle"></p>
+          <label class="sr-only" for="sort">정렬</label>
+          <select id="sort" class="h-10 rounded-full bg-surface ring-1 ring-edge/10 border-0 pl-4 pr-8 text-sm focus:outline-none focus:ring-cinnabar/60">
+            <option value="popular">후기 많은 순</option>
+            <option value="rating">평점 높은 순</option>
+            <option value="low">낮은 가격 순</option>
+            <option value="high">높은 가격 순</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 목록 -->
+      <div id="results" class="mt-8"></div>
+    </div>
+  </main>
+
+  <div data-shell="footer"></div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/common.js"></script>
+  <script>
+    const { D, $, $$, esc } = YW;
+    YW.mountShell();
+
+    // 주소: shop.html?cat=charm|rite|pray|all&sub=재물&q=검색어&sort=popular
+    const params = new URLSearchParams(location.search);
+    const CATS = [{ key: 'all', name: '전체', hanja: '全' }, ...D.SHOP_CATS];
+    const st = {
+      cat: CATS.some(c => c.key === params.get('cat')) ? params.get('cat') : 'all',
+      sub: params.get('sub') || '',
+      q: params.get('q') || '',
+      sort: params.get('sort') || 'popular',
+    };
+    const products = YW.shopProducts();
+
+    function syncUrl() {
+      const u = new URLSearchParams({ cat: st.cat });
+      if (st.sub) u.set('sub', st.sub);
+      if (st.q) u.set('q', st.q);
+      if (st.sort !== 'popular') u.set('sort', st.sort);
+      history.replaceState(null, '', `shop.html?${u}`);
+    }
+
+    function render() {
+      const cat = CATS.find(c => c.key === st.cat);
+      document.title = `${st.q ? `‘${st.q}’ 검색` : cat.name} | 염원 念願`;
+      $('#crumb').textContent = st.q ? '검색' : cat.name;
+      $('#title').innerHTML = st.q ? `‘${esc(st.q)}’ 검색 결과` : cat.key === 'all' ? '부적 · 제례 · 기도' : cat.name;
+      $('#qClear').classList.toggle('hidden', !st.q);
+      $('#sort').value = st.sort;
+
+      // 분류 탭 (개수 포함)
+      const inCat = key => products.filter(p => key === 'all' || p.group === key);
+      $('#catTabs').innerHTML = CATS.map(c => {
+        const on = st.cat === c.key, n = inCat(c.key).length;
+        return `<button type="button" role="tab" aria-selected="${on}" data-cat="${c.key}" ${n ? '' : 'disabled'} class="ease-spring shrink-0 relative h-12 px-4 text-sm font-semibold ${on ? 'text-fg' : 'text-subtle hover:text-fg'} disabled:opacity-40 disabled:pointer-events-none">
+          ${c.name} <span class="ml-0.5 text-xs font-normal tabular-nums ${on ? 'text-cinnabar' : ''}">${n}</span>
+          ${on ? '<span class="absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-cinnabar"></span>' : ''}
+        </button>`;
+      }).join('');
+
+      // 부적 세부 분류
+      const subs = st.cat === 'charm' ? [...new Set(inCat('charm').map(p => p.sub))] : [];
+      $('#subChips').innerHTML = subs.length ? ['', ...subs].map(s => {
+        const on = st.sub === s;
+        return `<button type="button" data-sub="${s}" class="ease-spring shrink-0 h-9 px-4 rounded-full text-sm border ${on ? 'bg-fg text-page border-fg' : 'bg-surface text-muted border-edge/10 hover:text-fg'}">${s || '전체'}</button>`;
+      }).join('') : '';
+
+      // 거르기 · 정렬
+      const q = st.q.replace(/\s/g, '');
+      let list = inCat(st.cat)
+        .filter(p => !st.sub || p.sub === st.sub)
+        .filter(p => !q || p.text.replace(/\s/g, '').includes(q));
+      const sorters = {
+        popular: (a, b) => b.reviews - a.reviews,
+        rating: (a, b) => b.rating - a.rating,
+        low: (a, b) => a.price - b.price,
+        high: (a, b) => b.price - a.price,
+      };
+      list.sort(sorters[st.sort]);
+      $('#count').textContent = `${list.length}개`;
+
+      // 가장 후기가 많은 부적 3개에 BEST 표시
+      const best = products.filter(p => p.kind === 'charm').sort((a, b) => b.reviews - a.reviews).slice(0, 3).map(p => p.monk.id + p.id);
+      const charms = list.filter(p => p.kind === 'charm'), rites = list.filter(p => p.kind === 'rite');
+      const charmGrid = `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-9">${charms.map(p => YW.charmCard(p, { best: best.includes(p.monk.id + p.id) })).join('')}</div>`;
+      const riteGrid = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${rites.map(p => YW.riteCard(p)).join('')}</div>`;
+      const heading = (t, n) => `<h2 class="mb-5 text-lg font-bold tracking-tight">${t} <span class="text-sm font-normal text-subtle">${n}</span></h2>`;
+
+      if (!list.length) {
+        $('#results').innerHTML = `
+          <div class="rounded-[2rem] border border-dashed border-edge/15 py-20 text-center">
+            <span class="font-serif text-5xl font-extrabold text-edge/10">無</span>
+            <p class="mt-5 font-semibold">찾으시는 상품이 없습니다</p>
+            <p class="mt-2 text-sm text-subtle">다른 낱말로 찾아보시거나 분류를 바꿔 보세요.</p>
+            <button type="button" id="reset" class="ease-spring mt-6 h-11 px-5 rounded-full bg-edge/5 border border-edge/10 text-sm font-semibold hover:bg-edge/10">전체 보기</button>
+          </div>`;
+      } else if (charms.length && rites.length) {
+        $('#results').innerHTML = heading('부적', charms.length) + charmGrid + `<div class="mt-16">${heading('제례 · 기도', rites.length)}${riteGrid}</div>`;
+      } else {
+        $('#results').innerHTML = charms.length ? charmGrid : riteGrid;
+      }
+      syncUrl();
+    }
+
+    $('#catTabs').addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (!b) return; st.cat = b.dataset.cat; st.sub = ''; render(); });
+    $('#subChips').addEventListener('click', e => { const b = e.target.closest('[data-sub]'); if (!b) return; st.sub = b.dataset.sub; render(); });
+    $('#sort').addEventListener('change', e => { st.sort = e.target.value; render(); });
+    $('#q').value = st.q;
+    $('#q').addEventListener('input', e => { st.q = e.target.value.trim(); st.cat = 'all'; st.sub = ''; render(); });
+    $('#searchForm').addEventListener('submit', e => e.preventDefault());
+    $('#qClear').addEventListener('click', () => { st.q = ''; $('#q').value = ''; render(); $('#q').focus(); });
+    $('#results').addEventListener('click', e => { if (e.target.closest('#reset')) { Object.assign(st, { cat: 'all', sub: '', q: '' }); $('#q').value = ''; render(); } });
+
+    render();
+    if (params.get('search') === '1') $('#q').focus();
+  </script>
+</body>
+</html>

@@ -80,11 +80,7 @@
     const resetTier = () => { rv.tier = rv.svc.tiers ? rv.svc.tiers[0].id : null; };
     resetTier();
 
-    function dateStatus(d) {
-      if (Math.round((d - today) / 86400000) < 3) return 'prep';
-      if (hash(dKey(d), m.id, rv.svc.id) % 6 === 0) return 'full';
-      return 'open';
-    }
+    const dateStatus = d => YW.dateStatus(m.id, rv.svc.id, d);
     const slotFull = (d, s) => hash(dKey(d), s, m.id, rv.svc.id) % 4 === 0;
 
     function renderDetail() {
