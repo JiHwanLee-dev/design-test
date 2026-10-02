@@ -444,7 +444,7 @@
           <article class="reveal group ${big ? 'col-span-2 lg:row-span-2' : ''} rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-edge/20" style="--index:${i % 4}">
             <div class="h-full rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] flex flex-col overflow-hidden">
               ${open(`relative flex items-center justify-center bg-gradient-to-b from-edge/[0.04] to-transparent ${big ? 'p-10 pt-14 lg:p-14 flex-1' : 'px-6 pt-12 pb-6 sm:px-8 sm:pt-14 sm:pb-8'}`, `aria-label="${c.name} 자세히 보기"`)}
-                <div class="ease-spring ${big ? 'w-40 lg:w-52' : 'w-24 sm:w-28'} group-hover:-translate-y-1 group-hover:rotate-[-2deg] shadow-[0_25px_50px_-20px_var(--drop)] rounded-[1rem]">${charmSVG(c, charmSeed(ci.id))}</div>
+                <div class="ease-spring ${big ? 'w-40 lg:w-52' : 'w-24 sm:w-28'} group-hover:-translate-y-1 group-hover:rotate-[-2deg] shadow-[0_25px_50px_-20px_var(--drop)] rounded-[1rem]">${YW.charmArt(m, ci.id)}</div>
                 ${big ? '<span class="absolute top-4 left-4 rounded-full px-2.5 py-1 text-[11px] font-medium bg-edge/5 border border-edge/10 text-fg2">가장 많이 찾으심</span>' : ''}
               ${close}
               <div class="p-4 sm:p-5 flex flex-col gap-1 mt-auto">
@@ -475,7 +475,7 @@
       function openProduct(id) {
         const ci = m.charms.find(x => x.id === id), c = D.CHARM_TYPES[id];
         Object.assign(pm, { id, price: ci.price, material: 'print', bless: false, qty: 1 });
-        $('#pmArt').innerHTML = charmSVG(c, charmSeed(id));
+        $('#pmArt').innerHTML = YW.charmArt(m, id);
         $('#pmCat').textContent = `${c.cat} · ${m.name} 스님`;
         $('#pmTitle').textContent = c.name;
         $('#pmDesc').textContent = c.desc;

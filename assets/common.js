@@ -54,11 +54,24 @@ window.YW = (() => {
     const mat = D.MATERIALS.find(x => x.id === material);
     return {
       key: ['charm', m.id, charmId, material, bless, who].join('|'),
-      type: 'charm', ref: charmId, seed: charmSeed(m.id, charmId), name: c.name,
+      type: 'charm', ref: charmId, seed: charmSeed(m.id, charmId), photo: charmPhotos(m, charmId)[0] || null, name: c.name,
       opts: [mat.name, bless ? '축원 봉인' : null, who ? `축원: ${who}` : null].filter(Boolean).join(' · '),
       unit: charmUnit(ci.price, material, bless), qty,
     };
   }
+  // 상품 사진: data.js의 charms 항목에 photo(한 장) 또는 photos(여러 장)를 넣으면 사진, 없으면 SVG 그림
+  const charmPhotos = (m, charmId) => {
+    const ci = m && m.charms.find(x => x.id === charmId);
+    return ci ? (ci.photos || (ci.photo ? [ci.photo] : [])) : [];
+  };
+  // 부적 그림 자리 (SVG와 같은 5:8 비율로 채움)
+  function charmArt(m, charmId, cls = '') {
+    const c = D.CHARM_TYPES[charmId], ps = charmPhotos(m, charmId);
+    return ps.length
+      ? `<img src="${ps[0]}" alt="${c.name}" class="block w-full aspect-[5/8] object-cover rounded-[1rem] ${cls}" loading="lazy" decoding="async">`
+      : charmSVG(c, charmSeed(m.id, charmId));
+  }
+
   // 이 부적의 후기 (후기의 '어떤 의식' 이름에 부적 이름이 들어 있으면)
   const charmReviews = (monkId, charmId) => D.REVIEWS.filter(r => r.monk === monkId && r.service.startsWith(D.CHARM_TYPES[charmId].name));
 
@@ -105,8 +118,10 @@ window.YW = (() => {
     return `
     <article class="group relative flex flex-col">
       <div class="relative">
-        <a href="${p.url}" class="block aspect-[4/5] rounded-[1.25rem] bg-deep/60 ring-1 ring-edge/10 overflow-hidden flex items-center justify-center ease-spring group-hover:ring-cinnabar/40" aria-label="${c.name} 자세히 보기">
-          <span class="w-[46%] ease-spring group-hover:-translate-y-1 group-hover:-rotate-2 shadow-[0_20px_40px_-18px_var(--drop)] rounded-[0.75rem]">${charmSVG(c, charmSeed(p.monk.id, p.id))}</span>
+        <a href="${p.url}" class="relative block aspect-[4/5] rounded-[1.25rem] bg-deep/60 ring-1 ring-edge/10 overflow-hidden flex items-center justify-center ease-spring group-hover:ring-cinnabar/40" aria-label="${c.name} 자세히 보기">
+          ${charmPhotos(p.monk, p.id).length
+            ? `<img src="${charmPhotos(p.monk, p.id)[0]}" alt="${c.name}" class="absolute inset-0 w-full h-full object-cover ease-spring group-hover:scale-105" loading="lazy" decoding="async">`
+            : `<span class="w-[46%] ease-spring group-hover:-translate-y-1 group-hover:-rotate-2 shadow-[0_20px_40px_-18px_var(--drop)] rounded-[0.75rem]">${charmSVG(c, charmSeed(p.monk.id, p.id))}</span>`}
         </a>
         <div class="absolute left-2.5 top-2.5 flex flex-wrap gap-1 pointer-events-none">
           ${best ? '<span class="rounded-md px-1.5 py-0.5 text-[10px] font-bold bg-cinnabar text-white">BEST</span>' : ''}
@@ -348,7 +363,7 @@ window.YW = (() => {
       const svc = it.type === 'ritual' ? D.SERVICE_TYPES[it.ref] : null;
       return `
       <div class="flex gap-4 py-5 border-b border-edge/5 last:border-0">
-        <div class="w-16 shrink-0">${charm ? charmSVG(charm, it.seed) : `<div class="aspect-[5/8] rounded-xl bg-cinnabar/10 border border-cinnabar/20 flex items-center justify-center font-serif font-extrabold text-cinnabar text-base [writing-mode:vertical-rl]">${svc.hanja}</div>`}</div>
+        <div class="w-16 shrink-0">${charm ? (it.photo ? `<img src="${it.photo}" alt="" class="block w-full aspect-[5/8] object-cover rounded-xl">` : charmSVG(charm, it.seed)) : `<div class="aspect-[5/8] rounded-xl bg-cinnabar/10 border border-cinnabar/20 flex items-center justify-center font-serif font-extrabold text-cinnabar text-base [writing-mode:vertical-rl]">${svc.hanja}</div>`}</div>
         <div class="flex-1 min-w-0">
           <div class="flex items-start justify-between gap-2">
             <div>
@@ -845,7 +860,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
   return {
     D, $, $$, won, manwon, esc, hash, rng, monkById, monkUrl, phoneOk,
     ritualUrl, ritualInfo, visibleRituals, offeredBy, bookUrl, priceAt, devOpt, onDevChange,
-    charmUrl, charmSeed, charmUnit, charmCartItem, charmReviews, calc, riteUrl, serviceReviews,
+    charmUrl, charmSeed, charmUnit, charmPhotos, charmArt, charmCartItem, charmReviews, calc, riteUrl, serviceReviews,
     dateStatus, earliestDate, shortDate, shopUrl, charmCard, riteCard, shopProducts,
     charmSVG, monkAvatar, landscapeSVG, monkCover, ritualImg, photo, stars,
     openLayer, closeLayer, toast, confirmDialog,

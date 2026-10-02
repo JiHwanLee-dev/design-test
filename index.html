@@ -393,7 +393,7 @@
             ${big ? '<span class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></span>' : ''}
             ${r.active ? '' : '<span class="absolute right-5 top-5 rounded-full px-2.5 py-1 text-[11px] bg-black/50 text-white">준비 중</span>'}
             ${big ? `<div class="hidden sm:flex absolute right-8 top-8 gap-3">
-              ${r.by[0].charms.slice(0, 2).map((ci, k) => `<div class="w-20 md:w-24 ease-spring ${k ? 'translate-y-4 rotate-[5deg] group-hover:rotate-[2deg]' : '-rotate-[4deg] group-hover:-rotate-[1deg]'} shadow-[0_25px_50px_-15px_rgba(0,0,0,0.7)] rounded-[0.75rem]">${charmSVG(D.CHARM_TYPES[ci.id], YW.charmSeed(r.by[0].id, ci.id))}</div>`).join('')}
+              ${r.by[0].charms.slice(0, 2).map((ci, k) => `<div class="w-20 md:w-24 ease-spring ${k ? 'translate-y-4 rotate-[5deg] group-hover:rotate-[2deg]' : '-rotate-[4deg] group-hover:-rotate-[1deg]'} shadow-[0_25px_50px_-15px_rgba(0,0,0,0.7)] rounded-[0.75rem]">${YW.charmArt(r.by[0], ci.id)}</div>`).join('')}
             </div>` : ''}
             <div class="absolute inset-x-0 bottom-0 p-6 md:p-8 text-white">
               <span class="font-serif font-extrabold text-3xl text-white/80">${r.mark}</span>
@@ -420,7 +420,7 @@
               <span class="absolute left-5 bottom-3 font-serif font-extrabold text-3xl text-white/90 drop-shadow">${r.mark}</span>
               ${r.active ? '' : '<span class="absolute right-4 top-4 rounded-full px-2.5 py-1 text-[11px] bg-black/50 text-white backdrop-blur-sm">준비 중</span>'}
               ${big ? `<div class="hidden sm:flex absolute right-5 bottom-5 gap-2">
-                ${r.by[0].charms.slice(0, 2).map((ci, k) => `<div class="w-16 md:w-20 ease-spring ${k ? 'translate-y-3 rotate-[5deg] group-hover:rotate-[2deg]' : '-rotate-[4deg] group-hover:-rotate-[1deg]'} shadow-[0_20px_40px_-15px_rgba(0,0,0,0.6)] rounded-[0.75rem]">${charmSVG(D.CHARM_TYPES[ci.id], YW.charmSeed(r.by[0].id, ci.id))}</div>`).join('')}
+                ${r.by[0].charms.slice(0, 2).map((ci, k) => `<div class="w-16 md:w-20 ease-spring ${k ? 'translate-y-3 rotate-[5deg] group-hover:rotate-[2deg]' : '-rotate-[4deg] group-hover:-rotate-[1deg]'} shadow-[0_20px_40px_-15px_rgba(0,0,0,0.6)] rounded-[0.75rem]">${YW.charmArt(r.by[0], ci.id)}</div>`).join('')}
               </div>` : ''}
             </div>
             <div class="flex-1 flex flex-col p-6 md:p-7 ${big ? 'sm:justify-center sm:p-10' : ''}">
@@ -458,7 +458,7 @@
       const prices = [...m.charms.map(c => c.price), ...m.services.map(s => s.price)];
       return `
         <div class="mt-6 flex items-center gap-4 rounded-2xl bg-edge/[0.03] border border-edge/10 p-3 pr-4">
-          <div class="flex -space-x-3 shrink-0">${top.map((ci, i) => `<span class="w-11 rounded-md ring-2 ring-surface shadow-[0_8px_16px_-8px_var(--drop)]" style="transform:rotate(${(i - 1) * 6}deg)">${charmSVG(D.CHARM_TYPES[ci.id], YW.charmSeed(m.id, ci.id))}</span>`).join('')}</div>
+          <div class="flex -space-x-3 shrink-0">${top.map((ci, i) => `<span class="w-11 rounded-md ring-2 ring-surface shadow-[0_8px_16px_-8px_var(--drop)]" style="transform:rotate(${(i - 1) * 6}deg)">${YW.charmArt(m, ci.id, 'rounded-md')}</span>`).join('')}</div>
           <p class="text-sm leading-snug"><b>부적 ${m.charms.length} · 제례 · 기도 ${m.services.length}</b><span class="block text-xs text-subtle mt-0.5 tabular-nums">${manwon(Math.min(...prices))} – ${manwon(Math.max(...prices))}</span></p>
         </div>`;
     };

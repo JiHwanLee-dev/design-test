@@ -251,7 +251,7 @@
               const href = sellers.length === 1 ? YW.charmUrl(sellers[0].id, id) : '#monks';
               return `<a href="${href}" class="reveal group block rounded-[1.75rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-cinnabar/50" style="--index:${i}">
                 <div class="h-full rounded-[calc(1.75rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-5 flex flex-col items-center text-center">
-                  <div class="w-20 ease-spring group-hover:-translate-y-1 shadow-[0_20px_40px_-18px_var(--drop)] rounded-[1rem]">${charmSVG(c, sellers.length === 1 ? YW.charmSeed(sellers[0].id, id) : YW.hash('ritual', id) % 997 + 1)}</div>
+                  <div class="w-20 ease-spring group-hover:-translate-y-1 shadow-[0_20px_40px_-18px_var(--drop)] rounded-[1rem]">${(sellers.length === 1 ? YW.charmArt(sellers[0], id) : charmSVG(c, YW.hash('ritual', id) % 997 + 1))}</div>
                   <p class="mt-4 text-xs text-cinnabar-soft">${c.cat}</p>
                   <p class="mt-0.5 font-bold">${c.name}</p>
                   <p class="mt-1 text-sm text-muted tabular-nums">${won(price)}부터</p>

@@ -124,6 +124,8 @@ window.YW_DATA = (() => {
       intro: '출가 31년째, 성북동 골목 끝 작은 절에서 천도재와 사십구재를 주로 모십니다. 유가족과 먼저 충분히 이야기를 나눈 뒤 재를 올립니다. 영가의 생전 이야기를 듣고 축원문을 한 줄씩 직접 씁니다.',
       hours: '매일 06:00 – 19:00', address: '서울 성북구 성북로 (예시 주소)', directions: '4호선 한성대입구역 6번 출구에서 마을버스 03번, 종점 하차 후 도보 5분',
       // rating · reviews: 상품별 평점과 후기 수 (예시 값)
+      // 상품 사진: photo: 'assets/images/charms/haewol-pyeongan.jpg' 처럼 한 장,
+      //           photos: ['...앞면.jpg', '...봉투.jpg'] 처럼 여러 장(첫 장이 대표). 없으면 SVG 그림으로 그림
       charms: [
         { id: 'pyeongan', price: 31000, rating: 4.94, reviews: 412 },
         { id: 'geongang', price: 33000, rating: 4.92, reviews: 287 },

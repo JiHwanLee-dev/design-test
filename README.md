@@ -42,6 +42,8 @@ python3 -m http.server 8000   # → http://localhost:8000
 스님 사진·표지는 `data.js`의 `photo`, `cover`, `storyPhoto`, `templePhoto`, 의식별 사진은 `RITUAL_IMAGES`, 사찰 풍경 갤러리는 스님별 `gallery`에서 바꿉니다 (스님 페이지에 표시, 없으면 숨김).
 사진이 없는 스님은 수묵 그림과 한자 도장으로 자동 대체됩니다.
 
+**부적 상품 사진**: `data.js` 스님의 `charms` 항목에 `photo: '경로'`(한 장) 또는 `photos: ['앞면', '봉투', …]`(여러 장, 첫 장이 대표)를 넣으면 진열 · 상세 · 장바구니 · 팝업 모두 사진으로 바뀝니다. 없으면 코드로 그린 부적 그림(SVG)이 나옵니다.
+
 ## DEV 패널
 
 주소 끝에 `?dev=1`을 붙이면 왼쪽 아래에 패널이 뜹니다. `?dev=0`으로 끕니다.
