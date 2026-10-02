@@ -20,7 +20,7 @@ python3 -m http.server 8000   # → http://localhost:8000
 | `shop.html?cat=charm` | 전체 상품 목록 (쇼핑몰형 메인에서 사용, 스님이 늘면 비교용) |
 | `monk.html?id=haewol` | 스님 페이지 = 가게. 기본 스토어형(짧은 프로필 + 상품 진열·분류·정렬), dev 패널에서 소개형 |
 | `ritual.html?id=sasipgu` | 의식 상세 (절차, 비용, 준비물, 모시는 스님) |
-| `charm.html?monk=haewol&id=pyeongan` | 부적 상세 (옵션·담기, 받아 보시기까지, 배송·환불, 후기) |
+| `charm.html?monk=haewol&id=pyeongan` | 부적 상세. 기본 쇼핑몰형(구매 영역 · 밑줄 탭 · 따라오는 구매 상자), dev 패널에서 소개형 |
 | `rite.html?monk=haewol&id=sasipgu` | 스님별 의식 예약 (모시는 방식, 예약 위젯, 진행 순서, 후기, 오시는 길) |
 | `help.html` | 고객센터 (FAQ, 환불 규정, 1:1 문의) |
 | `_preview/palette.html` | 배경색 시안 비교용 |
@@ -53,6 +53,7 @@ python3 -m http.server 8000   # → http://localhost:8000
 - 메인 구성: 랜딩형 / 쇼핑몰형 (헤더 메뉴도 함께 바뀜)
 - 메인 의식 카드 글씨: 사진 위 / 사진 아래
 - 스님 페이지 구성: 혼합형(위 소개 + 아래 진열) / 스토어형 / 소개형
+- 부적 상세 구성: 쇼핑몰형 / 소개형
 - 스님 페이지 들어갈 때 산문: 처음 한 번 / 매번 / 걸어 들어가기 / 없음
 - 배경색: 화이트 / 한지 미색 / 새벽 안개 / 먹색
 - 메인 의식 카드 클릭: 상세 페이지만 / 상세 + 바로 예약

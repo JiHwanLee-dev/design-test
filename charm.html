@@ -183,6 +183,152 @@
     </section>
   </main>
 
+
+  <!-- ============ 쇼핑몰형 부적 상세 (dev 옵션 charmLayout = shop) ============ -->
+  <main id="shopPage" class="hidden pt-24 md:pt-28 pb-24">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav aria-label="현재 위치" class="flex flex-wrap items-center gap-1 text-xs text-subtle">
+        <a href="index.html" class="hover:text-fg">홈</a><iconify-icon icon="solar:alt-arrow-right-linear" width="12"></iconify-icon>
+        <a id="spCrumbMonk" class="hover:text-fg"></a><iconify-icon icon="solar:alt-arrow-right-linear" width="12"></iconify-icon>
+        <a id="spCrumbCharms" class="hover:text-fg">부적</a><iconify-icon icon="solar:alt-arrow-right-linear" width="12"></iconify-icon>
+        <span id="spCrumbName" class="text-fg2"></span>
+      </nav>
+
+      <!-- 상단: 사진 + 구매 영역 -->
+      <div class="mt-5 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        <div class="lg:col-span-6">
+          <div id="spMain" class="relative aspect-square rounded-2xl bg-deep/60 ring-1 ring-edge/10 overflow-hidden flex items-center justify-center"></div>
+          <div id="spThumbs" class="mt-3 flex gap-2"></div>
+        </div>
+        <div id="spBuy" class="lg:col-span-6">
+          <a id="spSeller" class="inline-flex items-center gap-2 text-sm text-muted hover:text-fg"></a>
+          <h1 id="spName" class="mt-2 text-2xl md:text-3xl font-bold tracking-tight"></h1>
+          <p id="spDesc" class="mt-2 text-sm text-muted leading-relaxed"></p>
+          <div id="spRating" class="yw-review mt-2 flex items-center gap-1.5 text-sm"></div>
+          <p class="mt-4 text-3xl font-bold tracking-tight tabular-nums"><span id="spPrice"></span><span class="ml-1 text-sm font-normal text-subtle">부터</span></p>
+          <dl id="spInfo" class="mt-5 border-y border-edge/10 py-4 space-y-2.5 text-sm"></dl>
+
+          <p class="mt-5 text-sm font-semibold">제작 방식</p>
+          <div id="spMat" class="mt-2 space-y-2" role="radiogroup" aria-label="제작 방식"></div>
+          <label class="mt-3 flex items-center gap-3 rounded-xl border border-edge/10 px-4 py-3 cursor-pointer hover:bg-edge/[0.03]">
+            <input id="spBless" type="checkbox" class="w-4 h-4 accent-[#c8553d]">
+            <span class="flex-1 text-sm">이름 축원 봉인 <span class="text-subtle">· 성함으로 축원 후 밀봉</span></span>
+            <span id="spBlessPrice" class="text-sm tabular-nums text-fg2"></span>
+          </label>
+          <label class="mt-3 block">
+            <span class="text-sm font-semibold">축원 받으실 분 <span class="font-normal text-faint">(선택)</span></span>
+            <input id="spWho" maxlength="20" class="mt-1.5 w-full h-11 rounded-xl bg-edge/[0.03] border border-edge/10 px-4 text-sm placeholder:text-faint focus:outline-none focus:border-cinnabar/60" placeholder="비워 두시면 주문자 성함으로 축원합니다">
+          </label>
+
+          <!-- 선택한 상품 -->
+          <div class="mt-5 rounded-xl bg-deep/60 p-4">
+            <p id="spSelName" class="text-sm font-medium"></p>
+            <div class="mt-3 flex items-center justify-between">
+              <div class="flex items-center rounded-lg border border-edge/15 bg-surface">
+                <button type="button" id="spMinus" aria-label="수량 줄이기" class="w-9 h-9 flex items-center justify-center hover:bg-edge/5"><iconify-icon icon="solar:minus-circle-linear" width="18"></iconify-icon></button>
+                <span id="spQty" class="w-8 text-center text-sm tabular-nums font-semibold">1</span>
+                <button type="button" id="spPlus" aria-label="수량 늘리기" class="w-9 h-9 flex items-center justify-center hover:bg-edge/5"><iconify-icon icon="solar:add-circle-linear" width="18"></iconify-icon></button>
+              </div>
+              <b id="spLine" class="tabular-nums"></b>
+            </div>
+          </div>
+          <div class="mt-5 flex items-end justify-between">
+            <span class="text-sm text-fg2">총 상품 금액</span>
+            <b id="spTotal" class="text-2xl tracking-tight tabular-nums text-cinnabar"></b>
+          </div>
+          <div class="mt-4 grid grid-cols-2 gap-2">
+            <button type="button" id="spAdd" class="ease-spring h-14 rounded-xl border border-edge/20 font-semibold hover:bg-edge/5 active:scale-[0.98] flex items-center justify-center gap-2"><iconify-icon icon="solar:cart-large-2-linear" width="20"></iconify-icon>장바구니</button>
+            <button type="button" id="spBuyNow" class="ease-spring h-14 rounded-xl bg-cinnabar text-white font-semibold hover:brightness-105 active:scale-[0.98]">구매하기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 탭 (밑줄형, 상단 고정) -->
+    <div class="sticky top-[5.25rem] z-30 mt-14 bg-page/90 backdrop-blur-xl border-y border-edge/10">
+      <nav id="spTabs" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-6 overflow-x-auto no-scrollbar" aria-label="상세 메뉴"></nav>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div class="lg:col-span-8 space-y-16">
+        <!-- 상세정보 -->
+        <section id="spDetail" class="scroll-mt-40 space-y-10">
+          <div class="relative aspect-[16/9] rounded-2xl overflow-hidden ring-1 ring-edge/10">
+            <img src="assets/images/svc-talisman.jpg" alt="붓과 경면주사로 쓴 부적" class="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async">
+          </div>
+          <div>
+            <h2 class="text-lg font-bold">이 부적은</h2>
+            <p id="spAbout" class="mt-3 text-fg2 leading-relaxed"></p>
+            <p id="spWord" class="mt-4 text-sm text-muted border-l-2 border-cinnabar/50 pl-4"></p>
+          </div>
+          <div>
+            <h2 class="text-lg font-bold">제작 방식 비교</h2>
+            <div class="mt-3 overflow-x-auto rounded-xl ring-1 ring-edge/10"><table class="w-full text-sm min-w-[28rem]"><thead class="bg-deep/60 text-subtle"><tr><th class="text-left font-medium px-4 py-3">방식</th><th class="text-left font-medium px-4 py-3">가격</th><th class="text-left font-medium px-4 py-3">특징</th></tr></thead><tbody id="spMatTable"></tbody></table></div>
+          </div>
+          <div>
+            <h2 class="text-lg font-bold">받아 보시기까지</h2>
+            <ol id="spSteps" class="mt-3 divide-y divide-edge/10 rounded-xl ring-1 ring-edge/10"></ol>
+          </div>
+          <div>
+            <h2 class="text-lg font-bold">받으신 뒤에는</h2>
+            <ul id="spCare" class="mt-3 space-y-2 text-sm text-fg2"></ul>
+          </div>
+        </section>
+
+        <!-- 구매 안내 -->
+        <section id="spGuide" class="scroll-mt-40">
+          <h2 class="text-lg font-bold">구매 안내</h2>
+          <dl id="spPolicy" class="mt-3 rounded-xl ring-1 ring-edge/10 divide-y divide-edge/10 text-sm"></dl>
+        </section>
+
+        <!-- 후기 -->
+        <section id="spReviews" class="yw-review scroll-mt-40">
+          <h2 class="text-lg font-bold">후기 <span id="spReviewCount" class="text-sm font-normal text-subtle"></span></h2>
+          <div id="spReviewList" class="mt-3 divide-y divide-edge/10 border-y border-edge/10"></div>
+        </section>
+
+        <!-- 문의 -->
+        <section id="spQna" class="scroll-mt-40">
+          <div class="flex items-end justify-between gap-4">
+            <h2 class="text-lg font-bold">문의</h2>
+            <button type="button" data-ask class="h-10 px-4 rounded-full border border-edge/15 text-sm font-semibold hover:bg-edge/5 flex items-center gap-1.5"><iconify-icon icon="solar:chat-round-dots-linear" width="16"></iconify-icon>스님께 문의하기</button>
+          </div>
+          <div id="spFaq" class="mt-3 divide-y divide-edge/10 border-y border-edge/10"></div>
+        </section>
+      </div>
+
+      <!-- 데스크톱: 따라오는 작은 구매 상자 -->
+      <aside class="hidden lg:block lg:col-span-4">
+        <div class="sticky top-40 rounded-2xl ring-1 ring-edge/10 bg-surface p-5">
+          <p id="spMiniName" class="font-semibold"></p>
+          <p id="spMiniOpt" class="mt-1 text-xs text-subtle"></p>
+          <div class="mt-4 flex items-end justify-between"><span class="text-sm text-fg2">총 상품 금액</span><b id="spMiniTotal" class="text-xl tabular-nums text-cinnabar"></b></div>
+          <div class="mt-4 grid grid-cols-2 gap-2">
+            <button type="button" data-sp-add class="h-11 rounded-xl border border-edge/20 text-sm font-semibold hover:bg-edge/5">장바구니</button>
+            <button type="button" data-sp-buy class="h-11 rounded-xl bg-cinnabar text-white text-sm font-semibold hover:brightness-105">구매하기</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- 같은 스님의 다른 부적 -->
+    <section id="spMoreSec" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+      <div class="flex items-end justify-between gap-4">
+        <h2 id="spMoreTitle" class="text-lg font-bold"></h2>
+        <a id="spMoreAll" class="text-sm text-muted hover:text-fg flex items-center gap-1">전체 보기<iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon></a>
+      </div>
+      <div id="spMore" class="mt-5 grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8"></div>
+    </section>
+  </main>
+
+  <!-- 쇼핑몰형 모바일 하단 바 -->
+  <div id="spBar" class="hidden lg:hidden fixed bottom-0 inset-x-0 z-40 px-4 pb-4 translate-y-full opacity-0 ease-spring">
+    <div class="grid grid-cols-2 gap-2 rounded-2xl p-2 bg-surface/95 backdrop-blur-xl border border-edge/10 shadow-[0_-10px_30px_-15px_var(--drop)]">
+      <button type="button" data-sp-add class="h-12 rounded-xl border border-edge/20 text-sm font-semibold">장바구니</button>
+      <button type="button" data-sp-buy class="h-12 rounded-xl bg-cinnabar text-white text-sm font-semibold">구매하기 · <span data-sp-total class="tabular-nums"></span></button>
+    </div>
+  </div>
+
   <main id="notFound" class="hidden min-h-[100dvh] items-center justify-center px-4">
     <div class="text-center">
       <span class="font-serif text-7xl font-extrabold text-edge/10">無</span>
@@ -212,11 +358,146 @@
     const m = YW.monkById(params.get('monk'));
     const ci = m && m.charms.find(x => x.id === params.get('id'));
 
+    // dev 옵션 charmLayout: shop(쇼핑몰형, 기본) | intro(소개형)
+    const shopLayout = YW.devOpt('charmLayout') === 'shop';
     if (!ci) {
-      $('#page').remove(); $('#stickyBar').remove();
+      $('#page').remove(); $('#stickyBar').remove(); $('#shopPage').remove(); $('#spBar').remove();
       $('#notFound').classList.remove('hidden'); $('#notFound').classList.add('flex');
+    } else if (shopLayout) {
+      $('#page').remove(); $('#stickyBar').remove();
+      renderShop();
     } else {
+      $('#shopPage').remove(); $('#spBar').remove();
       render();
+    }
+
+    // ---------- 쇼핑몰형 ----------
+    function renderShop() {
+      const c = D.CHARM_TYPES[ci.id];
+      const info = D.RITUAL_DETAILS.charm;
+      const reviews = YW.charmReviews(m.id, ci.id);
+      document.title = `${c.name} · ${m.name} 스님 | 염원 念願`;
+      $('#shopPage').classList.remove('hidden');
+      $('#spBar').classList.remove('hidden');
+
+      $('#spCrumbMonk').textContent = `${m.name} 스님`; $('#spCrumbMonk').href = monkUrl(m.id);
+      $('#spCrumbCharms').href = `${monkUrl(m.id)}#charms`;
+      $('#spCrumbName').textContent = c.name;
+
+      // 사진 (상품 사진이 없으면 SVG 그림)
+      const photos = YW.charmPhotos(m, ci.id);
+      const showMain = i => {
+        $('#spMain').innerHTML = photos.length
+          ? `<img src="${photos[i]}" alt="${c.name} 사진 ${i + 1}" class="absolute inset-0 w-full h-full object-cover" decoding="async">`
+          : `<div class="w-[42%] shadow-[0_30px_60px_-25px_var(--drop)] rounded-[1rem]">${charmSVG(c, YW.charmSeed(m.id, ci.id))}</div>`;
+        $$('#spThumbs [data-ph]').forEach(b => b.classList.toggle('ring-cinnabar', +b.dataset.ph === i));
+      };
+      if (photos.length > 1) {
+        $('#spThumbs').innerHTML = photos.map((src, i) => `<button type="button" data-ph="${i}" aria-label="사진 ${i + 1}" class="w-16 h-16 rounded-lg overflow-hidden ring-2 ring-transparent hover:ring-edge/30"><img src="${src}" alt="" class="w-full h-full object-cover" loading="lazy"></button>`).join('');
+        $('#spThumbs').addEventListener('click', e => { const b = e.target.closest('[data-ph]'); if (b) showMain(+b.dataset.ph); });
+      }
+      showMain(0);
+
+      // 구매 정보
+      $('#spSeller').href = monkUrl(m.id);
+      $('#spSeller').innerHTML = `${monkAvatar(m, 'w-6 h-6 text-[8px]')}<span><b class="text-fg">${m.name} 스님</b> · ${m.temple}</span><iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon>`;
+      $('#spName').textContent = c.name;
+      $('#spDesc').textContent = c.desc;
+      $('#spRating').innerHTML = `<span class="flex text-cinnabar">${stars(ci.rating || m.rating, 14)}</span><b>${ci.rating || m.rating}</b><span class="text-subtle">후기 ${(ci.reviews || reviews.length).toLocaleString('ko-KR')}</span>`;
+      $('#spPrice').textContent = won(ci.price);
+      $('#spBlessPrice').textContent = '+' + won(D.BLESS_PRICE);
+      const infoRow = (k, v) => `<div class="flex gap-4"><dt class="w-12 shrink-0 text-subtle">${k}</dt><dd class="text-fg2">${v}</dd></div>`;
+
+      const st = { material: 'print', bless: false, qty: 1 };
+      const unit = () => YW.charmUnit(ci.price, st.material, st.bless);
+      const optText = () => [D.MATERIALS.find(x => x.id === st.material).name, st.bless ? '이름 축원 봉인' : null].filter(Boolean).join(' · ');
+      function draw() {
+        const total = unit() * st.qty;
+        $('#spInfo').innerHTML = [
+          infoRow('배송', `등기 · ${total >= 50000 ? '<b class="text-cinnabar">무료</b>' : '3,000원'} <span class="text-subtle">(5만 원 이상 무료)</span>`),
+          infoRow('발송', '결제 후 1–2일 안에 축원을 올리고 발송'),
+          infoRow('제작', '스님 직접 작성 · 성함으로 축원 · 한지 봉투 밀봉'),
+        ].join('');
+        $('#spMat').innerHTML = D.MATERIALS.map(x => {
+          const on = st.material === x.id;
+          return `<button type="button" role="radio" aria-checked="${on}" data-mat="${x.id}" class="w-full flex items-center gap-3 rounded-xl border px-4 py-3 text-left ${on ? 'border-cinnabar bg-cinnabar/[0.06]' : 'border-edge/10 hover:bg-edge/[0.03]'}">
+            <span class="w-4 h-4 rounded-full border-2 ${on ? 'border-cinnabar bg-cinnabar shadow-[inset_0_0_0_3px_rgb(var(--c-surface))]' : 'border-edge/30'}"></span>
+            <span class="flex-1 text-sm"><b>${x.name}</b> <span class="text-subtle">· ${x.note}</span></span>
+            <span class="text-sm tabular-nums ${on ? 'text-cinnabar font-semibold' : 'text-fg2'}">${won(ci.price + x.add)}</span>
+          </button>`;
+        }).join('');
+        $('#spSelName').textContent = `${c.name} · ${optText()}`;
+        $('#spQty').textContent = st.qty;
+        $('#spLine').textContent = won(total);
+        $('#spTotal').textContent = won(total);
+        $('#spMiniName').textContent = c.name;
+        $('#spMiniOpt').textContent = `${optText()} · ${st.qty}개`;
+        $('#spMiniTotal').textContent = won(total);
+        $$('[data-sp-total]').forEach(el => { el.textContent = won(total); });
+      }
+      $('#spMat').addEventListener('click', e => { const b = e.target.closest('[data-mat]'); if (b) { st.material = b.dataset.mat; draw(); } });
+      $('#spBless').addEventListener('change', e => { st.bless = e.target.checked; draw(); });
+      $('#spMinus').addEventListener('click', () => { st.qty = Math.max(1, st.qty - 1); draw(); });
+      $('#spPlus').addEventListener('click', () => { st.qty = Math.min(9, st.qty + 1); draw(); });
+      const add = () => YW.addToCart(m.id, YW.charmCartItem(m, ci.id, { material: st.material, bless: st.bless, who: $('#spWho').value.trim(), qty: st.qty }));
+      const doAdd = async () => { if (await add()) { YW.toast(`${c.name}을 담았습니다`); YW.openCart(); } };
+      const doBuy = async () => { if (await add()) YW.openCheckout(); };
+      $('#spAdd').addEventListener('click', doAdd);
+      $('#spBuyNow').addEventListener('click', doBuy);
+      $$('[data-sp-add]').forEach(b => b.addEventListener('click', doAdd));
+      $$('[data-sp-buy]').forEach(b => b.addEventListener('click', doBuy));
+      draw();
+
+      // 탭 (밑줄형)
+      const tabs = [['spDetail', '상세정보'], ['spGuide', '구매 안내'], YW.showReviews() && ['spReviews', `후기 ${reviews.length}`], ['spQna', '문의']].filter(Boolean);
+      $('#spTabs').innerHTML = tabs.map(([id, label]) => `<a href="#${id}" data-tab="${id}" class="relative shrink-0 py-4 text-sm font-semibold text-subtle hover:text-fg">${label}<span class="absolute inset-x-0 -bottom-px h-0.5 bg-transparent"></span></a>`).join('');
+      const setTab = id => $$('#spTabs [data-tab]').forEach(a => {
+        const on = a.dataset.tab === id;
+        a.classList.toggle('text-fg', on); a.classList.toggle('text-subtle', !on);
+        a.lastElementChild.classList.toggle('bg-fg', on); a.lastElementChild.classList.toggle('bg-transparent', !on);
+      });
+      const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) setTab(en.target.id); }), { rootMargin: '-35% 0px -60% 0px' });
+      tabs.forEach(([id]) => io.observe($('#' + id)));
+      setTab('spDetail');
+
+      // 상세정보
+      $('#spAbout').textContent = c.desc;
+      $('#spWord').innerHTML = `“주문하신 분의 사연을 먼저 읽고, 그날 아침 붓을 듭니다.” — ${m.name} 스님`;
+      $('#spMatTable').innerHTML = D.MATERIALS.map(x => `<tr class="border-t border-edge/10"><td class="px-4 py-3 font-medium">${x.name}</td><td class="px-4 py-3 tabular-nums">${won(ci.price + x.add)}</td><td class="px-4 py-3 text-fg2">${x.note}</td></tr>`).join('');
+      $('#spSteps').innerHTML = info.steps.map((s, i) => `<li class="flex gap-4 px-4 py-3.5"><span class="w-6 h-6 shrink-0 rounded-full bg-cinnabar/10 text-cinnabar text-xs font-bold flex items-center justify-center">${i + 1}</span><div><b class="text-sm">${s.t}</b><p class="mt-0.5 text-sm text-muted">${s.d}</p></div></li>`).join('');
+      $('#spCare').innerHTML = info.care.map(t => `<li class="flex gap-2"><span class="text-cinnabar">·</span>${t}</li>`).join('');
+
+      // 구매 안내
+      const row = (k, v) => `<div class="grid grid-cols-[7rem_1fr] gap-4 px-4 py-3"><dt class="text-subtle">${k}</dt><dd class="text-fg2 leading-relaxed">${v}</dd></div>`;
+      $('#spPolicy').innerHTML = [
+        row('배송 방법', '등기 우편 (운송장 번호를 문자로 알려 드립니다)'),
+        row('발송 시기', '결제 후 1–2일 안에 축원을 올리고 발송'),
+        row('배송비', '3,000원 · 같은 스님께 5만 원 이상 주문하시면 무료'),
+        row('교환', '축원 후 밀봉해 보내 드려 교환은 어렵습니다. 손상되었으면 다시 써서 보내 드립니다'),
+        ...D.REFUND_RULES.filter(r => r.item === '부적').map(r => row(`환불 · ${r.when}`, r.rate)),
+        row('판매', `${m.name} 스님 (${m.temple}) · 염원은 통신판매중개자입니다`),
+      ].join('') + `<div class="px-4 py-3"><a href="help.html#refund" class="text-cinnabar-soft hover:underline">전체 환불 규정 보기</a></div>`;
+
+      // 후기
+      const shown = reviews.length ? reviews : D.REVIEWS.filter(r => r.monk === m.id).slice(0, 3);
+      $('#spReviewCount').textContent = reviews.length ? `${reviews.length}건` : '아직 없음 · 스님의 다른 후기';
+      $('#spReviewList').innerHTML = shown.map(r => `<article class="py-4"><div class="flex items-center gap-2 text-xs"><span class="flex text-cinnabar">${stars(r.stars, 12)}</span><b>${r.name}</b><span class="text-subtle">${r.date} · ${r.service}</span></div><p class="mt-2 text-sm text-fg2 leading-relaxed">${r.body}</p></article>`).join('');
+
+      // 문의
+      YW.renderFaq($('#spFaq'), info.faq);
+      $('[data-ask]').addEventListener('click', () => YW.toast('시안에서는 문의 창이 열리지 않습니다'));
+
+      // 같은 스님의 다른 부적 (스토어 진열과 같은 카드)
+      const others = YW.shopProducts().filter(p => p.kind === 'charm' && p.monk.id === m.id && p.id !== ci.id).sort((a, b) => b.reviews - a.reviews);
+      if (!others.length) $('#spMoreSec').remove();
+      else {
+        $('#spMoreTitle').textContent = `${m.name} 스님의 다른 부적`;
+        $('#spMoreAll').href = `${monkUrl(m.id)}#charms`;
+        $('#spMore').innerHTML = others.slice(0, 4).map(p => YW.charmCard(p)).join('');
+      }
+
+      // 모바일 하단 바: 구매 영역을 지나면 보임
+      YW.stickyBar('#spBar', '#spBuy');
     }
 
     function render() {
