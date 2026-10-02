@@ -20,6 +20,7 @@ python3 -m http.server 8000   # → http://localhost:8000
 | `monk.html?id=haewol` | 스님 페이지 (부적 주문, 제례·기도 예약). `&svc=sasipgu`로 의식 미리 선택 |
 | `ritual.html?id=sasipgu` | 의식 상세 (절차, 비용, 준비물, 모시는 스님) |
 | `charm.html?monk=haewol&id=pyeongan` | 부적 상세 (옵션·담기, 받아 보시기까지, 배송·환불, 후기) |
+| `rite.html?monk=haewol&id=sasipgu` | 스님별 의식 예약 (모시는 방식, 예약 위젯, 진행 순서, 후기, 오시는 길) |
 | `help.html` | 고객센터 (FAQ, 환불 규정, 1:1 문의) |
 | `_preview/palette.html` | 배경색 시안 비교용 |
 
@@ -29,6 +30,7 @@ python3 -m http.server 8000   # → http://localhost:8000
 |---|---|
 | `assets/data.js` | 스님, 부적, 의식, 후기, FAQ 데이터. 스님 추가는 `EXAMPLE_MONKS` → `MONKS`로 옮기기 |
 | `assets/common.js` | 헤더·푸터, 장바구니(스님별 결제), 주문서, dev 패널 |
+| `assets/booking.js` | 제례·기도 예약 위젯 (스님 페이지와 의식 예약 페이지가 같이 씀) |
 | `assets/theme.js` | Tailwind 설정, 기본 테마 (`DEFAULT_THEME`) |
 | `assets/common.css` | 테마별 색 (CSS 변수), 애니메이션 |
 
@@ -41,6 +43,7 @@ python3 -m http.server 8000   # → http://localhost:8000
 - 모시는 스님이 없는 의식: 숨김 / 준비 중 표시
 - 의식 카드 가격: 숨김 / 표시 (숨기면 소요 시간만, 비용은 의식 상세 페이지에서 안내)
 - 스님 페이지에서 부적 클릭: 상세 페이지 / 팝업
+- 스님 페이지에서 의식 클릭: 상세 페이지 / 페이지 안 예약
 
 ## 참고
 

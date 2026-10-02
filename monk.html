@@ -91,98 +91,17 @@
       </div>
     </section>
 
-    <!-- 제례 · 기도 예약 -->
+    <!-- 제례 · 기도 -->
     <section id="rituals" class="relative py-24 md:py-32 lg:py-40 bg-deep/40 border-y border-edge/5 scroll-mt-36">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10">
-        <div class="lg:col-span-5">
-          <div class="lg:sticky lg:top-40">
-            <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">祭 · 제례 · 기도 예약</span>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+          <div>
+            <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">祭 · 제례 · 기도</span>
             <h2 id="ritualTitle" class="reveal mt-5 text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-snug" style="--index:1"></h2>
-            <p class="reveal mt-5 text-muted leading-relaxed" style="--index:2">의식을 고르고 날짜를 정해 주세요. 예약을 담으면 스님이 직접 확인 전화를 드립니다.</p>
-            <div id="serviceList" class="mt-10 flex flex-col gap-2" role="radiogroup" aria-label="의식 종류"></div>
           </div>
+          <p class="reveal text-muted leading-relaxed max-w-md" style="--index:2">의식을 고르고 날짜를 정해 주세요. 예약을 담으면 스님이 직접 확인 전화를 드립니다.</p>
         </div>
-
-        <div class="lg:col-span-7">
-          <div class="reveal rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10">
-            <div class="rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-5 sm:p-8">
-              <div id="serviceDetail"></div>
-
-              <div class="mt-8">
-                <div class="flex items-center justify-between">
-                  <p class="text-sm font-semibold text-fg2 flex items-center gap-2"><iconify-icon icon="solar:calendar-linear" width="18" class="text-cinnabar"></iconify-icon><span id="dateLabel">날짜</span> 선택</p>
-                  <div class="flex items-center gap-1">
-                    <button id="calPrev" aria-label="이전 달" class="ease-spring w-10 h-10 rounded-full flex items-center justify-center hover:bg-edge/5 disabled:opacity-30 disabled:pointer-events-none"><iconify-icon icon="solar:alt-arrow-left-linear" width="18"></iconify-icon></button>
-                    <span id="calLabel" class="text-sm font-semibold tabular-nums w-24 text-center"></span>
-                    <button id="calNext" aria-label="다음 달" class="ease-spring w-10 h-10 rounded-full flex items-center justify-center hover:bg-edge/5 disabled:opacity-30 disabled:pointer-events-none"><iconify-icon icon="solar:alt-arrow-right-linear" width="18"></iconify-icon></button>
-                  </div>
-                </div>
-                <div class="mt-4 grid grid-cols-7 text-center text-[11px] text-subtle font-medium">
-                  <span class="text-cinnabar-soft">일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
-                </div>
-                <div id="calGrid" class="mt-2 grid grid-cols-7 gap-1"></div>
-                <div class="mt-3 flex flex-wrap gap-4 text-[11px] text-subtle">
-                  <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-fg2"></span>예약 가능</span>
-                  <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-cinnabar"></span>선택됨</span>
-                  <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-faint"></span>마감 · 준비 기간</span>
-                </div>
-                <div id="scheduleNote" class="mt-4"></div>
-              </div>
-
-              <div id="slotWrap" class="mt-8">
-                <p class="text-sm font-semibold text-fg2 flex items-center gap-2"><iconify-icon icon="solar:clock-circle-linear" width="18" class="text-cinnabar"></iconify-icon> 시간 선택</p>
-                <div id="slotGrid" class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
-              </div>
-
-              <div class="mt-8">
-                <p class="text-sm font-semibold text-fg2 flex items-center gap-2"><iconify-icon icon="solar:videocamera-record-linear" width="18" class="text-cinnabar"></iconify-icon> 참여 방식</p>
-                <div id="modeGrid" class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2"></div>
-              </div>
-
-              <div id="tierWrap" class="mt-8">
-                <p class="text-sm font-semibold text-fg2 flex items-center gap-2"><iconify-icon icon="solar:hand-heart-linear" width="18" class="text-cinnabar"></iconify-icon> <span id="tierLabel"></span></p>
-                <div id="tierGrid" class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2"></div>
-              </div>
-
-              <form id="ritualForm" class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3" novalidate>
-                <label class="block">
-                  <span class="text-xs text-muted">신청자 성함</span>
-                  <input name="applicant" autocomplete="name" class="ease-spring mt-1.5 w-full h-12 rounded-xl bg-edge/[0.04] border border-edge/10 px-4 text-sm placeholder:text-faint focus:outline-none focus:border-cinnabar/60 focus:bg-edge/[0.06]" placeholder="예) 오예린">
-                </label>
-                <label class="block">
-                  <span class="text-xs text-muted">연락처</span>
-                  <input name="phone" inputmode="tel" autocomplete="tel" class="ease-spring mt-1.5 w-full h-12 rounded-xl bg-edge/[0.04] border border-edge/10 px-4 text-sm placeholder:text-faint focus:outline-none focus:border-cinnabar/60 focus:bg-edge/[0.06]" placeholder="010-0000-0000">
-                </label>
-                <label class="block deceased-field">
-                  <span class="text-xs text-muted">영가 (고인) 성함</span>
-                  <input name="deceased" class="ease-spring mt-1.5 w-full h-12 rounded-xl bg-edge/[0.04] border border-edge/10 px-4 text-sm placeholder:text-faint focus:outline-none focus:border-cinnabar/60 focus:bg-edge/[0.06]" placeholder="위패에 올릴 함자">
-                </label>
-                <label class="block deceased-field">
-                  <span class="text-xs text-muted">고인과의 관계</span>
-                  <select name="relation" class="ease-spring mt-1.5 w-full h-12 rounded-xl bg-edge/[0.04] border border-edge/10 px-4 text-sm focus:outline-none focus:border-cinnabar/60">
-                    <option>부친</option><option>모친</option><option>조부</option><option>조모</option><option>배우자</option><option>자녀</option><option>기타</option>
-                  </select>
-                </label>
-                <label class="block sm:col-span-2">
-                  <span class="text-xs text-muted" id="memoLabel">요청 사항 <span class="text-faint">(선택)</span></span>
-                  <textarea name="memo" rows="2" class="ease-spring mt-1.5 w-full rounded-xl bg-edge/[0.04] border border-edge/10 px-4 py-3 text-sm placeholder:text-faint focus:outline-none focus:border-cinnabar/60 focus:bg-edge/[0.06] resize-none"></textarea>
-                </label>
-              </form>
-
-              <div class="mt-8 rounded-2xl bg-edge/[0.03] border border-edge/10 p-5 flex flex-col sm:flex-row sm:items-center gap-5 justify-between">
-                <div class="text-sm leading-relaxed">
-                  <p id="ritualSummary" class="text-muted"></p>
-                  <p class="mt-1 text-2xl font-bold tracking-tight tabular-nums" id="ritualTotal">0원</p>
-                </div>
-                <button id="ritualSubmit" class="group ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-cinnabar text-white pl-7 pr-2 py-2 min-h-[56px] text-base font-semibold hover:scale-[1.02] active:scale-[0.98] hover:shadow-[0_0_30px_rgba(200,85,61,0.25)] disabled:opacity-40 disabled:pointer-events-none">
-                  예약 담기
-                  <span class="ease-spring w-10 h-10 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:arrow-right-linear" width="20"></iconify-icon></span>
-                </button>
-              </div>
-              <p id="ritualError" class="mt-3 text-sm text-cinnabar-soft hidden" role="alert"></p>
-            </div>
-          </div>
-        </div>
+        <div id="ritualBody" class="mt-14"></div>
       </div>
     </section>
 
@@ -319,6 +238,7 @@
 
   <script src="assets/data.js"></script>
   <script src="assets/common.js"></script>
+  <script src="assets/booking.js"></script>
   <script>
     const { D, $, $$, won, manwon, esc, hash, monkUrl, monkAvatar, landscapeSVG, charmSVG, stars } = YW;
 
@@ -461,185 +381,63 @@
       });
       $('#productModal').addEventListener('click', e => { if (e.target.closest('[data-close]')) YW.closeLayer($('#productModal')); });
 
-      // ---------- 제례 · 기도 예약 ----------
+      // ---------- 제례 · 기도 ----------
+      // dev 옵션 riteClick: page(카드 → 의식 예약 페이지) | inline(이 페이지 안에서 바로 예약)
       $('#ritualTitle').innerHTML = `${m.name} 스님이<br>모시는 의식`;
-      const services = m.services.map(s => ({ ...D.SERVICE_TYPES[s.id], id: s.id, price: s.price }));
-      const today = new Date(); today.setHours(0, 0, 0, 0);
-      // 메인에서 특정 의식을 눌러 들어오면 그 의식을 먼저 선택 (?svc=sasipgu)
-      const svcParam = new URLSearchParams(location.search).get('svc');
-      const firstSvc = services.find(s => s.id === svcParam) || services[0];
-      const rv = { svc: firstSvc, date: null, slot: null, mode: firstSvc.modes[0], tier: null, calY: today.getFullYear(), calM: today.getMonth() };
-      const DOW = ['일', '월', '화', '수', '목', '금', '토'];
-      const dKey = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-      const fmt = d => `${d.getMonth() + 1}월 ${d.getDate()}일(${DOW[d.getDay()]})`;
-      const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
-      const resetTier = () => { rv.tier = rv.svc.tiers ? rv.svc.tiers[0].id : null; };
-      resetTier();
-
-      function dateStatus(d) {
-        if (Math.round((d - today) / 86400000) < 3) return 'prep';
-        if (hash(dKey(d), m.id, rv.svc.id) % 6 === 0) return 'full';
-        return 'open';
-      }
-      const slotFull = (d, s) => hash(dKey(d), s, m.id, rv.svc.id) % 4 === 0;
-
-      function renderServices() {
-        $('#serviceList').innerHTML = services.map((s, i) => {
-          const on = rv.svc.id === s.id;
-          return `
-          <button role="radio" aria-checked="${on}" data-svc="${s.id}" class="reveal ease-spring group flex items-center gap-4 rounded-2xl px-4 py-4 text-left border ${on ? 'bg-edge/[0.06] border-edge/15' : 'border-transparent hover:bg-edge/[0.03]'}" style="--index:${i}">
-            <span class="font-serif font-extrabold text-lg w-12 shrink-0 ${on ? 'text-cinnabar' : 'text-faint group-hover:text-muted'} ease-spring">${s.hanja}</span>
-            <span class="flex-1">
-              <span class="block font-semibold ${on ? 'text-fg' : 'text-fg2'}">${s.name}</span>
-              <span class="block text-xs text-subtle mt-0.5">${s.dur} · ${manwon(s.price)}부터</span>
-            </span>
-            <iconify-icon icon="solar:alt-arrow-right-linear" width="18" class="ease-spring ${on ? 'text-cinnabar' : 'text-faint -translate-x-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-0'}"></iconify-icon>
-          </button>`;
-        }).join('');
-        YW.observeReveals();
-      }
-      function renderDetail() {
-        const s = rv.svc;
-        $('#serviceDetail').innerHTML = `
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <p class="text-xs text-cinnabar-soft font-medium">${s.dur}</p>
-              <h3 class="mt-1 text-2xl md:text-3xl font-bold tracking-tight">${s.name}</h3>
+      const services = m.services.map(s => ({ ...D.SERVICE_TYPES[s.id], ...s }));
+      if (YW.devOpt('riteClick') === 'page') {
+        $('#ritualBody').innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">${services.map((s, i) => `
+          <a href="${YW.riteUrl(m.id, s.id)}" class="reveal group block rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-cinnabar/50" style="--index:${i % 2}">
+            <article class="h-full rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-7 md:p-8 flex flex-col">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <p class="text-xs text-cinnabar-soft font-medium">${s.dur}</p>
+                  <h3 class="mt-1 text-2xl font-bold tracking-tight">${s.name}</h3>
+                </div>
+                <span class="font-serif font-extrabold text-4xl text-edge/15 ease-spring group-hover:text-cinnabar">${s.hanja}</span>
+              </div>
+              <p class="mt-3 text-sm text-muted leading-relaxed">${s.desc}</p>
+              ${s.way ? `<p class="mt-4 text-sm text-fg2 flex gap-2 leading-relaxed"><iconify-icon icon="solar:hand-heart-linear" width="18" class="text-cinnabar shrink-0 mt-0.5"></iconify-icon>${s.way[0]}</p>` : ''}
+              <div class="mt-auto pt-6 flex items-center justify-between gap-3">
+                <p class="font-semibold tabular-nums">${won(s.price)}<span class="text-subtle text-xs font-normal">부터</span></p>
+                <span class="ease-spring inline-flex items-center gap-2 rounded-full bg-edge/5 border border-edge/10 pl-4 pr-1.5 py-1.5 text-sm font-semibold group-hover:bg-cinnabar group-hover:border-cinnabar group-hover:text-white">자세히 보기 · 예약<span class="w-8 h-8 rounded-full bg-edge/5 flex items-center justify-center ease-spring group-hover:translate-x-0.5"><iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon></span></span>
+              </div>
+            </article>
+          </a>`).join('')}</div>`;
+      } else {
+        $('#ritualBody').innerHTML = `
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10">
+            <div class="lg:col-span-5"><div id="serviceList" class="lg:sticky lg:top-40 flex flex-col gap-2" role="radiogroup" aria-label="의식 종류"></div></div>
+            <div class="lg:col-span-7">
+              <div class="reveal rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10">
+                <div id="bookingRoot" class="rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-5 sm:p-8"></div>
+              </div>
             </div>
-            <span class="font-serif font-extrabold text-4xl text-edge/10">${s.hanja}</span>
-          </div>
-          <p class="mt-3 text-sm text-muted leading-relaxed">${s.desc}</p>
-          <a href="${YW.ritualUrl(s.id)}" class="ease-spring mt-2 inline-flex items-center gap-1 text-sm text-cinnabar-soft hover:gap-2">절차 · 준비물 자세히 보기 <iconify-icon icon="solar:arrow-right-linear" width="14"></iconify-icon></a>
-          ${s.note ? `<p class="mt-3 text-sm text-fg2 flex gap-2"><iconify-icon icon="solar:clock-circle-linear" width="18" class="text-cinnabar shrink-0 mt-0.5"></iconify-icon>${s.note}</p>` : ''}
-          <ul class="mt-4 flex flex-wrap gap-2">${s.includes.map(t => `<li class="flex items-center gap-1.5 rounded-full bg-edge/[0.04] border border-edge/10 px-3 py-1.5 text-xs text-fg2"><iconify-icon icon="solar:check-circle-bold" width="14" class="text-cinnabar"></iconify-icon>${t}</li>`).join('')}</ul>`;
-        $('#dateLabel').textContent = s.dateLabel;
-        $$('.deceased-field').forEach(el => el.classList.toggle('hidden', !s.deceased));
-        $('#slotWrap').classList.toggle('hidden', !s.slots);
-        $('#tierWrap').classList.toggle('hidden', !s.tiers);
-        if (s.tiers) $('#tierLabel').textContent = s.tierLabel;
-        const f = $('#ritualForm');
-        $('#memoLabel').innerHTML = s.deceased ? '요청 사항 <span class="text-faint">(선택)</span>' : '발원 내용 <span class="text-faint">(선택)</span>';
-        f.memo.placeholder = s.deceased ? '생전에 즐기시던 음식, 고향 상차림 방식 등을 적어 주세요' : '축원 받으실 분과 바라는 일을 적어 주세요. 예) 아들 한도윤 임용 시험 합격';
-      }
-      function renderCalendar() {
-        const first = new Date(rv.calY, rv.calM, 1);
-        const days = new Date(rv.calY, rv.calM + 1, 0).getDate();
-        $('#calLabel').textContent = `${rv.calY}. ${String(rv.calM + 1).padStart(2, '0')}`;
-        const ahead = (rv.calY - today.getFullYear()) * 12 + rv.calM - today.getMonth();
-        $('#calPrev').disabled = ahead <= 0;
-        $('#calNext').disabled = ahead >= 3;
-        let html = '';
-        for (let i = 0; i < first.getDay(); i++) html += '<span></span>';
-        for (let d = 1; d <= days; d++) {
-          const dt = new Date(rv.calY, rv.calM, d);
-          const st = dateStatus(dt);
-          const sel = rv.date && dKey(rv.date) === dKey(dt);
-          const isToday = dKey(dt) === dKey(today);
-          let cls = 'ease-spring relative aspect-square sm:aspect-auto sm:h-11 rounded-xl text-sm tabular-nums flex items-center justify-center ';
-          if (sel) cls += 'bg-cinnabar text-white font-semibold';
-          else if (st === 'open') cls += `hover:bg-edge/10 ${dt.getDay() === 0 ? 'text-cinnabar-soft' : 'text-fg'}`;
-          else cls += 'text-faint cursor-not-allowed';
-          html += `<button ${st !== 'open' ? 'disabled' : ''} data-day="${d}" class="${cls}" aria-label="${rv.calM + 1}월 ${d}일 ${st === 'open' ? '예약 가능' : st === 'full' ? '마감' : '준비 기간'}">
-            ${d}${st === 'full' ? '<span class="absolute bottom-1 text-[9px] leading-none text-faint">마감</span>' : ''}${isToday ? '<span class="absolute top-1 right-1.5 w-1 h-1 rounded-full bg-muted"></span>' : ''}
-          </button>`;
-        }
-        $('#calGrid').innerHTML = html;
-        renderScheduleNote();
-      }
-      function renderScheduleNote() {
-        const el = $('#scheduleNote');
-        if (!rv.date) { el.innerHTML = ''; return; }
-        if (rv.svc.id === 'sasipgu') {
-          const names = ['초재', '이재', '삼재', '사재', '오재', '육재', '막재'];
-          el.innerHTML = `<div class="rounded-2xl bg-edge/[0.03] border border-edge/10 p-4">
-            <p class="text-xs text-muted">일곱 번의 재 일정</p>
-            <ol class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">${names.map((n, i) => `<li class="rounded-xl px-3 py-2 ${i === 6 ? 'bg-cinnabar/10 text-cinnabar-soft' : 'bg-edge/[0.03] text-fg2'}"><b class="block">${n}</b>${fmt(addDays(rv.date, i * 7))}</li>`).join('')}</ol>
           </div>`;
-        } else if (rv.svc.id === 'baegil') {
-          el.innerHTML = `<p class="text-sm text-muted">입재 ${fmt(rv.date)} → 회향 <b class="text-fg">${fmt(addDays(rv.date, 99))}</b></p>`;
-        } else if (rv.svc.id === 'deung') {
-          el.innerHTML = `<p class="text-sm text-muted">입등 ${fmt(rv.date)} → 소등 <b class="text-fg">${fmt(addDays(rv.date, 364))}</b></p>`;
-        } else el.innerHTML = '';
-      }
-      function renderSlots() {
-        $('#slotGrid').innerHTML = D.SLOTS.map(s => {
-          const full = rv.date ? slotFull(rv.date, s) : false;
-          const on = rv.slot === s, disabled = !rv.date || full;
-          return `<button data-slot="${s}" ${disabled ? 'disabled' : ''} class="ease-spring h-12 rounded-xl text-sm font-medium tabular-nums border ${on ? 'bg-cinnabar border-cinnabar text-white' : disabled ? 'border-edge/5 text-faint cursor-not-allowed' : 'border-edge/10 bg-edge/[0.03] hover:bg-edge/[0.08]'}">${s}${full ? ' <span class="text-[11px]">마감</span>' : ''}</button>`;
-        }).join('');
-      }
-      function renderModes() {
-        $('#modeGrid').innerHTML = rv.svc.modes.map(k => {
-          const md = D.MODES[k], on = rv.mode === k;
-          return `<button data-mode="${k}" class="ease-spring flex items-start gap-3 rounded-xl px-4 py-3 text-left border ${on ? 'border-cinnabar/70 bg-cinnabar/10' : 'border-edge/10 bg-edge/[0.03] hover:bg-edge/[0.06]'}">
-            <iconify-icon icon="${md.icon}" width="18" class="mt-0.5 ${on ? 'text-cinnabar' : 'text-subtle'}"></iconify-icon>
-            <span><span class="block text-sm font-semibold">${md.name}</span><span class="block text-xs text-subtle mt-0.5">${md.note}${md.add ? ' · +' + won(md.add) : ''}</span></span>
-          </button>`;
-        }).join('');
-      }
-      function renderTiers() {
-        if (!rv.svc.tiers) { $('#tierGrid').innerHTML = ''; return; }
-        $('#tierGrid').innerHTML = rv.svc.tiers.map(t => {
-          const on = rv.tier === t.id;
-          return `<button data-tier="${t.id}" class="ease-spring rounded-xl px-4 py-3 text-left border ${on ? 'border-cinnabar/70 bg-cinnabar/10' : 'border-edge/10 bg-edge/[0.03] hover:bg-edge/[0.06]'}">
-            <span class="block text-sm font-semibold">${t.name} <span class="font-normal text-xs ${on ? 'text-cinnabar-soft' : 'text-subtle'}">${t.add ? '+' + won(t.add) : '포함'}</span></span>
-            <span class="block text-xs text-subtle mt-0.5">${t.note}</span>
-          </button>`;
-        }).join('');
-      }
-      const ritualPrice = () => rv.svc.price + (D.MODES[rv.mode]?.add || 0) + (rv.svc.tiers ? rv.svc.tiers.find(t => t.id === rv.tier).add : 0);
-      const ready = () => rv.date && (!rv.svc.slots || rv.slot);
-      function renderSummary() {
-        const s = rv.svc;
-        if (ready()) $('#ritualSummary').innerHTML = `<b class="text-fg">${s.name}</b> · ${s.dateLabel} ${fmt(rv.date)}${rv.slot && s.slots ? ' ' + rv.slot : ''} · ${D.MODES[rv.mode].name}`;
-        else $('#ritualSummary').textContent = !rv.date ? `${s.dateLabel}을 선택해 주세요` : '시간을 선택해 주세요';
-        $('#ritualTotal').textContent = won(ritualPrice());
-        $('#ritualSubmit').disabled = !ready();
-      }
-      function renderRitual() { renderDetail(); renderCalendar(); renderSlots(); renderModes(); renderTiers(); renderSummary(); }
-
-      $('#serviceList').addEventListener('click', e => {
-        const b = e.target.closest('[data-svc]'); if (!b) return;
-        rv.svc = services.find(s => s.id === b.dataset.svc);
-        rv.mode = rv.svc.modes[0]; rv.slot = null; resetTier();
-        if (rv.date && dateStatus(rv.date) !== 'open') rv.date = null;
-        renderServices(); renderRitual();
-        if (window.innerWidth < 1024) $('#serviceDetail').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      });
-      $('#calGrid').addEventListener('click', e => {
-        const b = e.target.closest('[data-day]'); if (!b || b.disabled) return;
-        rv.date = new Date(rv.calY, rv.calM, +b.dataset.day);
-        if (rv.slot && slotFull(rv.date, rv.slot)) rv.slot = null;
-        renderCalendar(); renderSlots(); renderSummary();
-      });
-      $('#calPrev').addEventListener('click', () => { if (--rv.calM < 0) { rv.calM = 11; rv.calY--; } renderCalendar(); });
-      $('#calNext').addEventListener('click', () => { if (++rv.calM > 11) { rv.calM = 0; rv.calY++; } renderCalendar(); });
-      $('#slotGrid').addEventListener('click', e => { const b = e.target.closest('[data-slot]'); if (!b || b.disabled) return; rv.slot = b.dataset.slot; renderSlots(); renderSummary(); });
-      $('#modeGrid').addEventListener('click', e => { const b = e.target.closest('[data-mode]'); if (!b) return; rv.mode = b.dataset.mode; renderModes(); renderSummary(); });
-      $('#tierGrid').addEventListener('click', e => { const b = e.target.closest('[data-tier]'); if (!b) return; rv.tier = b.dataset.tier; renderTiers(); renderSummary(); });
-
-      $('#ritualSubmit').addEventListener('click', async () => {
-        const f = $('#ritualForm'), err = $('#ritualError'), s = rv.svc;
-        const fail = (msg, el) => { err.textContent = msg; err.classList.remove('hidden'); el.focus(); };
-        const applicant = f.applicant.value.trim(), phone = f.phone.value.trim();
-        if (!applicant) return fail('신청자 성함을 입력해 주세요.', f.applicant);
-        if (!YW.phoneOk(phone)) return fail('연락처를 010-0000-0000 형식으로 입력해 주세요.', f.phone);
-        if (s.deceased && !f.deceased.value.trim()) return fail('위패에 올릴 영가 성함을 입력해 주세요.', f.deceased);
-        err.classList.add('hidden');
-        const parts = [`${s.dateLabel} ${rv.date.getFullYear()}.${rv.date.getMonth() + 1}.${rv.date.getDate()}(${DOW[rv.date.getDay()]})${s.slots ? ' ' + rv.slot : ''}`, D.MODES[rv.mode].name];
-        if (s.tiers) parts.push(s.tiers.find(t => t.id === rv.tier).name);
-        if (s.deceased) parts.push(`${f.relation.value} ${f.deceased.value.trim()} 영가`);
-        const ok = await YW.addToCart(m.id, {
-          key: 'ritual|' + Date.now(), type: 'ritual', ref: s.id, name: s.name, opts: parts.join(' · '),
-          unit: ritualPrice(), qty: 1, applicant, phone, memo: f.memo.value.trim(),
+        // 메인 등에서 특정 의식을 눌러 들어오면 그 의식을 먼저 선택 (?svc=sasipgu)
+        const booking = YW.mountBooking($('#bookingRoot'), { monk: m, serviceId: new URLSearchParams(location.search).get('svc') });
+        const renderServices = () => {
+          $('#serviceList').innerHTML = services.map((s, i) => {
+            const on = booking.service.id === s.id;
+            return `
+            <button type="button" role="radio" aria-checked="${on}" data-svc="${s.id}" class="reveal ease-spring group flex items-center gap-4 rounded-2xl px-4 py-4 text-left border ${on ? 'bg-edge/[0.06] border-edge/15' : 'border-transparent hover:bg-edge/[0.03]'}" style="--index:${i}">
+              <span class="font-serif font-extrabold text-lg w-12 shrink-0 ${on ? 'text-cinnabar' : 'text-faint group-hover:text-muted'} ease-spring">${s.hanja}</span>
+              <span class="flex-1">
+                <span class="block font-semibold ${on ? 'text-fg' : 'text-fg2'}">${s.name}</span>
+                <span class="block text-xs text-subtle mt-0.5">${s.dur} · ${manwon(s.price)}부터</span>
+              </span>
+              <iconify-icon icon="solar:alt-arrow-right-linear" width="18" class="ease-spring ${on ? 'text-cinnabar' : 'text-faint -translate-x-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-0'}"></iconify-icon>
+            </button>`;
+          }).join('');
+          YW.observeReveals();
+        };
+        $('#serviceList').addEventListener('click', e => {
+          const b = e.target.closest('[data-svc]'); if (!b) return;
+          booking.setService(b.dataset.svc); renderServices();
+          if (window.innerWidth < 1024) $('#serviceDetail').scrollIntoView({ behavior: 'smooth', block: 'center' });
         });
-        if (!ok) return;
-        YW.toast(`${s.name} 예약을 담았습니다`);
-        rv.slot = null; renderSlots(); renderSummary();
-        YW.openCart();
-      });
-
-      renderServices(); renderRitual();
+        renderServices();
+      }
 
       // ---------- 후기 ----------
       $('#reviewTitle').innerHTML = `${m.name} 스님께<br>맡기신 분들의 이야기`;

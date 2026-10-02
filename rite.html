@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>의식 예약 | 염원 念願</title>
+  <meta name="description" content="스님께 제례와 기도를 예약하세요. 진행 방식, 비용, 준비하실 것, 후기를 한 페이지에서 확인할 수 있습니다.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
+  <script src="assets/theme.js"></script>
+  <link rel="stylesheet" href="assets/common.css">
+</head>
+<body class="grain font-sans break-keep-all selection:bg-cinnabar/40">
+
+  <div data-shell="header"></div>
+
+  <main id="page">
+    <!-- 상단: 수묵 배경 + 제목 + 핵심 정보 -->
+    <section id="top" class="relative pt-28 md:pt-32 pb-16 md:pb-24 overflow-hidden">
+      <div id="cover" aria-hidden="true" class="absolute inset-x-0 top-0 h-[34rem] opacity-60"></div>
+      <div aria-hidden="true" class="absolute inset-x-0 top-0 h-[34rem] bg-gradient-to-b from-page/30 via-page/70 to-page"></div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav aria-label="현재 위치" class="reveal flex flex-wrap items-center gap-1.5 text-sm text-subtle">
+          <a href="index.html" class="ease-spring hover:text-fg">홈</a>
+          <iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon>
+          <a id="crumbMonk" class="ease-spring hover:text-fg"></a>
+          <iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon>
+          <a id="crumbRituals" class="ease-spring hover:text-fg">제례 · 기도</a>
+          <iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon>
+          <span id="crumbName" class="text-fg2"></span>
+        </nav>
+
+        <div class="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-end">
+          <div class="lg:col-span-7">
+            <a id="monkChip" class="reveal ease-spring inline-flex items-center gap-3 rounded-full bg-surface/70 backdrop-blur-sm border border-edge/10 pl-1.5 pr-4 py-1.5 hover:bg-surface" style="--index:1"></a>
+            <h1 id="title" class="reveal mt-6 text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight" style="--index:1"></h1>
+            <p id="summary" class="reveal mt-6 text-base md:text-lg text-muted leading-relaxed max-w-[52ch]" style="--index:2"></p>
+            <div class="reveal mt-10 flex flex-col sm:flex-row gap-3" style="--index:3">
+              <a href="#book" class="group ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-cinnabar text-white pl-8 pr-2 py-2 min-h-[56px] text-lg font-semibold hover:scale-[1.02] active:scale-[0.98] hover:shadow-[0_0_30px_rgba(200,85,61,0.25)]">
+                날짜 잡고 예약하기
+                <span class="ease-spring w-10 h-10 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-y-0.5"><iconify-icon icon="solar:calendar-linear" width="20"></iconify-icon></span>
+              </a>
+              <a href="#reviews" id="reviewJump" class="group ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-edge/5 border border-edge/10 pl-8 pr-2 py-2 min-h-[56px] text-lg font-semibold hover:bg-edge/10 hover:scale-[1.02] active:scale-[0.98]"></a>
+            </div>
+          </div>
+          <aside class="lg:col-span-5">
+            <div class="reveal rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10" style="--index:3">
+              <dl id="facts" class="rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-6 md:p-8 grid grid-cols-2 gap-x-6 gap-y-6"></dl>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- 고정 탭 -->
+    <div class="sticky top-[5.25rem] z-30 px-4">
+      <nav id="tabs" class="mx-auto flex gap-1 overflow-x-auto no-scrollbar rounded-full p-1.5 backdrop-blur-xl bg-deep/70 border border-edge/10 w-max max-w-full" aria-label="예약 페이지 메뉴"></nav>
+    </div>
+
+    <!-- 이 스님은 이렇게 모십니다 -->
+    <section id="way" class="py-24 md:py-32 scroll-mt-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div class="lg:col-span-4">
+          <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">心 · 모시는 방식</span>
+          <h2 id="wayTitle" class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug" style="--index:1"></h2>
+        </div>
+        <div class="lg:col-span-8">
+          <ul id="wayList" class="grid grid-cols-1 gap-3"></ul>
+          <blockquote id="monkWord" class="reveal mt-8 border-l-2 border-cinnabar/60 pl-5 text-fg2 leading-relaxed"></blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- 예약 -->
+    <section id="book" class="py-24 md:py-32 bg-deep/40 border-y border-edge/5 scroll-mt-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10">
+        <div class="lg:col-span-5">
+          <div class="lg:sticky lg:top-40">
+            <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">約 · 예약</span>
+            <h2 class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug" style="--index:1">날짜를 고르고<br>예약을 담으세요</h2>
+            <p class="reveal mt-5 text-muted leading-relaxed" style="--index:2">예약을 담고 결제하시면 스님이 직접 확인 전화를 드립니다. 봉행 3일 전까지는 날짜를 무료로 바꿀 수 있습니다.</p>
+            <div class="reveal mt-8 rounded-[1.5rem] bg-surface ring-1 ring-edge/10 p-6" style="--index:3">
+              <p class="text-sm font-semibold flex items-center gap-2"><iconify-icon icon="solar:check-circle-bold" width="18" class="text-cinnabar"></iconify-icon>비용에 포함된 것</p>
+              <ul id="includes" class="mt-3 space-y-1.5 text-sm text-fg2"></ul>
+              <p class="mt-5 pt-5 border-t border-edge/10 text-xs text-subtle leading-relaxed">봉행 3일 전까지 전액 환불 · 2일 전부터는 준비한 제수 비용을 뺀 금액 환불 · <a href="help.html#refund" class="underline underline-offset-2 hover:text-fg">환불 규정</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="lg:col-span-7">
+          <div class="reveal rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10">
+            <div id="bookingRoot" class="rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-5 sm:p-8"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 진행 순서 · 준비하실 것 -->
+    <section id="process" class="py-24 md:py-32 scroll-mt-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">順 · 진행 순서</span>
+            <h2 class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug" style="--index:1">이렇게 진행됩니다</h2>
+          </div>
+          <a id="guideLink" class="reveal ease-spring inline-flex items-center gap-1 text-sm text-cinnabar-soft hover:gap-2" style="--index:2"></a>
+        </div>
+        <ol id="steps" class="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-6"></ol>
+        <div class="reveal mt-16 rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10">
+          <div class="rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-7 md:p-10 grid grid-cols-1 md:grid-cols-12 gap-6">
+            <div class="md:col-span-4">
+              <p class="text-xs tracking-[0.15em] text-cinnabar-soft">備 · 준비하실 것</p>
+              <h3 class="mt-3 text-2xl font-bold tracking-tight">예약하실 때<br>알려 주세요</h3>
+            </div>
+            <ul id="prepare" class="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-3"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 후기 -->
+    <section id="reviews" class="py-24 md:py-32 bg-deep/40 border-y border-edge/5 scroll-mt-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <span class="reveal inline-block rounded-full px-3 py-1 text-[11px] tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">緣 · 후기</span>
+        <h2 id="reviewTitle" class="reveal mt-5 text-3xl md:text-4xl font-bold tracking-tight leading-snug" style="--index:1"></h2>
+        <div id="reviewGrid" class="mt-12 columns-1 md:columns-2 lg:columns-3 gap-5"></div>
+      </div>
+    </section>
+
+    <!-- 사찰 오시는 길 · 질문 -->
+    <section id="visit" class="py-24 md:py-32 scroll-mt-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div class="reveal rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10">
+          <div class="h-full rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-7 md:p-10">
+            <p class="text-xs tracking-[0.15em] text-cinnabar-soft">寺 · 직접 오실 때</p>
+            <h2 id="templeName" class="mt-3 text-2xl md:text-3xl font-bold tracking-tight"></h2>
+            <dl id="templeInfo" class="mt-6 space-y-5 text-sm"></dl>
+          </div>
+        </div>
+        <div class="reveal rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10" style="--index:1">
+          <div class="h-full rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-7 md:p-10">
+            <p class="text-xs tracking-[0.15em] text-cinnabar-soft">問 · 자주 묻는 질문</p>
+            <div id="faq" class="mt-4 divide-y divide-edge/10"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 이 스님의 다른 의식 -->
+    <section id="moreSec" class="pb-24 md:pb-32">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 id="moreTitle" class="reveal text-2xl md:text-3xl font-bold tracking-tight"></h2>
+        <div id="more" class="mt-8 flex gap-4 overflow-x-auto no-scrollbar -mx-4 px-4 lg:mx-0 lg:px-0 snap-x"></div>
+      </div>
+    </section>
+  </main>
+
+  <main id="notFound" class="hidden min-h-[100dvh] items-center justify-center px-4">
+    <div class="text-center">
+      <span class="font-serif text-7xl font-extrabold text-edge/10">無</span>
+      <h1 class="mt-6 text-2xl font-bold">이 스님이 모시지 않는 의식입니다</h1>
+      <p class="mt-3 text-subtle">스님 페이지에서 다시 골라 주세요.</p>
+      <a href="index.html" class="ease-spring mt-8 inline-flex h-12 px-6 rounded-full bg-cinnabar text-white font-semibold items-center gap-2 hover:scale-[1.02]">홈으로<iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></a>
+    </div>
+  </main>
+
+  <div data-shell="footer"></div>
+
+  <!-- 모바일 하단 고정 바 -->
+  <div id="stickyBar" class="lg:hidden fixed bottom-0 inset-x-0 z-40 px-4 pb-4 translate-y-full opacity-0 ease-spring">
+    <div class="flex items-center gap-2 rounded-full p-1.5 pl-5 bg-deep/80 backdrop-blur-xl border border-edge/10">
+      <p class="flex-1 min-w-0 text-sm leading-tight"><span id="barName" class="block truncate text-subtle text-xs"></span><b id="barPrice" class="tabular-nums"></b></p>
+      <a href="#book" class="h-12 px-5 rounded-full bg-cinnabar text-white text-sm font-semibold flex items-center gap-2 active:scale-[0.98] ease-spring"><iconify-icon icon="solar:calendar-linear" width="18"></iconify-icon>날짜 선택하기</a>
+    </div>
+  </div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/common.js"></script>
+  <script src="assets/booking.js"></script>
+  <script>
+    const { D, $, $$, won, manwon, monkUrl, monkAvatar, landscapeSVG, stars } = YW;
+    YW.mountShell({ active: 'monk' });
+
+    const params = new URLSearchParams(location.search);
+    const m = YW.monkById(params.get('monk'));
+    const entry = m && m.services.find(s => s.id === params.get('id'));
+
+    if (!entry) {
+      $('#page').remove(); $('#stickyBar').remove();
+      $('#notFound').classList.remove('hidden'); $('#notFound').classList.add('flex');
+    } else {
+      render();
+    }
+
+    function render() {
+      const key = entry.id;
+      const s = { ...D.SERVICE_TYPES[key], ...entry };
+      const info = D.RITUAL_DETAILS[key];
+      const reviews = YW.serviceReviews(m.id, key);
+      document.title = `${s.name} 예약 · ${m.name} 스님 | 염원 念願`;
+      document.querySelector('meta[name=description]').setAttribute('content', `${m.name} 스님(${m.temple})께 ${s.name}을 예약하세요. ${info.summary}`);
+
+      // ---------- 상단 ----------
+      $('#cover').innerHTML = landscapeSVG(m.seed);
+      $('#crumbMonk').textContent = `${m.name} 스님`; $('#crumbMonk').href = monkUrl(m.id);
+      $('#crumbRituals').href = `${monkUrl(m.id)}#rituals`;
+      $('#crumbName').textContent = s.name;
+      $('#monkChip').href = monkUrl(m.id);
+      $('#monkChip').innerHTML = `${monkAvatar(m, 'w-9 h-9 text-[11px]')}<span class="text-sm"><b>${m.name} 스님</b> <span class="text-subtle">· ${m.temple} · ${m.area}</span></span><iconify-icon icon="solar:alt-arrow-right-linear" width="16" class="text-subtle"></iconify-icon>`;
+      $('#title').innerHTML = `${s.name}<span class="block mt-2 text-2xl md:text-3xl font-semibold text-muted">${m.name} 스님께 모십니다</span>`;
+      $('#summary').textContent = info.summary;
+      $('#reviewJump').innerHTML = `후기 ${reviews.length}건 보기<span class="ease-spring w-10 h-10 rounded-full bg-edge/5 flex items-center justify-center group-hover:translate-y-0.5"><iconify-icon icon="solar:alt-arrow-down-linear" width="20"></iconify-icon></span>`;
+      const fact = (label, value) => `<div><dt class="text-xs text-subtle">${label}</dt><dd class="mt-1.5 font-bold tracking-tight leading-snug">${value}</dd></div>`;
+      $('#facts').innerHTML = [
+        fact('비용', `<span class="text-cinnabar">${won(s.price)}부터</span>`),
+        fact('횟수', info.count),
+        fact('소요 시간', s.dur),
+        fact(s.dateLabel, '3일 뒤부터 예약 가능'),
+        `<div class="col-span-2 pt-5 border-t border-edge/10"><dt class="text-xs text-subtle">참여 방식</dt><dd class="mt-1.5 text-sm text-fg2 leading-relaxed">${s.modes.map(k => D.MODES[k].name + (D.MODES[k].add ? ` (+${manwon(D.MODES[k].add)})` : '')).join(' · ')}</dd></div>`,
+      ].join('');
+
+      // ---------- 탭 ----------
+      const tabs = [['way', '모시는 방식'], ['book', '예약'], ['process', '진행 순서'], ['reviews', `후기 ${reviews.length}`], ['visit', '오시는 길']];
+      $('#tabs').innerHTML = tabs.map(([id, label]) => `<a href="#${id}" data-tab="${id}" class="ease-spring shrink-0 h-10 px-4 rounded-full text-sm font-medium flex items-center text-muted hover:text-fg">${label}</a>`).join('');
+      const setTab = id => $$('#tabs [data-tab]').forEach(a => { const on = a.dataset.tab === id; a.classList.toggle('bg-fg', on); a.classList.toggle('text-page', on); a.classList.toggle('text-muted', !on); });
+      const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) setTab(en.target.id); }), { rootMargin: '-45% 0px -50% 0px' });
+      tabs.forEach(([id]) => io.observe($('#' + id)));
+      setTab('way');
+
+      // ---------- 모시는 방식 ----------
+      $('#wayTitle').innerHTML = `${m.name} 스님은<br>이렇게 모십니다`;
+      const ways = s.way || [m.intro];
+      $('#wayList').innerHTML = ways.map((t, i) => `
+        <li class="reveal flex items-start gap-4 rounded-[1.5rem] bg-surface ring-1 ring-edge/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-6" style="--index:${i}">
+          <span class="w-9 h-9 shrink-0 rounded-full bg-cinnabar/10 flex items-center justify-center font-serif font-extrabold text-cinnabar">${i + 1}</span>
+          <span class="pt-1.5 leading-relaxed text-fg2">${t}</span>
+        </li>`).join('');
+      $('#monkWord').innerHTML = `“${m.tagline}”<span class="block mt-2 text-sm text-subtle">— ${m.name} 스님 · 출가 ${m.years}년</span>`;
+
+      // ---------- 예약 ----------
+      $('#includes').innerHTML = s.includes.map(t => `<li class="flex gap-2"><span class="text-cinnabar">·</span>${t}</li>`).join('');
+      YW.mountBooking($('#bookingRoot'), { monk: m, serviceId: key, showDetail: false });
+
+      // ---------- 진행 순서 · 준비 ----------
+      $('#guideLink').href = YW.ritualUrl(key);
+      $('#guideLink').innerHTML = `${s.name} 안내 자세히 보기 <iconify-icon icon="solar:arrow-right-linear" width="14"></iconify-icon>`;
+      $('#steps').innerHTML = info.steps.map((st, i) => `
+        <li class="reveal md:pr-6" style="--index:${i}">
+          <span class="font-serif text-5xl font-extrabold text-edge/10">0${i + 1}</span>
+          <div class="mt-4 h-px bg-gradient-to-r from-cinnabar/60 to-transparent"></div>
+          <h3 class="mt-6 text-lg font-semibold">${st.t}</h3>
+          <p class="mt-3 text-sm text-muted leading-relaxed">${st.d}</p>
+        </li>`).join('');
+      $('#prepare').innerHTML = info.prepare.map(t => `<li class="flex gap-3 rounded-xl bg-edge/[0.03] border border-edge/10 px-4 py-3 text-sm text-fg2 leading-relaxed"><iconify-icon icon="solar:pen-linear" width="18" class="text-cinnabar shrink-0 mt-0.5"></iconify-icon>${t}</li>`).join('');
+
+      // ---------- 후기 ----------
+      $('#reviewTitle').textContent = reviews.length ? `${m.name} 스님께 ${s.name}을 맡기신 분들` : `${m.name} 스님께 맡기신 분들`;
+      const shown = reviews.length ? reviews : D.REVIEWS.filter(r => r.monk === m.id).slice(0, 3);
+      $('#reviewGrid').innerHTML = (reviews.length ? '' : `<p class="mb-6 text-sm text-subtle break-inside-avoid">이 의식의 후기는 아직 없어 스님의 다른 후기를 보여 드립니다.</p>`) + shown.map((r, i) => `
+        <figure class="reveal break-inside-avoid mb-5 rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10" style="--index:${i % 3}">
+          <div class="rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-6 md:p-7">
+            <div class="flex items-center justify-between gap-3"><div class="flex text-cinnabar">${stars(r.stars)}</div><span class="text-[11px] text-faint tabular-nums">${r.date}</span></div>
+            <blockquote class="mt-4 text-fg leading-relaxed">${r.body}</blockquote>
+            <figcaption class="mt-6 text-sm"><b>${r.name}</b> <span class="text-subtle">· ${r.service}</span></figcaption>
+          </div>
+        </figure>`).join('');
+
+      // ---------- 오시는 길 · 질문 ----------
+      $('#templeName').innerHTML = `${m.temple} <span class="text-base font-medium text-subtle">${m.area}</span>`;
+      const infoRow = (icon, label, value) => `<div class="flex gap-4"><iconify-icon icon="${icon}" width="20" class="text-cinnabar shrink-0 mt-0.5"></iconify-icon><div><dt class="text-xs text-subtle">${label}</dt><dd class="mt-1 text-fg2 leading-relaxed">${value}</dd></div></div>`;
+      $('#templeInfo').innerHTML = [
+        infoRow('solar:map-point-linear', '주소', m.address),
+        infoRow('solar:delivery-linear', '오시는 길', m.directions),
+        infoRow('solar:clock-circle-linear', '참배 · 상담 시간', m.hours),
+      ].join('');
+      YW.renderFaq($('#faq'), info.faq);
+
+      // ---------- 이 스님의 다른 의식 ----------
+      const others = m.services.filter(x => x.id !== key);
+      if (!others.length) $('#moreSec').remove();
+      else {
+        $('#moreTitle').textContent = `${m.name} 스님의 다른 의식`;
+        $('#more').innerHTML = others.map((x, i) => {
+          const t = D.SERVICE_TYPES[x.id];
+          return `<a href="${YW.riteUrl(m.id, x.id)}" class="reveal group snap-start shrink-0 w-64 rounded-[1.75rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-cinnabar/50" style="--index:${i}">
+            <div class="h-full rounded-[calc(1.75rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-6">
+              <span class="font-serif font-extrabold text-3xl text-edge/20 ease-spring group-hover:text-cinnabar">${t.hanja}</span>
+              <p class="mt-6 font-bold">${t.name}</p>
+              <p class="mt-1 text-sm text-muted line-clamp-2">${D.RITUAL_DETAILS[x.id].summary}</p>
+              <p class="mt-4 text-sm text-subtle">${t.dur}</p>
+            </div>
+          </a>`;
+        }).join('');
+      }
+
+      // ---------- 모바일 하단 바 ----------
+      $('#barName').textContent = `${s.name} · ${m.name} 스님`;
+      $('#barPrice').textContent = `${won(s.price)}부터`;
+      const bar = $('#stickyBar');
+      const vis = { top: true, book: false };
+      const sync = () => { const hide = vis.top || vis.book; bar.classList.toggle('translate-y-full', hide); bar.classList.toggle('opacity-0', hide); };
+      new IntersectionObserver(es => es.forEach(en => { vis[en.target.id] = en.isIntersecting; sync(); }), { threshold: 0.05 })
+        .observe($('#top'));
+      new IntersectionObserver(es => es.forEach(en => { vis.book = en.isIntersecting; sync(); }), { threshold: 0.05 }).observe($('#book'));
+
+      YW.observeReveals();
+      if (location.hash && $(location.hash)) setTimeout(() => $(location.hash).scrollIntoView({ behavior: 'smooth' }), 150);
+    }
+  </script>
+</body>
+</html>

@@ -22,7 +22,12 @@ window.YW = (() => {
   // 의식(부적 포함) 관련
   const ritualUrl = key => `ritual.html?id=${encodeURIComponent(key)}`;
   const offeredBy = key => D.MONKS.filter(m => key === 'charm' ? m.charms.length > 0 : m.services.some(s => s.id === key));
-  const bookUrl = (m, key) => key === 'charm' ? `${monkUrl(m.id)}#charms` : `${monkUrl(m.id)}&svc=${key}#rituals`;
+  // 스님별 의식 예약 페이지
+  const riteUrl = (monkId, key) => `rite.html?monk=${encodeURIComponent(monkId)}&id=${encodeURIComponent(key)}`;
+  // 예약하러 가는 곳: dev 옵션 riteClick이 page면 의식 예약 페이지, inline이면 스님 페이지 안 위젯
+  const bookUrl = (m, key) => key === 'charm' ? `${monkUrl(m.id)}#charms`
+    : devOpt('riteClick') === 'page' ? `${riteUrl(m.id, key)}#book` : `${monkUrl(m.id)}&svc=${key}#rituals`;
+  const serviceReviews = (monkId, key) => D.REVIEWS.filter(r => r.monk === monkId && r.service.startsWith(D.SERVICE_TYPES[key].name));
   const priceAt = (m, key) => key === 'charm' ? m.minCharm : m.services.find(s => s.id === key).price;
   function ritualInfo(key) {
     const c = D.CATEGORIES.find(x => x.key === key), d = D.RITUAL_DETAILS[key];
@@ -55,7 +60,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page' };
+  const DEV_DEFAULTS = { cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -585,6 +590,7 @@ window.YW = (() => {
     { key: 'emptyRitual', label: '모시는 스님이 없는 의식', choices: [['hide', '숨김'], ['soon', '준비 중 표시']] },
     { key: 'cardPrice', label: '의식 카드 가격', choices: [['hide', '숨김'], ['show', '표시']] },
     { key: 'charmClick', label: '스님 페이지에서 부적 클릭', choices: [['page', '상세 페이지'], ['modal', '팝업']] },
+    { key: 'riteClick', label: '스님 페이지에서 의식 클릭', choices: [['page', '상세 페이지'], ['inline', '페이지 안 예약']] },
   ];
   function setDevOpt(key, val) {
     const o = store.get('yw-dev-opts', {}); o[key] = val; store.set('yw-dev-opts', o);
@@ -697,7 +703,7 @@ window.YW = (() => {
   return {
     D, $, $$, won, manwon, esc, hash, rng, monkById, monkUrl, phoneOk,
     ritualUrl, ritualInfo, visibleRituals, offeredBy, bookUrl, priceAt, devOpt, onDevChange,
-    charmUrl, charmSeed, charmUnit, charmCartItem, charmReviews, calc,
+    charmUrl, charmSeed, charmUnit, charmCartItem, charmReviews, calc, riteUrl, serviceReviews,
     charmSVG, monkAvatar, landscapeSVG, stars,
     openLayer, closeLayer, toast, confirmDialog,
     addToCart, openCart, openCheckout, mountShell, observeReveals, observeCounters, stickyBar, renderFaq,
