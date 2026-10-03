@@ -182,7 +182,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'page', charmLayout: 'shop', monkCount: '1', monkStyle: 'screen', trustStyle: 'full', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
+  const DEV_DEFAULTS = { profileView: 'page', charmLayout: 'shop', storeTabs: 'underline', monkCount: '1', monkStyle: 'screen', trustStyle: 'full', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -762,6 +762,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     { key: 'reviews', label: '후기 · 평점 (사이트 전체)', choices: [['hide', '숨김'], ['show', '표시']] },
     { key: 'mainLayout', label: '메인 구성 (헤더 포함)', choices: [['brand', '랜딩형'], ['shop', '쇼핑몰형']] },
     { key: 'monkLayout', label: '스님 페이지 구성', choices: [['mix', '혼합형'], ['store', '스토어형'], ['intro', '소개형']] },
+    { key: 'storeTabs', label: '스님 페이지 분류 탭', choices: [['underline', '큰 밑줄 탭'], ['tiles', '분류 타일'], ['pill', '막대 (크게)']] },
     { key: 'profileView', label: '스님 소개 보기', choices: [['page', '별도 페이지'], ['panel', '옆 패널']] },
     { key: 'ritualLayout', label: '의식 안내 페이지 구성', choices: [['guide', '안내서형'], ['landing', '랜딩형']] },
     { key: 'guideDeco', label: '(안내서형) 꾸밈', choices: [['rich', '표지 · 해부도 · 말씀'], ['plain', '글만']] },
