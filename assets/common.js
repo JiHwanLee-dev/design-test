@@ -182,7 +182,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'page', charmLayout: 'shop', monkCount: '1', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
+  const DEV_DEFAULTS = { profileView: 'page', charmLayout: 'shop', monkCount: '1', monkStyle: 'screen', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -755,7 +755,8 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     $$('#ywDev [data-theme-id]').forEach(b => b.setAttribute('aria-pressed', b.dataset.themeId === id));
   }
   const DEV_OPTIONS = [
-    { key: 'monkCount', label: '스님 수 (시안, 예시 스님 합침)', choices: [['1', '1분'], ['3', '3분'], ['5', '5분']] },
+    { key: 'monkCount', label: '스님 수 (시안, 예시 스님 합침)', choices: [['1', '1분'], ['2', '2분'], ['3', '3분'], ['4', '4분'], ['5', '5분']] },
+    { key: 'monkStyle', label: '메인 스님 배치 (2분 이상)', choices: [['screen', '병풍'], ['index', '이름 색인'], ['portrait', '여백 초상'], ['cards', '카드']] },
     { key: 'heroImage', label: '메인 히어로 사진', choices: [['eaves', '처마 풍경'], ['room', '다실 햇살'], ['incense', '향 연기']] },
     { key: 'reviews', label: '후기 · 평점 (사이트 전체)', choices: [['hide', '숨김'], ['show', '표시']] },
     { key: 'mainLayout', label: '메인 구성 (헤더 포함)', choices: [['brand', '랜딩형'], ['shop', '쇼핑몰형']] },
@@ -765,6 +766,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     { key: 'guideDeco', label: '(안내서형) 꾸밈', choices: [['rich', '표지 · 해부도 · 말씀'], ['plain', '글만']] },
     { key: 'charmLayout', label: '부적 상세 구성', choices: [['shop', '쇼핑몰형'], ['intro', '소개형']] },
     { key: 'gate', label: '스님 페이지 들어갈 때 산문', choices: [['once', '처음 한 번'], ['always', '매번'], ['walk', '걸어 들어가기'], ['none', '없음']] },
+    { key: 'ritualGroup', label: '메인 의식 구성', choices: [['group', '3개 묶음'], ['list', '목록형'], ['cards', '카드형']] },
     { key: 'cardStyle', label: '메인 의식 카드 글씨', choices: [['overlay', '사진 위'], ['below', '사진 아래']] },
     { key: 'cardLink', label: '메인 의식 카드 클릭', choices: [['detail', '상세 페이지만'], ['both', '상세 + 바로 예약']] },
     { key: 'emptyRitual', label: '모시는 스님이 없는 의식', choices: [['hide', '숨김'], ['soon', '준비 중 표시']] },
