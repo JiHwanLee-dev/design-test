@@ -182,3 +182,15 @@ html.gate-pending::before { content: ""; position: fixed; inset: 0; z-index: 65;
   .yw-screen .yw-panel.is-open .yw-panel-mark, .yw-screen:hover .yw-panel:hover .yw-panel-mark { opacity: 0; }
   .yw-screen:hover .yw-panel.is-open:not(:hover) .yw-panel-mark { opacity: 1; }
 }
+
+/* 병풍 자동 넘김: 펼친 패널 아래 진행 선이 다 차면 다음 스님으로 (선이 곧 타이머) */
+@keyframes ywProgress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.yw-screen .yw-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: rgb(var(--c-cin)); transform: scaleX(0); transform-origin: left; z-index: 2; }
+.yw-screen.is-auto .yw-panel.is-open .yw-progress { animation: ywProgress var(--yw-dwell, 6s) linear forwards; }
+.yw-screen.is-paused .yw-progress { animation-play-state: paused !important; }
+/* 모바일: 펼침 대신 지금 차례인 스님만 밝게 */
+@media (max-width: 767px) {
+  .yw-screen.is-auto .yw-panel .yw-panel-img { transition: filter 0.8s ease; }
+  .yw-screen.is-auto .yw-panel:not(.is-open) .yw-panel-img { filter: brightness(0.55) saturate(0.6); }
+}
+@media (prefers-reduced-motion: reduce) { .yw-screen .yw-progress { display: none; } }

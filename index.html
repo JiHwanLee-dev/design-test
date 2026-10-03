@@ -660,6 +660,7 @@
         ${list.map((m, i) => `
         <a href="${monkUrl(m.id)}" class="yw-panel ${i === 0 ? 'is-open' : ''} block ${i ? 'border-t md:border-t-0 md:border-l border-white/10' : ''}">
           <div class="yw-panel-img absolute inset-0">${monkVisual(m, '', false)}</div>
+          <span class="yw-progress" aria-hidden="true"></span>
           <span class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/10"></span>
           <span aria-hidden="true" class="yw-panel-mark hidden md:block absolute left-1/2 -translate-x-1/2 top-8 font-serif font-extrabold text-2xl text-white/75 [writing-mode:vertical-rl] tracking-[0.35em]">${m.hanja}</span>
           <span class="hidden md:block absolute left-1/2 -translate-x-1/2 bottom-6 yw-panel-mark text-[11px] text-white/50 [writing-mode:vertical-rl] tracking-[0.3em]">${m.region}</span>
@@ -716,6 +717,35 @@
         </a>`).join('')}
       </div>`;
 
+    // 병풍 자동 넘김: 진행 선 애니메이션이 끝나면 다음 패널을 펼침.
+    // 마우스를 올리거나(그 스님을 펼치고 멈춤) 키보드로 고르거나 화면 밖이면 멈춤
+    function bindScreen() {
+      const box = $('.yw-screen'); if (!box) return;
+      const panels = $$('.yw-panel', box);
+      const open = i => panels.forEach((p, k) => p.classList.toggle('is-open', k === i));
+      panels.forEach((p, i) => {
+        p.addEventListener('mouseenter', () => open(i));
+        p.addEventListener('focus', () => open(i));
+      });
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (YW.devOpt('screenAuto') !== 'on' || reduce || panels.length < 2) return;
+      box.classList.add('is-auto');
+      const why = new Set(['offscreen']);
+      const sync = () => box.classList.toggle('is-paused', why.size > 0);
+      const pause = (k, on) => { on ? why.add(k) : why.delete(k); sync(); };
+      box.addEventListener('mouseenter', () => pause('hover', true));
+      box.addEventListener('mouseleave', () => pause('hover', false));
+      box.addEventListener('focusin', () => pause('focus', true));
+      box.addEventListener('focusout', () => pause('focus', false));
+      new IntersectionObserver(([e]) => pause('offscreen', !e.isIntersecting), { threshold: 0.4 }).observe(box);
+      box.addEventListener('animationend', e => {
+        if (!e.target.classList.contains('yw-progress')) return;
+        const i = panels.findIndex(p => p.classList.contains('is-open'));
+        open((i + 1) % panels.length);
+      });
+      sync();
+    }
+
     function renderMonks() {
       const list = MONKS, n = list.length;
       const grid = $('#monkGrid');
@@ -724,6 +754,7 @@
         grid.className = 'mt-12';
         grid.innerHTML = style === 'index' ? indexHtml(list) : style === 'portrait' ? portraitsHtml(list) : screenHtml(list);
         if (style === 'index') bindIndex(list);
+        if (style === 'screen') bindScreen();
         YW.observeReveals();
         return;
       }

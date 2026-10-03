@@ -182,7 +182,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'page', charmLayout: 'shop', monkCount: '1', monkStyle: 'screen', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
+  const DEV_DEFAULTS = { profileView: 'page', charmLayout: 'shop', monkCount: '1', monkStyle: 'screen', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -756,6 +756,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
   }
   const DEV_OPTIONS = [
     { key: 'monkCount', label: '스님 수 (시안, 예시 스님 합침)', choices: [['1', '1분'], ['2', '2분'], ['3', '3분'], ['4', '4분'], ['5', '5분']] },
+    { key: 'screenAuto', label: '(병풍) 자동 넘김', choices: [['on', '켬'], ['off', '끔']] },
     { key: 'monkStyle', label: '메인 스님 배치 (2분 이상)', choices: [['screen', '병풍'], ['index', '이름 색인'], ['portrait', '여백 초상'], ['cards', '카드']] },
     { key: 'heroImage', label: '메인 히어로 사진', choices: [['eaves', '처마 풍경'], ['room', '다실 햇살'], ['incense', '향 연기']] },
     { key: 'reviews', label: '후기 · 평점 (사이트 전체)', choices: [['hide', '숨김'], ['show', '표시']] },
