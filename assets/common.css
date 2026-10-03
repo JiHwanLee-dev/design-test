@@ -170,7 +170,8 @@ html.gate-pending::before { content: ""; position: fixed; inset: 0; z-index: 65;
 @media (min-width: 768px) {
   .yw-screen { flex-direction: row; height: 36rem; }
   .yw-screen .yw-panel { height: auto; flex: 1 1 0; transition: flex-grow 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
-  .yw-screen .yw-panel.is-open, .yw-screen:hover .yw-panel:hover { flex-grow: 3.2; }
+  /* 펼침 비율은 인원수에 따라 (--grow: 2분 1.5 · 3분 2 · 4–5분 3.2). 적을수록 덜 펼쳐야 출렁이지 않음 */
+  .yw-screen .yw-panel.is-open, .yw-screen:hover .yw-panel:hover { flex-grow: var(--grow, 3.2); }
   .yw-screen:hover .yw-panel.is-open:not(:hover) { flex-grow: 1; }
   .yw-screen .yw-panel .yw-panel-img { transition: filter 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1); filter: grayscale(1) contrast(1.05) brightness(0.7); }
   .yw-screen .yw-panel.is-open .yw-panel-img, .yw-screen:hover .yw-panel:hover .yw-panel-img { filter: sepia(0.15) saturate(0.85) brightness(0.95); transform: scale(1.03); }

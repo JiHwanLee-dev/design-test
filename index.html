@@ -650,7 +650,7 @@
 
     // A. 병풍: 틈 없이 붙은 세로 패널, 올린 패널만 펼쳐짐 (첫 분은 처음부터 펼침)
     const screenHtml = list => `
-      <div class="reveal yw-screen rounded-[2rem] overflow-hidden ring-1 ring-edge/10 bg-black">
+      <div class="reveal yw-screen rounded-[2rem] overflow-hidden ring-1 ring-edge/10 bg-black" style="--grow:${list.length === 2 ? 1.5 : list.length === 3 ? 2 : 3.2}">
         ${list.map((m, i) => `
         <a href="${monkUrl(m.id)}" class="yw-panel ${i === 0 ? 'is-open' : ''} block ${i ? 'border-t md:border-t-0 md:border-l border-white/10' : ''}">
           <div class="yw-panel-img absolute inset-0">${monkVisual(m, '', false)}</div>
