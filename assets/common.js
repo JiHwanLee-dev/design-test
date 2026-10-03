@@ -128,24 +128,24 @@ window.YW = (() => {
   const ratingLine = p => `<span class="yw-review flex items-center gap-1 text-xs"><iconify-icon icon="solar:star-bold" width="13" class="text-cinnabar"></iconify-icon><b class="tabular-nums">${p.rating}</b><span class="text-subtle tabular-nums">(${p.reviews.toLocaleString('ko-KR')})</span></span>`;
 
   // 부적 상품 카드 (쇼핑몰형 진열용, 촘촘하게)
-  function charmCard(p, { best = false } = {}) {
+  function charmCard(p, { best = false, label, compact = false } = {}) {
     const c = D.CHARM_TYPES[p.id];
     return `
     <article class="group relative flex flex-col">
       <div class="relative">
-        <a href="${p.url}" class="relative block aspect-[4/5] rounded-[1.25rem] bg-deep/60 ring-1 ring-edge/10 overflow-hidden flex items-center justify-center ease-spring group-hover:ring-cinnabar/40" aria-label="${c.name} 자세히 보기">
+        <a href="${p.url}" class="relative block ${compact ? 'aspect-square' : 'aspect-[4/5]'} rounded-[1.25rem] bg-deep/60 ring-1 ring-edge/10 overflow-hidden flex items-center justify-center ease-spring group-hover:ring-cinnabar/40" aria-label="${c.name} 자세히 보기">
           ${charmPhotos(p.monk, p.id).length
             ? `<img src="${charmPhotos(p.monk, p.id)[0]}" alt="${c.name}" class="absolute inset-0 w-full h-full object-cover ease-spring group-hover:scale-105" loading="lazy" decoding="async">`
-            : `<span class="w-[46%] ease-spring group-hover:-translate-y-1 group-hover:-rotate-2 shadow-[0_20px_40px_-18px_var(--drop)] rounded-[0.75rem]">${charmSVG(c, charmSeed(p.monk.id, p.id), p.monk.hanja)}</span>`}
+            : `<span class="${compact ? 'w-[40%]' : 'w-[46%]'} ease-spring group-hover:-translate-y-1 group-hover:-rotate-2 shadow-[0_20px_40px_-18px_var(--drop)] rounded-[0.75rem]">${charmSVG(c, charmSeed(p.monk.id, p.id), p.monk.hanja)}</span>`}
         </a>
         <div class="absolute left-2.5 top-2.5 flex flex-wrap gap-1 pointer-events-none">
           ${best ? '<span class="rounded-md px-1.5 py-0.5 text-[10px] font-bold bg-cinnabar text-white">BEST</span>' : ''}
-          <span class="rounded-md px-1.5 py-0.5 text-[10px] font-medium bg-surface/90 text-fg2 ring-1 ring-edge/10">수기 가능</span>
+          ${compact ? '' : '<span class="rounded-md px-1.5 py-0.5 text-[10px] font-medium bg-surface/90 text-fg2 ring-1 ring-edge/10">수기 가능</span>'}
         </div>
-        <button type="button" data-quick-add="${p.monk.id}|${p.id}" aria-label="${c.name} 바로 담기" class="ease-spring absolute right-2.5 bottom-2.5 w-10 h-10 rounded-full bg-surface/95 ring-1 ring-edge/15 text-fg flex items-center justify-center hover:bg-cinnabar hover:text-white hover:ring-cinnabar active:scale-95 shadow-[0_8px_20px_-8px_var(--drop)]"><iconify-icon icon="solar:cart-large-2-linear" width="18"></iconify-icon></button>
+        <button type="button" data-quick-add="${p.monk.id}|${p.id}" aria-label="${c.name} 바로 담기" class="ease-spring absolute right-2.5 bottom-2.5 ${compact ? 'w-9 h-9' : 'w-10 h-10'} rounded-full bg-surface/95 ring-1 ring-edge/15 text-fg flex items-center justify-center hover:bg-cinnabar hover:text-white hover:ring-cinnabar active:scale-95 shadow-[0_8px_20px_-8px_var(--drop)]"><iconify-icon icon="solar:cart-large-2-linear" width="18"></iconify-icon></button>
       </div>
-      <div class="mt-3 px-0.5">
-        <p class="text-[11px] text-subtle truncate">${p.monk.name} 스님 · ${p.monk.temple}</p>
+      <div class="${compact ? 'mt-2.5' : 'mt-3'} px-0.5">
+        <p class="${compact ? 'hidden' : ''} text-[11px] text-subtle truncate">${label ?? `${p.monk.name} 스님 · ${p.monk.temple}`}</p>
         <h3 class="mt-0.5 text-sm sm:text-[15px] font-semibold leading-snug"><a href="${p.url}" class="hover:underline underline-offset-2">${c.name}</a></h3>
         <p class="mt-1 font-bold tabular-nums">${won(p.price)}<span class="ml-0.5 text-[11px] font-normal text-subtle">부터</span></p>
         <div class="mt-1">${ratingLine(p)}</div>
@@ -182,7 +182,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'page', charmLayout: 'shop', storeTabs: 'underline', monkCount: '1', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
+  const DEV_DEFAULTS = { profileView: 'page', charmLayout: 'shop', storeTabs: 'underline', monkCount: '1', charmCount: 'normal', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -787,6 +787,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
   const DEV_OPTIONS = [
     { key: 'headStyle', label: '헤더 모양', choices: [['wide', '스크롤하면 펴짐'], ['pill', '알약 고정']] },
     { key: 'trustStyle', label: '안심 카드 사진', choices: [['full', '사진 전체 + 위에 글씨'], ['side', '오른쪽 사진']] },
+    { key: 'charmCount', label: '부적 수 (시안, 해월 스님)', choices: [['normal', '지금 (8개)'], ['many', '많이 (37개)']] },
     { key: 'monkCount', label: '스님 수 (시안, 예시 스님 합침)', choices: [['1', '1분'], ['2', '2분'], ['3', '3분'], ['4', '4분'], ['5', '5분']] },
     { key: 'screenAuto', label: '(병풍) 자동 넘김', choices: [['on', '켬'], ['off', '끔']] },
     { key: 'monkStyle', label: '메인 스님 배치 (2분 이상)', choices: [['screen', '병풍'], ['index', '이름 색인'], ['portrait', '여백 초상'], ['cards', '카드']] },
@@ -816,7 +817,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     renderNavRituals();
     // 페이지가 직접 다시 그리지 못하면 새로고침
     // 스님 수는 데이터부터 바뀌므로 늘 새로고침
-    if (devHandlers.length && key !== 'monkCount') devHandlers.forEach(fn => fn(key, val)); else location.reload();
+    if (devHandlers.length && key !== 'monkCount' && key !== 'charmCount') devHandlers.forEach(fn => fn(key, val)); else location.reload();
   }
   function devPanel() {
     const dev = new URLSearchParams(location.search).get('dev');

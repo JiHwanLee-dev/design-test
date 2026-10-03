@@ -3,16 +3,53 @@
 
 window.YW_DATA = (() => {
   // 부적 종류 (전 플랫폼 공통). 가격은 스님마다 다르게 MONKS에서 지정합니다.
+  // 부적 분류 (바라는 일 기준). 스님 페이지에서 부적이 많으면 이 순서로 묶어 보여 줌
+  const CHARM_CATS = ['삼재 · 액막이', '애정 · 인연', '재물 · 사업', '합격 · 취업', '건강 · 질병', '가정 · 평안', '소원 · 행운'];
+
   const CHARM_TYPES = {
-    jaemul:    { glyph: '財', name: '재물 부적',      cat: '재물',   desc: '흩어지는 돈을 붙잡고 들어올 길을 여는 부적입니다. 지갑이나 금고, 계산대 안쪽에 두시길 권합니다.' },
-    geongang:  { glyph: '康', name: '건강 쾌유 부적', cat: '건강',   desc: '병중에 계신 분이나 큰 수술을 앞둔 가족을 위해 씁니다. 베개 밑이나 머리맡에 두세요.' },
-    inyeon:    { glyph: '緣', name: '인연 부적',      cat: '인연',   desc: '좋은 인연을 부르고 틀어진 관계가 풀리길 바라는 마음을 담습니다. 늘 지니는 가방에 넣어 두세요.' },
-    hapgyeok:  { glyph: '學', name: '합격 부적',      cat: '학업',   desc: '시험을 앞둔 수험생의 집중과 마음 안정을 빕니다. 필통이나 책상 서랍에 두시면 됩니다.' },
-    samjae:    { glyph: '護', name: '삼재 소멸 부적', cat: '액막이', desc: '삼재 기간의 액운을 막아 달라는 축원을 올립니다. 현관 위나 지갑에 두세요.' },
-    pyeongan:  { glyph: '安', name: '가내 평안 부적', cat: '가정',   desc: '집안의 다툼을 가라앉히고 식구들의 무탈을 빕니다. 이사하실 때 함께 많이 찾으십니다.' },
-    gaeeop:    { glyph: '開', name: '개업 번창 부적', cat: '재물',   desc: '새로 문을 여는 가게와 사무실의 손님 길을 열어 달라는 부적입니다. 출입문 안쪽 위에 붙이세요.' },
-    sowon:     { glyph: '願', name: '소원 성취 부적', cat: '소원',   desc: '말씀해 주신 소원 한 가지를 그대로 축원문에 적어 올립니다. 주문 시 바라는 일을 꼭 적어 주세요.' },
-    yeohaeng:  { glyph: '行', name: '길 안전 부적',   cat: '액막이', desc: '먼 길 떠나는 가족의 무사 귀환을 빕니다. 차량 햇빛 가리개 안쪽이나 여권 지갑에 넣어 두세요.' },
+    jaemul:    { glyph: '財', name: '재물 부적',      cat: '재물 · 사업', desc: '흩어지는 돈을 붙잡고 들어올 길을 여는 부적입니다. 지갑이나 금고, 계산대 안쪽에 두시길 권합니다.' },
+    geongang:  { glyph: '康', name: '건강 쾌유 부적', cat: '건강 · 질병', desc: '병중에 계신 분이나 큰 수술을 앞둔 가족을 위해 씁니다. 베개 밑이나 머리맡에 두세요.' },
+    inyeon:    { glyph: '緣', name: '인연 부적',      cat: '애정 · 인연', desc: '좋은 인연을 부르고 틀어진 관계가 풀리길 바라는 마음을 담습니다. 늘 지니는 가방에 넣어 두세요.' },
+    hapgyeok:  { glyph: '學', name: '합격 부적',      cat: '합격 · 취업', desc: '시험을 앞둔 수험생의 집중과 마음 안정을 빕니다. 필통이나 책상 서랍에 두시면 됩니다.' },
+    samjae:    { glyph: '護', name: '삼재 소멸 부적', cat: '삼재 · 액막이', desc: '삼재 기간의 액운을 막아 달라는 축원을 올립니다. 현관 위나 지갑에 두세요.' },
+    pyeongan:  { glyph: '安', name: '가내 평안 부적', cat: '가정 · 평안', desc: '집안의 다툼을 가라앉히고 식구들의 무탈을 빕니다. 이사하실 때 함께 많이 찾으십니다.' },
+    gaeeop:    { glyph: '開', name: '개업 번창 부적', cat: '재물 · 사업', desc: '새로 문을 여는 가게와 사무실의 손님 길을 열어 달라는 부적입니다. 출입문 안쪽 위에 붙이세요.' },
+    sowon:     { glyph: '願', name: '소원 성취 부적', cat: '소원 · 행운', desc: '말씀해 주신 소원 한 가지를 그대로 축원문에 적어 올립니다. 주문 시 바라는 일을 꼭 적어 주세요.' },
+    yeohaeng:  { glyph: '行', name: '길 안전 부적',   cat: '삼재 · 액막이', desc: '먼 길 떠나는 가족의 무사 귀환을 빕니다. 차량 햇빛 가리개 안쪽이나 여권 지갑에 넣어 두세요.' },
+  };
+
+
+  // 시안용: dev 패널 '부적 수: 많이'일 때 해월 스님에게 더해 보는 예시 부적 (분류별로 많을 때 진열 확인용)
+  const EXTRA_CHARM_TYPES = {
+    deulsamjae: { glyph: '入', name: '들삼재 소멸부', cat: '삼재 · 액막이', desc: '삼재가 처음 드는 해에 액운이 들어오지 않도록 막아 달라고 빕니다.' },
+    nulsamjae: { glyph: '中', name: '눌삼재 소멸부', cat: '삼재 · 액막이', desc: '삼재가 머무는 둘째 해의 막힘과 구설을 풀어 달라고 빕니다.' },
+    nalsamjae: { glyph: '出', name: '날삼재 소멸부', cat: '삼재 · 액막이', desc: '삼재가 나가는 해에 남은 액운까지 깨끗이 보내 달라고 빕니다.' },
+    gwanjae: { glyph: '官', name: '관재구설 소멸부', cat: '삼재 · 액막이', desc: '다툼과 송사, 억울한 구설에서 벗어나길 빕니다.' },
+    akmong: { glyph: '夢', name: '악몽 퇴치부', cat: '삼재 · 액막이', desc: '잠자리를 어지럽히는 꿈을 거두고 편히 잠들길 빕니다.' },
+    buburhwa: { glyph: '和', name: '부부 화합부', cat: '애정 · 인연', desc: '부부 사이의 오해가 풀리고 다시 마음이 맞닿길 빕니다.' },
+    aejeong: { glyph: '情', name: '애정 회복부', cat: '애정 · 인연', desc: '멀어진 사이에 다시 따뜻한 마음이 오가길 빕니다.' },
+    joeuninyeon: { glyph: '遇', name: '좋은 인연부', cat: '애정 · 인연', desc: '곁에 오래 머물 좋은 사람을 만나길 빕니다.' },
+    jaehoe: { glyph: '逢', name: '재회 발원부', cat: '애정 · 인연', desc: '헤어진 인연과 다시 만날 길이 열리길 빕니다.' },
+    saeop: { glyph: '興', name: '사업 번창부', cat: '재물 · 사업', desc: '하는 일에 손님과 거래가 끊이지 않길 빕니다.' },
+    maemae: { glyph: '賣', name: '매매 성사부', cat: '재물 · 사업', desc: '집과 땅, 가게의 매매가 순조롭게 이루어지길 빕니다.' },
+    jaesu: { glyph: '福', name: '재수 대통부', cat: '재물 · 사업', desc: '막혔던 운이 트이고 들어올 복이 들어오길 빕니다.' },
+    geumjeon: { glyph: '錢', name: '금전 순환부', cat: '재물 · 사업', desc: '들어온 돈이 새지 않고 제자리를 찾아 돌길 빕니다.' },
+    suneung: { glyph: '考', name: '수능 합격부', cat: '합격 · 취업', desc: '수험생이 그동안 쌓은 실력을 시험장에서 다 펼치길 빕니다.' },
+    chwieop: { glyph: '職', name: '취업 성취부', cat: '합격 · 취업', desc: '바라던 일터의 문이 열리길 빕니다.' },
+    seungjin: { glyph: '昇', name: '승진 발원부', cat: '합격 · 취업', desc: '애쓴 만큼 인정받고 자리에 오르길 빕니다.' },
+    jipjung: { glyph: '專', name: '시험 집중부', cat: '합격 · 취업', desc: '흩어지는 마음을 모아 공부에 몰두하길 빕니다.' },
+    susul: { glyph: '癒', name: '수술 무사부', cat: '건강 · 질병', desc: '큰 수술을 앞둔 분이 무사히 회복하길 빕니다.' },
+    byeongma: { glyph: '除', name: '병마 퇴치부', cat: '건강 · 질병', desc: '오래 앓는 병이 물러나고 기운을 되찾길 빕니다.' },
+    sukmyeon: { glyph: '眠', name: '숙면 안정부', cat: '건강 · 질병', desc: '불안과 불면을 가라앉히고 깊이 잠들길 빕니다.' },
+    jangsu: { glyph: '壽', name: '어르신 장수부', cat: '건강 · 질병', desc: '부모님과 어르신의 건강과 장수를 빕니다.' },
+    antaek: { glyph: '宅', name: '이사 안택부', cat: '가정 · 평안', desc: '새 집에 들어가는 날 집안이 편안하길 빕니다.' },
+    janyeo: { glyph: '子', name: '자녀 무탈부', cat: '가정 · 평안', desc: '아이들이 아프지 않고 바르게 자라길 빕니다.' },
+    hwamok: { glyph: '睦', name: '가족 화목부', cat: '가정 · 평안', desc: '식구들 사이의 다툼이 잦아들고 웃음이 늘길 빕니다.' },
+    taea: { glyph: '胎', name: '태아 안녕부', cat: '가정 · 평안', desc: '배 속의 아기와 산모가 무사하길 빕니다.' },
+    gaeun: { glyph: '吉', name: '개운부', cat: '소원 · 행운', desc: '막힌 운을 풀고 새 기운을 불러오길 빕니다.' },
+    haengun: { glyph: '幸', name: '행운 초래부', cat: '소원 · 행운', desc: '작은 일에도 좋은 일이 겹치길 빕니다.' },
+    ilnyeom: { glyph: '一', name: '소원 일념부', cat: '소원 · 행운', desc: '간절한 소원 하나를 한마음으로 올립니다.' },
+    sinnyeon: { glyph: '新', name: '신년 발원부', cat: '소원 · 행운', desc: '새해의 바람을 담아 한 해의 평안을 빕니다.' },
   };
 
   // 부적 해부도: 그림(charmSVG, 200×320) 위 위치(%)와 설명. 예시 문구 (공개 전 스님 확인 필요)
@@ -454,6 +491,14 @@ window.YW_DATA = (() => {
 
   const SLOTS = ['07:00', '10:00', '13:30', '16:00'];
 
+  // 시안용: dev 패널 '부적 수: 많이'면 해월 스님 부적을 예시로 늘림
+  try {
+    if (JSON.parse(localStorage.getItem('yw-dev-opts') || '{}').charmCount === 'many') {
+      Object.assign(CHARM_TYPES, EXTRA_CHARM_TYPES);
+      Object.keys(EXTRA_CHARM_TYPES).forEach((id, i) => MONKS[0].charms.push({ id, price: 29000 + (i * 7919 % 21) * 1000, reviews: (i * 37) % 120 }));
+    }
+  } catch (e) { }
+
   // 시안용: dev 패널 '스님 수'로 예시 스님을 잠시 합쳐 봄 (실제 입점은 EXAMPLE_MONKS → MONKS로 옮기기)
   try {
     const n = Number(JSON.parse(localStorage.getItem('yw-dev-opts') || '{}').monkCount || 1);
@@ -469,5 +514,5 @@ window.YW_DATA = (() => {
     if (m.charms.length) m.specialties.unshift('부적');
   });
 
-  return { CHARM_ANATOMY, RITUAL_IMAGES, HERO_IMAGES, CHARM_TYPES, MATERIALS, BLESS_PRICE, MODES, SERVICE_TYPES, CATEGORIES, SHOP_CATS, MONKS, EXAMPLE_MONKS, REVIEWS, SLOTS, RITUAL_DETAILS, FAQ_CATS, FAQS, REFUND_RULES };
+  return { CHARM_CATS, CHARM_ANATOMY, RITUAL_IMAGES, HERO_IMAGES, CHARM_TYPES, MATERIALS, BLESS_PRICE, MODES, SERVICE_TYPES, CATEGORIES, SHOP_CATS, MONKS, EXAMPLE_MONKS, REVIEWS, SLOTS, RITUAL_DETAILS, FAQ_CATS, FAQS, REFUND_RULES };
 })();

@@ -48,13 +48,6 @@
           </div>
         </div>
         </div>
-        <!-- 신뢰 띠 -->
-        <ul class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-fg2">
-          <li class="flex items-center gap-2 rounded-xl bg-edge/[0.03] border border-edge/10 px-3 py-2.5"><iconify-icon icon="solar:verified-check-linear" width="16" class="text-cinnabar"></iconify-icon>승적 · 사찰 확인</li>
-          <li class="flex items-center gap-2 rounded-xl bg-edge/[0.03] border border-edge/10 px-3 py-2.5"><iconify-icon icon="solar:pen-linear" width="16" class="text-cinnabar"></iconify-icon>스님 직접 수기</li>
-          <li class="flex items-center gap-2 rounded-xl bg-edge/[0.03] border border-edge/10 px-3 py-2.5"><iconify-icon icon="solar:delivery-linear" width="16" class="text-cinnabar"></iconify-icon>5만 원 이상 무료배송</li>
-          <li class="flex items-center gap-2 rounded-xl bg-edge/[0.03] border border-edge/10 px-3 py-2.5"><iconify-icon icon="solar:shield-check-linear" width="16" class="text-cinnabar"></iconify-icon>발송 · 봉행 전 전액 환불</li>
-        </ul>
       </div>
       <!-- 고정 도구 줄: 분류 + 정렬 -->
       <div id="stTools" class="sticky top-[var(--head-h)] yw-follow z-30 mt-8 px-4 scroll-mt-24">
@@ -69,6 +62,8 @@
             <option value="high">높은 가격 순</option>
           </select>
         </div>
+        <!-- 부적이 많을 때만 나타나는 분류 칩 (CHARM_MANY 이상) -->
+        <div id="stChips" class="hidden max-w-7xl mx-auto"></div>
       </div>
       <div id="stGrid" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8"></div>
     </section>
@@ -424,6 +419,10 @@
         const st = { cat: location.hash === '#charms' ? 'charm' : location.hash === '#rituals' ? 'ritual' : 'all', sort: 'popular' };
         const sorters = { popular: (a, b) => b.reviews - a.reviews, rating: (a, b) => b.rating - a.rating, low: (a, b) => a.price - b.price, high: (a, b) => b.price - a.price };
         const best = products.filter(p => p.kind === 'charm').sort(sorters.popular).slice(0, 3).map(p => p.id);
+        // 부적이 이만큼 넘으면 분류 칩 + 분류별 묶음으로 보여 줌
+        const CHARM_MANY = 13;
+        st.ccat = 'all'; st.page = 1; st.dir = 0;
+        const catOf = p => D.CHARM_TYPES[p.id].cat;
         const draw = () => {
           const tabsDef = [['all', '전체', products.length], ['charm', '부적', nCharm], ['ritual', '제례 · 기도', nRite]].filter(t => t[2]);
           // 분류 탭 모양: underline(큰 밑줄 탭) / tiles(분류 타일) / pill(막대, 크게)
@@ -453,15 +452,95 @@
           const list = products.filter(p => st.cat === 'all' || (st.cat === 'charm' ? p.kind === 'charm' : p.kind === 'rite')).sort(sorters[st.sort]);
           const charms = list.filter(p => p.kind === 'charm'), rites = list.filter(p => p.kind === 'rite');
           const head = (t, n, id) => `<h2 id="${id}" class="mb-6 text-2xl md:text-3xl font-bold tracking-tight scroll-mt-40">${t} <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${n}</span></h2>`;
+          const card = p => YW.charmCard(p, { best: best.includes(p.id), label: catOf(p) }); // 스님 페이지에선 스님 이름 대신 분류
+          const grid = ps => `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-9">${ps.map(card).join('')}</div>`;
+
+          // 부적이 많으면: 분류 칩 + (전체) 분류마다 한 줄 미리보기 / (분류 선택) 그 분류만
+          const many = nCharm >= CHARM_MANY && charms.length > 0;
+          const cats = D.CHARM_CATS.map(c => [c, charms.filter(p => catOf(p) === c)]).filter(([, ps]) => ps.length);
+          if (many && !cats.some(([c]) => c === st.ccat)) st.ccat = 'all';
+          // 분류 표지 한자 (목차 · 칩 · 묶음 제목에 같이 씀)
+          const CAT_MARK = { '삼재 · 액막이': '護', '애정 · 인연': '緣', '재물 · 사업': '財', '합격 · 취업': '學', '건강 · 질병': '康', '가정 · 평안': '安', '소원 · 행운': '願' };
+          const catList = [['all', '전체', charms.length, '全'], ...cats.map(([c, ps]) => [c, c, ps.length, CAT_MARK[c] || '符'])];
+
+          // 모바일 · 태블릿: 고정 줄 아래 큰 칩 한 줄 (데스크탑은 왼쪽 목차라 숨김)
+          const chipsEl = $('#stChips');
+          chipsEl.className = many ? `yw-chips lg:hidden max-w-7xl mx-auto ${tabStyle === 'underline' ? 'px-4 sm:px-6' : 'mt-2 px-1'} py-3 flex items-center gap-2 overflow-x-auto no-scrollbar` : 'hidden';
+          chipsEl.innerHTML = many ? catList.map(([k, name, n, mk]) =>
+            `<button type="button" data-ccat="${k}" aria-pressed="${st.ccat === k}" class="ease-spring shrink-0 h-10 pl-3 pr-4 rounded-full flex items-center gap-1.5 text-[15px] ring-1 ${st.ccat === k ? 'bg-fg text-page ring-fg font-semibold' : 'bg-surface text-fg2 ring-edge/15 font-medium'}"><span class="font-serif font-extrabold ${st.ccat === k ? 'text-cinnabar' : 'text-cinnabar-soft'}">${mk}</span>${name}<span class="text-xs tabular-nums opacity-60">${n}</span></button>`).join('') : '';
+
+          // 데스크탑 왼쪽 목차: 큰 글씨, 한자 표지, 고른 분류는 주홍 세로선
+          const sideNav = `
+            <aside class="hidden lg:block">
+              <nav aria-label="부적 분류" class="sticky top-[calc(var(--head-h)+4.75rem)] yw-follow">
+                <p class="px-4 text-xs font-semibold tracking-[0.2em] text-subtle">符 · 부적 분류</p>
+                <ul class="mt-4 border-l border-edge/15">
+                  ${catList.map(([k, name, n, mk]) => `<li><button type="button" data-ccat="${k}" aria-pressed="${st.ccat === k}" class="ease-spring group -ml-px w-full flex items-center gap-3 py-3 pl-4 pr-2 text-left border-l-2 ${st.ccat === k ? 'border-cinnabar text-fg' : 'border-transparent text-muted hover:text-fg hover:border-edge/40'}">
+                    <span class="w-6 text-center font-serif font-extrabold text-lg leading-none ${st.ccat === k ? 'text-cinnabar' : 'text-cinnabar-soft/70 group-hover:text-cinnabar-soft'}">${mk}</span>
+                    <span class="flex-1 text-base ${st.ccat === k ? 'font-bold' : 'font-medium'}">${name}</span>
+                    <span class="text-sm tabular-nums ${st.ccat === k ? 'text-cinnabar-soft font-semibold' : 'text-subtle'}">${n}</span>
+                  </button></li>`).join('')}
+                </ul>
+              </nav>
+            </aside>`;
+          // 분류별 묶음: 데스크탑 3개 미리보기, 모바일은 옆으로 넘겨 전부
+          const small = p => YW.charmCard(p, { best: best.includes(p.id), compact: true });
+          const catHead = (c, n) => `<span class="font-serif font-extrabold text-cinnabar-soft mr-2">${CAT_MARK[c] || '符'}</span>${c} <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${n}</span>`;
+          let charmHtml = '';
+          if (charms.length && !many) charmHtml = head('부적', charms.length, 'stCharms') + grid(charms);
+          else if (many) {
+            // 늘 2줄 고정 + 페이지 넘김. 한 쪽 개수는 화면 폭에 맞춰 (4열 8개 / 3열 6개 / 2열 4개)
+            const cols = innerWidth >= 768 ? 4 : innerWidth >= 640 ? 3 : 2;
+            const per = cols * 2;
+            const ps = st.ccat === 'all' ? charms : charms.filter(p => catOf(p) === st.ccat);
+            const pages = Math.max(1, Math.ceil(ps.length / per));
+            st.page = Math.min(Math.max(1, st.page || 1), pages);
+            const from = (st.page - 1) * per, shown = ps.slice(from, from + per);
+            const pgBtn = (pg, label, extra = '') => `<button type="button" data-page="${pg}" ${extra} class="ease-spring w-11 h-11 rounded-full text-[15px] font-semibold tabular-nums flex items-center justify-center ${pg === st.page && !label ? 'bg-fg text-page' : 'text-fg2 hover:bg-edge/5'} disabled:opacity-30 disabled:pointer-events-none">${label || pg}</button>`;
+            const pager = pages > 1 ? `
+              <nav aria-label="부적 페이지" class="mt-10 flex items-center justify-center gap-1">
+                ${pgBtn(st.page - 1, '<iconify-icon icon="solar:alt-arrow-left-linear" width="20"></iconify-icon>', `aria-label="이전 페이지" ${st.page === 1 ? 'disabled' : ''}`)}
+                ${cols === 2 || pages > 7
+                  ? `<span class="min-w-[5.5rem] text-center text-[15px] tabular-nums"><b class="text-fg">${st.page}</b><span class="text-subtle"> / ${pages}</span></span>`
+                  : Array.from({ length: pages }, (_, i) => pgBtn(i + 1, '', `aria-label="${i + 1}쪽" ${i + 1 === st.page ? 'aria-current="page"' : ''}`)).join('')}
+                ${pgBtn(st.page + 1, '<iconify-icon icon="solar:alt-arrow-right-linear" width="20"></iconify-icon>', `aria-label="다음 페이지" ${st.page === pages ? 'disabled' : ''}`)}
+              </nav>` : '';
+            const title = st.ccat === 'all' ? `<span class="font-serif font-extrabold text-cinnabar-soft mr-2">全</span>전체 부적 <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${ps.length}</span>` : catHead(st.ccat, ps.length);
+            const body = `
+              <div class="mb-6 flex items-end justify-between gap-4">
+                <h2 class="text-2xl md:text-3xl font-bold tracking-tight">${title}</h2>
+                ${pages > 1 ? `<p class="shrink-0 text-sm text-subtle tabular-nums">${from + 1}–${from + shown.length} / ${ps.length}</p>` : ''}
+              </div>
+              <div class="yw-page-in grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-3 md:gap-x-4 gap-y-7" style="--dir:${st.dir || 0}">${shown.map(st.ccat === 'all' ? p => YW.charmCard(p, { best: best.includes(p.id), compact: true, label: catOf(p) }) : small).join('')}</div>
+              ${pager}`;
+            charmHtml = `<div id="stCharms" class="scroll-mt-40 lg:grid lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:gap-12">${sideNav}<div class="min-w-0">${body}</div></div>`;
+          }
           $('#stGrid').innerHTML =
-            (charms.length ? head('부적', charms.length, 'stCharms') + `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-9">${charms.map(p => YW.charmCard(p, { best: best.includes(p.id) })).join('')}</div>` : '')
+            charmHtml
             + (rites.length ? `<div class="${charms.length ? 'mt-16' : ''}">${head('제례 · 기도', rites.length, 'stRites')}<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${rites.map(p => YW.riteCard(p)).join('')}</div></div>` : '');
         };
         // 밑줄 탭이 위에 붙었는지 (헤더 뒤 틈 막기)
         addEventListener('scroll', () => { const t = $('#stTools'); t.classList.toggle('is-stuck', t.classList.contains('g-tabs') && t.getBoundingClientRect().top <= parseFloat(getComputedStyle(t).top) + 1); }, { passive: true });
-        $('#stTabs').addEventListener('click', e => { const b = e.target.closest('[data-stcat]'); if (!b) return; st.cat = b.dataset.stcat; draw(); });
+        $('#stTabs').addEventListener('click', e => { const b = e.target.closest('[data-stcat]'); if (!b) return; st.cat = b.dataset.stcat; st.page = 1; st.dir = 0; draw(); });
+        // 페이지 넘김: 넘긴 방향으로 카드가 살짝 밀려 들어옴, 진열 맨 위가 화면 밖이면 올려 줌
+        document.addEventListener('click', e => {
+          const b = e.target.closest('[data-page]'); if (!b || b.disabled) return;
+          const pg = +b.dataset.page; st.dir = pg > (st.page || 1) ? 1 : -1; st.page = pg; draw();
+          const grid = $('#stCharms'), offset = $('#stTools').offsetHeight + ($('#ywHead')?.offsetHeight || 72) + 24;
+          if (grid.getBoundingClientRect().top < offset) { grid.style.scrollMarginTop = offset + 'px'; grid.scrollIntoView({ behavior: 'smooth' }); }
+        });
+        // 화면 폭이 바뀌어 한 쪽 개수가 달라지면 다시 그림
+        let lastCols = 0; addEventListener('resize', () => { const c = innerWidth >= 768 ? 4 : innerWidth >= 640 ? 3 : 2; if (c !== lastCols) { lastCols = c; draw(); } });
+        // 분류 칩 · '전체 보기': 그 분류만 보여 주고 진열 맨 위로
+        document.addEventListener('click', e => {
+          const b = e.target.closest('[data-ccat]'); if (!b) return;
+          st.ccat = b.dataset.ccat; st.page = 1; st.dir = 0; draw();
+          // 진열 맨 위가 헤더 + 고정 탭 줄 바로 아래에 오게 (이미 그 위쪽이면 그대로)
+          const grid = $('#stGrid'), offset = $('#stTools').offsetHeight + ($('#ywHead')?.offsetHeight || 72) + 24;
+          if (grid.getBoundingClientRect().top < offset) { grid.style.scrollMarginTop = offset + 'px'; grid.scrollIntoView({ behavior: 'smooth' }); }
+        });
         if (!YW.showReviews()) { $('#stSort option[value=rating]').remove(); $('#stSort option[value=popular]').textContent = '추천순'; }
-        $('#stSort').addEventListener('change', e => { st.sort = e.target.value; draw(); });
+        $('#stSort').addEventListener('change', e => { st.sort = e.target.value; st.page = 1; st.dir = 0; draw(); });
         $('[data-ask]').addEventListener('click', () => YW.toast('시안에서는 상담 창이 열리지 않습니다'));
         draw();
         // 혼합형: 상단 [부적 고르기] [제례 · 기도 예약] → 진열로 내려가며 분류 선택

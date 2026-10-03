@@ -251,3 +251,16 @@ html.yw-scrolled .yw-head[data-style="wide"] .yw-head-bar {
   background-color: rgb(var(--c-page) / 0.96); box-shadow: 0 10px 30px -20px var(--drop);
 }
 @media (min-width: 768px) { html.yw-scrolled .yw-head[data-style="wide"] .yw-head-bar { height: 4.5rem; } }
+
+/* 스님 페이지 진열 도구 줄 (밑줄 탭): 위에 붙으면 탭을 낮고 작게 줄여 헤더 아래가 덜 무겁게 */
+#stTools.g-tabs { transition: top 0.6s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease; }
+#stTools.g-tabs [role="tab"] { transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1), font-size 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease; }
+#stTools.g-tabs.is-stuck { background: rgb(var(--c-page) / 0.97); }
+#stTools.g-tabs.is-stuck [role="tab"] { height: 3.25rem; font-size: 1.0625rem; }
+#stTools.g-tabs.is-stuck #stSort { margin-bottom: 0.5rem; }
+#stTools.g-tabs.is-stuck .yw-chips { padding-top: 0.375rem; padding-bottom: 0.5rem; }
+
+/* 부적 페이지 넘김: 넘긴 방향(--dir: 1 다음 / -1 이전)에서 살짝 밀려 들어옴 */
+@keyframes ywPageIn { from { opacity: 0; transform: translateX(calc(var(--dir, 0) * 2.5rem)); } to { opacity: 1; transform: none; } }
+.yw-page-in { animation: ywPageIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+@media (prefers-reduced-motion: reduce) { .yw-page-in { animation: none; } }
