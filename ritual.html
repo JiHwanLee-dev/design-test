@@ -210,7 +210,32 @@
       const sub = t => `<h3 class="mt-10 first:mt-0 mb-4 text-base font-semibold text-fg">${t}</h3>`;
 
       // ---- 의미 ----
-      const meaningBody = `<div class="space-y-5 text-[17px] text-fg2 leading-[1.85]">${r.meaning.map(t => `<p>${t}</p>`).join('')}</div>`;
+      const meaningBody = `<div class="space-y-5 text-[17px] text-fg2 leading-[1.85]">${r.meaning.map(t => `<p>${t}</p>`).join('')}</div>`
+        + (YW.devOpt('guideDeco') === 'rich' && isCharm ? anatomyHtml() : '');
+
+      // 부적 해부도: 그림 오른쪽 가장자리에 번호, 옆에 번호별 설명
+      function anatomyHtml() {
+        const A = D.CHARM_ANATOMY;
+        return `
+        <figure class="mt-10 rounded-[2rem] bg-deep/70 ring-1 ring-edge/5 p-6 md:p-8">
+          <figcaption class="text-base font-semibold text-fg">부적 한 장은 이렇게 이루어집니다</figcaption>
+          <div class="mt-6 grid grid-cols-1 sm:grid-cols-[12rem_1fr] gap-8 sm:gap-10 items-center">
+            <div class="relative w-44 sm:w-full mx-auto sm:mx-0 mr-10 sm:mr-0">
+              <div class="shadow-[0_25px_50px_-20px_var(--drop)] rounded-[1rem] -rotate-1">${charmSVG(D.CHARM_TYPES.pyeongan, 7)}</div>
+              ${A.map((a, i) => `<span class="absolute flex items-center -translate-y-1/2" style="top:${a.y}%; left:72%">
+                <span class="w-[calc(28%+0.75rem)] min-w-[2.5rem] h-px bg-cinnabar/70"></span>
+                <span class="w-6 h-6 shrink-0 rounded-full bg-cinnabar text-white text-xs font-bold flex items-center justify-center tabular-nums shadow">${i + 1}</span>
+              </span>`).join('')}
+            </div>
+            <ol class="space-y-5">
+              ${A.map((a, i) => `<li class="flex gap-3">
+                <span class="w-6 h-6 shrink-0 rounded-full bg-cinnabar/15 text-cinnabar text-xs font-bold flex items-center justify-center tabular-nums mt-0.5">${i + 1}</span>
+                <p class="text-[15px] text-fg2 leading-relaxed"><b class="text-fg">${a.name}</b> · ${a.text}</p>
+              </li>`).join('')}
+            </ol>
+          </div>
+        </figure>`;
+      }
 
       // ---- 부적 종류 / 모시는 방식 ----
       let waysBody;
@@ -289,23 +314,54 @@
           </div>`}
         </div>`;
 
-      $('#page').innerHTML = `
-        <header id="top" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 md:pt-32">
-          <nav aria-label="현재 위치" class="flex items-center gap-1.5 text-sm text-subtle">
-            <a href="index.html" class="ease-spring hover:text-fg">홈</a><iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon>
-            <a href="index.html#services" class="ease-spring hover:text-fg">의식 안내</a><iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon>
-            <span class="text-fg2">${r.name}</span>
-          </nav>
-          <p class="mt-8 text-sm font-medium text-cinnabar-soft"><span class="font-serif">${r.hanja || r.mark}</span> · ${isCharm ? '스님이 직접 쓰는 부적' : '제례 · 기도'}</p>
-          <h1 class="mt-2 text-3xl md:text-4xl font-bold tracking-tight">${r.name}</h1>
-          <p class="mt-3 text-lg text-fg2 leading-relaxed max-w-[60ch]">${r.desc || r.summary}</p>
-          <dl class="mt-8 grid grid-cols-2 lg:grid-cols-4 rounded-2xl ring-1 ring-edge/10 bg-surface divide-edge/10 overflow-hidden">
+      // ---- 머리 영역: 꾸밈(rich)이면 의식 사진을 넓게 깐 표지 띠, 아니면 글만 ----
+      const rich = YW.devOpt('guideDeco') === 'rich';
+      const crumb = (base, strong) => `<nav aria-label="현재 위치" class="flex items-center gap-1.5 text-sm ${base}">
+            <a href="index.html" class="ease-spring hover:opacity-100 opacity-80">홈</a><iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon>
+            <a href="index.html#services" class="ease-spring hover:opacity-100 opacity-80">의식 안내</a><iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon>
+            <span class="${strong}">${r.name}</span>
+          </nav>`;
+      const label = `<span class="font-serif">${r.hanja || r.mark}</span> · ${isCharm ? '스님이 직접 쓰는 부적' : '제례 · 기도'}`;
+      const factsDl = cls => `<dl class="${cls} grid grid-cols-2 lg:grid-cols-4 rounded-2xl ring-1 ring-edge/10 bg-surface divide-edge/10 overflow-hidden">
             ${facts.map(([l, v, ic], i) => `<div class="p-4 md:p-5 ${i % 2 ? 'border-l' : ''} ${i > 1 ? 'border-t lg:border-t-0' : ''} ${i === 2 ? 'lg:border-l' : ''} border-edge/10">
               <dt class="text-xs text-subtle flex items-center gap-1.5"><iconify-icon icon="${ic}" width="14"></iconify-icon>${l}</dt>
               <dd class="mt-1.5 font-semibold leading-snug ">${v}</dd>
-            </div>`).join('')}
-          </dl>
-        </header>
+            </div>`).join('')}`;
+      const head = rich ? `
+        <header id="top">
+          <div class="relative h-[24rem] md:h-[28rem] overflow-hidden bg-deep">
+            ${YW.photo(YW.ritualImg(r.key), r.name, 'absolute inset-0 w-full h-full object-cover')}
+            <span class="absolute inset-0" style="background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0.25) 100%);"></span>
+            <span aria-hidden="true" class="absolute right-4 md:right-[8%] bottom-10 md:bottom-14 font-serif font-extrabold text-[7rem] md:text-[11rem] leading-none text-white/[0.12] select-none">${r.mark}</span>
+            <div class="absolute inset-x-0 bottom-0 pb-16 md:pb-20">
+              <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
+                ${crumb('text-white/80', 'text-white')}
+                <p class="mt-6 text-sm font-medium text-[#f0b9a8]">${label}</p>
+                <h1 class="mt-2 text-4xl md:text-5xl font-bold tracking-tight drop-shadow-sm">${r.name}</h1>
+                <p class="mt-3 text-lg text-white/85 leading-relaxed max-w-[56ch]">${r.desc || r.summary}</p>
+              </div>
+            </div>
+          </div>
+          <div class="relative z-10 -mt-8 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">${factsDl('shadow-[0_20px_50px_-25px_var(--drop)]')}</div>
+        </header>` : `
+        <header id="top" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 md:pt-32">
+          ${crumb('text-subtle', 'text-fg2')}
+          <p class="mt-8 text-sm font-medium text-cinnabar-soft">${label}</p>
+          <h1 class="mt-2 text-3xl md:text-4xl font-bold tracking-tight">${r.name}</h1>
+          <p class="mt-3 text-lg text-fg2 leading-relaxed max-w-[60ch]">${r.desc || r.summary}</p>
+          ${factsDl('mt-8')}
+        </header>`;
+
+      // ---- 스님 말씀 (꾸밈일 때 섹션 사이에) ----
+      const quoteBlock = rich && r.quote ? `
+            <figure class="my-4 rounded-[2rem] bg-deep/70 ring-1 ring-edge/5 px-7 py-9 md:px-12 md:py-12 relative overflow-hidden">
+              <span aria-hidden="true" class="absolute -top-6 left-5 font-serif font-extrabold text-[8rem] leading-none text-cinnabar/20 select-none">“</span>
+              <blockquote class="relative font-serif font-bold text-xl md:text-2xl leading-[1.7] text-fg tracking-tight">${r.quote}</blockquote>
+              ${single ? `<figcaption class="relative mt-6 flex items-center gap-3">${monkAvatar(r.by[0], 'w-10 h-10 text-xs')}<span class="text-sm"><b class="text-fg">${r.by[0].name} 스님</b><span class="text-subtle"> · ${r.by[0].temple}</span></span></figcaption>` : ''}
+            </figure>` : '';
+
+      $('#page').innerHTML = `
+        ${head}
 
         <nav id="gTabs" aria-label="이 페이지 목차" class="g-tabs sticky top-[5.25rem] z-30 mt-10 bg-page/85 backdrop-blur-xl border-b border-edge/10">
           <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-6 overflow-x-auto no-scrollbar">
@@ -317,6 +373,7 @@
           <article class="min-w-0 max-w-[44rem]">
             ${sec('g-meaning', `${r.name}의 의미`, meaningBody)}
             ${sec('g-about', '이런 분께 권합니다', checks(r.forWhom))}
+            ${quoteBlock}
             ${sec('g-steps', sections[2][1], stepsBody, isCharm ? '' : '세부 절차와 용어는 사찰마다 조금씩 다를 수 있습니다. 예약하시면 스님이 직접 설명해 드립니다.')}
             ${sec('g-ways', sections[3][1], waysBody)}
             ${sec('g-prepare', sections[4][1], prepareBody)}
