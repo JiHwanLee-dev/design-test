@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>스님 소개 | 염원 念願</title>
+  <title>스님 소개 | 오늘의 부적</title>
   <meta name="description" content="스님이 걸어온 길과 모시는 방식, 계신 사찰을 소개합니다.">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
@@ -120,7 +120,7 @@
     if (!m) {
       $('#page').remove(); $('#notFound').classList.remove('hidden'); $('#notFound').classList.add('flex');
     } else {
-      document.title = `${m.name} 스님 소개 · ${m.temple} | 염원 念願`;
+      document.title = `${m.name} 스님 소개 · ${m.temple} | 오늘의 부적`;
       document.querySelector('meta[name=description]').setAttribute('content', `${m.name} 스님(${m.temple})이 걸어온 길과 모시는 방식을 소개합니다.`);
 
       // 1. 히어로

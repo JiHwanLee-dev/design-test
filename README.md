@@ -1,4 +1,4 @@
-# 염원 念願 — 디자인 시안
+# 오늘의 부적 — 디자인 시안
 
 스님이 직접 쓰는 부적을 주문하고 제례·기도를 예약하는 플랫폼의 정적 HTML 시안입니다.
 [supanova-design-skill](https://github.com/uxjoseph/supanova-design-skill)의 taste · soft · output 스킬을 적용했습니다.
@@ -41,7 +41,7 @@ python3 -m http.server 8000   # → http://localhost:8000
 ## 이미지
 
 `assets/images/`의 사진은 `../temple/public/images/`에서 가져와 JPG로 줄인 **임시 이미지**입니다.
-스님 사진·표지는 `data.js`의 `photo`, `cover`, `storyPhoto`, `templePhoto`, 메인 맨 아래 권유 영역 사진은 `join-envelope.jpg`(ChatGPT로 만든 이미지), 의식별 사진은 `RITUAL_IMAGES`, 사찰 풍경 갤러리는 스님별 `gallery`에서 바꿉니다 (스님 페이지에 표시, 없으면 숨김). 직함 `role`, 걸어온 길 `history`, 스님의 말 `interview`, 사찰 소개 `templeIntro`는 **예시 문구**입니다. 의식 안내 페이지의 의미 `meaning`, 모시는 때 `when`(`RITUAL_DETAILS`)과 스님 말씀 `quote`, 부적 해부도 설명 `CHARM_ANATOMY`도 **예시 문구**라 공개 전 스님 확인이 필요합니다.
+스님 사진·표지는 `data.js`의 `photo`, `cover`, `storyPhoto`, `templePhoto`, 예시 스님 4분 사진은 `monk-dohyeon/beobin/jeongu/hyean.jpg`(ChatGPT로 만든 임시 사진), 메인 맨 아래 권유 영역 사진은 `join-envelope.jpg`(ChatGPT로 만든 이미지), 의식별 사진은 `RITUAL_IMAGES`, 사찰 풍경 갤러리는 스님별 `gallery`에서 바꿉니다 (스님 페이지에 표시, 없으면 숨김). 직함 `role`, 걸어온 길 `history`, 스님의 말 `interview`, 사찰 소개 `templeIntro`는 **예시 문구**입니다. 의식 안내 페이지의 의미 `meaning`, 모시는 때 `when`(`RITUAL_DETAILS`)과 스님 말씀 `quote`, 부적 해부도 설명 `CHARM_ANATOMY`도 **예시 문구**라 공개 전 스님 확인이 필요합니다.
 사진이 없는 스님은 수묵 그림과 한자 도장으로 자동 대체됩니다.
 
 **부적 상품 사진**: `data.js` 스님의 `charms` 항목에 `photo: '경로'`(한 장) 또는 `photos: ['앞면', '봉투', …]`(여러 장, 첫 장이 대표)를 넣으면 진열 · 상세 · 장바구니 · 팝업 모두 사진으로 바뀝니다. 없으면 코드로 그린 부적 그림(SVG)이 나옵니다.

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>부적 · 제례 · 기도 | 염원 念願</title>
+  <title>부적 · 제례 · 기도 | 오늘의 부적</title>
   <meta name="description" content="스님이 직접 쓰는 부적과 예약 가능한 제례·기도를 한눈에 보고 고르세요.">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
@@ -92,7 +92,7 @@
 
     function render() {
       const cat = CATS.find(c => c.key === st.cat);
-      document.title = `${st.q ? `‘${st.q}’ 검색` : cat.name} | 염원 念願`;
+      document.title = `${st.q ? `‘${st.q}’ 검색` : cat.name} | 오늘의 부적`;
       $('#crumb').textContent = st.q ? '검색' : cat.name;
       $('#title').innerHTML = st.q ? `‘${esc(st.q)}’ 검색 결과` : cat.key === 'all' ? '부적 · 제례 · 기도' : cat.name;
       $('#qClear').classList.toggle('hidden', !st.q);

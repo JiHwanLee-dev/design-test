@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>부적 | 염원 念願</title>
+  <title>부적 | 오늘의 부적</title>
   <meta name="description" content="스님이 직접 쓰는 부적의 설명, 받아 보시기까지의 절차, 배송·환불 안내입니다.">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
@@ -376,7 +376,7 @@
       const c = D.CHARM_TYPES[ci.id];
       const info = D.RITUAL_DETAILS.charm;
       const reviews = YW.charmReviews(m.id, ci.id);
-      document.title = `${c.name} · ${m.name} 스님 | 염원 念願`;
+      document.title = `${c.name} · ${m.name} 스님 | 오늘의 부적`;
       $('#shopPage').classList.remove('hidden');
       $('#spBar').classList.remove('hidden');
 
@@ -389,7 +389,7 @@
       const showMain = i => {
         $('#spMain').innerHTML = photos.length
           ? `<img src="${photos[i]}" alt="${c.name} 사진 ${i + 1}" class="absolute inset-0 w-full h-full object-cover" decoding="async">`
-          : `<div class="w-[42%] shadow-[0_30px_60px_-25px_var(--drop)] rounded-[1rem]">${charmSVG(c, YW.charmSeed(m.id, ci.id))}</div>`;
+          : `<div class="w-[42%] shadow-[0_30px_60px_-25px_var(--drop)] rounded-[1rem]">${charmSVG(c, YW.charmSeed(m.id, ci.id), m.hanja)}</div>`;
         $$('#spThumbs [data-ph]').forEach(b => b.classList.toggle('ring-cinnabar', +b.dataset.ph === i));
       };
       if (photos.length > 1) {
@@ -475,7 +475,7 @@
         row('배송비', '3,000원 · 같은 스님께 5만 원 이상 주문하시면 무료'),
         row('교환', '축원 후 밀봉해 보내 드려 교환은 어렵습니다. 손상되었으면 다시 써서 보내 드립니다'),
         ...D.REFUND_RULES.filter(r => r.item === '부적').map(r => row(`환불 · ${r.when}`, r.rate)),
-        row('판매', `${m.name} 스님 (${m.temple}) · 염원은 통신판매중개자입니다`),
+        row('판매', `${m.name} 스님 (${m.temple}) · 오늘의 부적은 통신판매중개자입니다`),
       ].join('') + `<div class="px-4 py-3"><a href="help.html#refund" class="text-cinnabar-soft hover:underline">전체 환불 규정 보기</a></div>`;
 
       // 후기
@@ -504,7 +504,7 @@
       const c = D.CHARM_TYPES[ci.id];
       const info = D.RITUAL_DETAILS.charm;
       const reviews = YW.charmReviews(m.id, ci.id);
-      document.title = `${c.name} · ${m.name} 스님 | 염원 念願`;
+      document.title = `${c.name} · ${m.name} 스님 | 오늘의 부적`;
       document.querySelector('meta[name=description]').setAttribute('content', `${m.name} 스님(${m.temple})이 직접 쓰는 ${c.name}. ${c.desc}`);
 
       // ---------- 상단 ----------
@@ -529,7 +529,7 @@
         $('#artBadge').className = 'absolute left-5 top-5 rounded-full px-3 py-1.5 text-xs font-medium bg-black/55 text-white';
         $('#artMark').classList.add('hidden'); // 사진 위에는 큰 한자 장식을 숨김 (삭제하면 아래 코드가 이 요소를 못 찾아 멈춤)
       } else {
-        $('#art').innerHTML = charmSVG(c, YW.charmSeed(m.id, ci.id));
+        $('#art').innerHTML = charmSVG(c, YW.charmSeed(m.id, ci.id), m.hanja);
       }
       $('#artMark').textContent = c.glyph;
       $('#artBadge').textContent = `${c.cat} · 경면주사 수기 가능`;
@@ -612,7 +612,7 @@
         row('배송비', '3,000원 · 같은 스님께 5만 원 이상 주문하시면 무료'),
         row('교환', '축원 후 밀봉해 보내 드려 교환은 어렵습니다. 받으신 부적이 손상되었으면 다시 써서 보내 드립니다'),
         ...D.REFUND_RULES.filter(r => r.item === '부적').map(r => row(`환불 · ${r.when}`, `<span class="${/전액/.test(r.rate) ? 'text-cinnabar font-semibold' : ''}">${r.rate}</span>`)),
-        row('판매', `${m.name} 스님 (${m.temple}) · 염원은 통신판매중개자입니다`),
+        row('판매', `${m.name} 스님 (${m.temple}) · 오늘의 부적은 통신판매중개자입니다`),
       ].join('');
 
       // ---------- 후기 ----------

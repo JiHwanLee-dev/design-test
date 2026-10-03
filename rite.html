@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>의식 예약 | 염원 念願</title>
+  <title>의식 예약 | 오늘의 부적</title>
   <meta name="description" content="스님께 제례와 기도를 예약하세요. 진행 방식, 비용, 준비하실 것, 후기를 한 페이지에서 확인할 수 있습니다.">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
@@ -200,7 +200,7 @@
       const s = { ...D.SERVICE_TYPES[key], ...entry };
       const info = D.RITUAL_DETAILS[key];
       const reviews = YW.serviceReviews(m.id, key);
-      document.title = `${s.name} 예약 · ${m.name} 스님 | 염원 念願`;
+      document.title = `${s.name} 예약 · ${m.name} 스님 | 오늘의 부적`;
       document.querySelector('meta[name=description]').setAttribute('content', `${m.name} 스님(${m.temple})께 ${s.name}을 예약하세요. ${info.summary}`);
 
       // ---------- 상단 ----------

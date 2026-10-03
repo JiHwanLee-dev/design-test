@@ -1,4 +1,4 @@
-// 염원 念願 — 공통 기능: 유틸, 그래픽, 장바구니(스님별 결제), 주문서, 헤더·푸터, 스크롤 애니메이션
+// 오늘의 부적 — 공통 기능: 유틸, 그래픽, 장바구니(스님별 결제), 주문서, 헤더·푸터, 스크롤 애니메이션
 
 window.YW = (() => {
   const D = window.YW_DATA;
@@ -69,7 +69,7 @@ window.YW = (() => {
     const c = D.CHARM_TYPES[charmId], ps = charmPhotos(m, charmId);
     return ps.length
       ? `<img src="${ps[0]}" alt="${c.name}" class="block w-full aspect-[5/8] object-cover rounded-[1rem] ${cls}" loading="lazy" decoding="async">`
-      : charmSVG(c, charmSeed(m.id, charmId));
+      : charmSVG(c, charmSeed(m.id, charmId), m.hanja); // 도장은 쓴 스님 법명
   }
 
   // 이 부적의 후기 (후기의 '어떤 의식' 이름에 부적 이름이 들어 있으면)
@@ -136,7 +136,7 @@ window.YW = (() => {
         <a href="${p.url}" class="relative block aspect-[4/5] rounded-[1.25rem] bg-deep/60 ring-1 ring-edge/10 overflow-hidden flex items-center justify-center ease-spring group-hover:ring-cinnabar/40" aria-label="${c.name} 자세히 보기">
           ${charmPhotos(p.monk, p.id).length
             ? `<img src="${charmPhotos(p.monk, p.id)[0]}" alt="${c.name}" class="absolute inset-0 w-full h-full object-cover ease-spring group-hover:scale-105" loading="lazy" decoding="async">`
-            : `<span class="w-[46%] ease-spring group-hover:-translate-y-1 group-hover:-rotate-2 shadow-[0_20px_40px_-18px_var(--drop)] rounded-[0.75rem]">${charmSVG(c, charmSeed(p.monk.id, p.id))}</span>`}
+            : `<span class="w-[46%] ease-spring group-hover:-translate-y-1 group-hover:-rotate-2 shadow-[0_20px_40px_-18px_var(--drop)] rounded-[0.75rem]">${charmSVG(c, charmSeed(p.monk.id, p.id), p.monk.hanja)}</span>`}
         </a>
         <div class="absolute left-2.5 top-2.5 flex flex-wrap gap-1 pointer-events-none">
           ${best ? '<span class="rounded-md px-1.5 py-0.5 text-[10px] font-bold bg-cinnabar text-white">BEST</span>' : ''}
@@ -193,7 +193,7 @@ window.YW = (() => {
 
   // ---------- 그래픽 ----------
   // 부적 SVG
-  function charmSVG(c, seed = 1) {
+  function charmSVG(c, seed = 1, stamp = '符') {
     const id = uid();
     const r = rng(seed);
     let strokes = '';
@@ -221,7 +221,7 @@ window.YW = (() => {
         <text x="100" y="190" text-anchor="middle" font-family="'Nanum Myeongjo', serif" font-weight="800" font-size="84" fill="#a8321f">${c.glyph}</text>
         ${strokes}
         <rect x="80" y="274" width="40" height="24" rx="2" fill="#a8321f"/>
-        <text x="100" y="291" text-anchor="middle" font-family="'Nanum Myeongjo', serif" font-weight="800" font-size="13" fill="#ddc791">念願</text>
+        <text x="100" y="291" text-anchor="middle" font-family="'Nanum Myeongjo', serif" font-weight="800" font-size="${stamp.length > 1 ? 13 : 16}" fill="#ddc791">${stamp}</text>
       </g>
     </svg>`;
   }
@@ -380,7 +380,7 @@ window.YW = (() => {
       const svc = it.type === 'ritual' ? D.SERVICE_TYPES[it.ref] : null;
       return `
       <div class="flex gap-4 py-5 border-b border-edge/5 last:border-0">
-        <div class="w-16 shrink-0">${charm ? (it.photo ? `<img src="${it.photo}" alt="" class="block w-full aspect-[5/8] object-cover rounded-xl">` : charmSVG(charm, it.seed)) : `<div class="aspect-[5/8] rounded-xl bg-cinnabar/10 border border-cinnabar/20 flex items-center justify-center font-serif font-extrabold text-cinnabar text-base [writing-mode:vertical-rl]">${svc.hanja}</div>`}</div>
+        <div class="w-16 shrink-0">${charm ? (it.photo ? `<img src="${it.photo}" alt="" class="block w-full aspect-[5/8] object-cover rounded-xl">` : charmSVG(charm, it.seed, m.hanja)) : `<div class="aspect-[5/8] rounded-xl bg-cinnabar/10 border border-cinnabar/20 flex items-center justify-center font-serif font-extrabold text-cinnabar text-base [writing-mode:vertical-rl]">${svc.hanja}</div>`}</div>
         <div class="flex-1 min-w-0">
           <div class="flex items-start justify-between gap-2">
             <div>
@@ -566,9 +566,9 @@ window.YW = (() => {
     const header = `
       <header class="fixed top-4 inset-x-0 z-40 px-4">
         <nav class="mx-auto w-full md:w-max flex items-center justify-between md:justify-start gap-2 md:gap-8 rounded-full pl-5 pr-2 py-2 backdrop-blur-xl bg-deep/60 border border-edge/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" aria-label="주 메뉴">
-          <a href="index.html" class="flex items-center gap-2 shrink-0" aria-label="염원 홈">
-            <span class="font-serif text-lg font-extrabold text-cinnabar">念願</span>
-            <span class="text-sm font-semibold tracking-tight text-fg">염원</span>
+          <a href="index.html" class="flex items-center gap-2 shrink-0" aria-label="오늘의 부적 홈">
+            <span class="w-8 h-8 shrink-0 rounded-md bg-cinnabar text-white font-serif font-extrabold text-base flex items-center justify-center shadow-[inset_0_0_0_2px_rgba(255,255,255,0.18)]" aria-hidden="true">符</span>
+            <span class="text-[17px] font-bold tracking-[-0.02em] text-fg whitespace-nowrap">오늘의 부적</span>
           </a>
 ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
             <button data-open-cart aria-label="장바구니 열기" class="ease-spring relative flex items-center gap-2 rounded-full bg-fg text-page pl-4 pr-3 h-11 text-sm font-semibold hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-cinnabar">
@@ -585,7 +585,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
       <div id="ywMenu" class="fixed inset-0 z-50 hidden backdrop-blur-3xl bg-page/90">
         <div class="flex flex-col h-full px-6 pt-6 pb-10 overflow-y-auto">
           <div class="flex items-center justify-between">
-            <span class="font-serif text-xl font-extrabold text-cinnabar">念願</span>
+            <span class="flex items-center gap-2"><span class="w-8 h-8 shrink-0 rounded-md bg-cinnabar text-white font-serif font-extrabold text-base flex items-center justify-center shadow-[inset_0_0_0_2px_rgba(255,255,255,0.18)]" aria-hidden="true">符</span><span class="text-lg font-bold tracking-[-0.02em] text-fg">오늘의 부적</span></span>
             <button id="ywMenuClose" aria-label="메뉴 닫기" class="w-11 h-11 rounded-full flex items-center justify-center bg-edge/5 text-fg"><iconify-icon icon="solar:close-circle-linear" width="24"></iconify-icon></button>
           </div>
           ${shop ? `
@@ -611,7 +611,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
       <footer class="border-t border-edge/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-12 gap-10">
           <div class="md:col-span-5">
-            <p class="flex items-center gap-2"><span class="font-serif text-2xl font-extrabold text-cinnabar">念願</span><span class="font-semibold">염원</span></p>
+            <p class="flex items-center gap-2"><span class="w-9 h-9 shrink-0 rounded-md bg-cinnabar text-white font-serif font-extrabold text-lg flex items-center justify-center shadow-[inset_0_0_0_2px_rgba(255,255,255,0.18)]" aria-hidden="true">符</span><span class="text-xl font-bold tracking-[-0.02em]">오늘의 부적</span></p>
             <p class="mt-4 text-sm text-subtle leading-relaxed max-w-[44ch]">사찰과 승적을 확인한 스님이 부적을 쓰고 제례와 기도를 모시는 곳입니다. 스님 페이지에서 바로 주문하고 예약하세요.</p>
           </div>
           <div class="md:col-span-3 text-sm">
@@ -627,13 +627,13 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
           <div class="md:col-span-4 text-sm text-subtle space-y-2">
             <p class="font-semibold text-fg2">고객센터</p>
             <p class="pt-2 flex items-center gap-2"><iconify-icon icon="solar:phone-linear" width="16"></iconify-icon>1644-3071 · 매일 09:00 – 21:00</p>
-            <p class="flex items-center gap-2"><iconify-icon icon="solar:letter-linear" width="16"></iconify-icon>help@yeomwon.example</p>
+            <p class="flex items-center gap-2"><iconify-icon icon="solar:letter-linear" width="16"></iconify-icon>help@oneulbujeok.example</p>
           </div>
         </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-28 md:pb-12 text-xs text-faint leading-relaxed space-y-2">
-          <p>염원은 통신판매중개자이며, 부적 제작과 제례·기도 봉행의 당사자는 각 스님입니다. 부적과 제례·기도는 신앙과 전통에 바탕을 둔 서비스로, 특정한 결과를 보장하지 않습니다.</p>
+          <p>오늘의 부적은 통신판매중개자이며, 부적 제작과 제례·기도 봉행의 당사자는 각 스님입니다. 부적과 제례·기도는 신앙과 전통에 바탕을 둔 서비스로, 특정한 결과를 보장하지 않습니다.</p>
           <p>이 사이트는 디자인 시안입니다. 스님, 사찰, 연락처, 후기, 결제 기능은 모두 예시입니다.</p>
-          <p>© 2026 염원. All rights reserved.</p>
+          <p>© 2026 오늘의 부적. All rights reserved.</p>
         </div>
       </footer>`;
 

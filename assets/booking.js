@@ -1,4 +1,4 @@
-// 염원 念願 — 제례 · 기도 예약 위젯 (스님 페이지와 의식 예약 페이지가 같이 씀)
+// 오늘의 부적 — 제례 · 기도 예약 위젯 (스님 페이지와 의식 예약 페이지가 같이 씀)
 // 사용: const w = YW.mountBooking(rootEl, { monk, serviceId, showDetail: true });  w.setService('sasipgu')
 // 한 페이지에 하나만 올리는 것을 전제로 요소 ID(#calGrid 등)를 씁니다.
 

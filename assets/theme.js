@@ -1,4 +1,4 @@
-// 염원 念願 — 테마 설정
+// 오늘의 부적 — 테마 설정
 // 색은 assets/common.css 의 CSS 변수로 정의하고, 클래스는 bg-page / text-muted 처럼 역할 이름으로 씁니다.
 // 기본 테마를 바꾸려면 DEFAULT_THEME 값만 바꾸면 됩니다. (dark | hanji | dawn | white)
 

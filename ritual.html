@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>의식 안내 | 염원 念願</title>
+  <title>의식 안내 | 오늘의 부적</title>
   <meta name="description" content="의식별 절차, 비용, 준비하실 것을 안내합니다.">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.min.css">
@@ -169,7 +169,7 @@
     // ================= 안내서형: 왼쪽에서 읽고, 오른쪽 상자에서 결정 =================
     function renderGuide() {
       const isCharm = r.key === 'charm';
-      document.title = `${r.name} 안내 · 의미와 절차 | 염원 念願`;
+      document.title = `${r.name} 안내 · 의미와 절차 | 오늘의 부적`;
       document.querySelector('meta[name=description]').setAttribute('content', `${r.summary} ${r.name}의 의미와 절차, 준비하실 것을 안내합니다.`);
       $('.orb')?.parentElement.remove(); // 배경 빛 번짐은 읽는 페이지에선 뺌
 
@@ -221,7 +221,7 @@
           <figcaption class="text-base font-semibold text-fg">부적 한 장은 이렇게 이루어집니다</figcaption>
           <div class="mt-6 grid grid-cols-1 sm:grid-cols-[12rem_1fr] gap-8 sm:gap-10 items-center">
             <div class="relative w-44 sm:w-full mx-auto sm:mx-0 mr-10 sm:mr-0">
-              <div class="shadow-[0_25px_50px_-20px_var(--drop)] rounded-[1rem] -rotate-1">${charmSVG(D.CHARM_TYPES.pyeongan, 7)}</div>
+              <div class="shadow-[0_25px_50px_-20px_var(--drop)] rounded-[1rem] -rotate-1">${charmSVG(D.CHARM_TYPES.pyeongan, 7, r.by[0]?.hanja)}</div>
               ${A.map((a, i) => `<span class="absolute flex items-center -translate-y-1/2" style="top:${a.y}%; left:72%">
                 <span class="w-[calc(28%+0.75rem)] min-w-[2.5rem] h-px bg-cinnabar/70"></span>
                 <span class="w-6 h-6 shrink-0 rounded-full bg-cinnabar text-white text-xs font-bold flex items-center justify-center tabular-nums shadow">${i + 1}</span>
@@ -433,7 +433,7 @@
 
     function render() {
       const isCharm = r.key === 'charm';
-      document.title = `${r.name} 안내 · 절차와 비용 | 염원 念願`;
+      document.title = `${r.name} 안내 · 절차와 비용 | 오늘의 부적`;
       document.querySelector('meta[name=description]').setAttribute('content', `${r.summary} ${r.name}의 절차, 비용, 준비하실 것을 안내합니다.`);
 
       // ---------- 상단 ----------
