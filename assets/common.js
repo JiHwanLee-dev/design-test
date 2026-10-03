@@ -182,7 +182,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'page', charmLayout: 'shop', reviews: 'hide', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
+  const DEV_DEFAULTS = { profileView: 'page', charmLayout: 'shop', ritualLayout: 'guide', reviews: 'hide', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -758,6 +758,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     { key: 'mainLayout', label: '메인 구성 (헤더 포함)', choices: [['brand', '랜딩형'], ['shop', '쇼핑몰형']] },
     { key: 'monkLayout', label: '스님 페이지 구성', choices: [['mix', '혼합형'], ['store', '스토어형'], ['intro', '소개형']] },
     { key: 'profileView', label: '스님 소개 보기', choices: [['page', '별도 페이지'], ['panel', '옆 패널']] },
+    { key: 'ritualLayout', label: '의식 안내 페이지 구성', choices: [['guide', '안내서형'], ['landing', '랜딩형']] },
     { key: 'charmLayout', label: '부적 상세 구성', choices: [['shop', '쇼핑몰형'], ['intro', '소개형']] },
     { key: 'gate', label: '스님 페이지 들어갈 때 산문', choices: [['once', '처음 한 번'], ['always', '매번'], ['walk', '걸어 들어가기'], ['none', '없음']] },
     { key: 'cardStyle', label: '메인 의식 카드 글씨', choices: [['overlay', '사진 위'], ['below', '사진 아래']] },

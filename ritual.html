@@ -160,8 +160,208 @@
     if (!r || (!r.active && !showSoon)) {
       $('#page').remove(); $('#stickyBar').remove();
       $('#notFound').classList.remove('hidden'); $('#notFound').classList.add('flex');
+    } else if (YW.devOpt('ritualLayout') === 'guide') {
+      renderGuide();
     } else {
       render();
+    }
+
+    // ================= 안내서형: 왼쪽에서 읽고, 오른쪽 상자에서 결정 =================
+    function renderGuide() {
+      const isCharm = r.key === 'charm';
+      document.title = `${r.name} 안내 · 의미와 절차 | 염원 念願`;
+      document.querySelector('meta[name=description]').setAttribute('content', `${r.summary} ${r.name}의 의미와 절차, 준비하실 것을 안내합니다.`);
+      $('.orb')?.parentElement.remove(); // 배경 빛 번짐은 읽는 페이지에선 뺌
+
+      // 이 페이지는 의식 '설명'만. 가격은 스님 페이지(가게)에서 안내하므로 금액을 보여 주지 않음
+      const single = r.by.length === 1;
+      const primaryLabel = isCharm ? '부적 고르러 가기' : '날짜 잡고 예약하기';
+      const primaryHref = single ? YW.bookUrl(r.by[0], r.key) : '#g-monks';
+      const monkHref = single ? monkUrl(r.by[0].id) : '#g-monks';
+      const modeText = isCharm ? '등기 발송' : (r.modes || []).map(m => D.MODES[m].name).join(' · ');
+
+      // 핵심 정보 4개 (맨 위 한 줄)
+      const facts = [
+        ['모시는 때', r.when, 'solar:calendar-linear'],
+        [isCharm ? '받아 보시는 때' : '소요 시간', r.dur, 'solar:clock-circle-linear'],
+        [isCharm ? '보내는 방법' : '횟수', r.count, isCharm ? 'solar:box-linear' : 'solar:repeat-linear'],
+        [isCharm ? '제작 방식' : '참여 방식', isCharm ? D.MATERIALS.map(m => m.name).join(' · ') : modeText, isCharm ? 'solar:pen-linear' : 'solar:users-group-rounded-linear'],
+      ];
+
+      // 섹션 (탭과 같은 순서)
+      const sections = [
+        ['g-meaning', '의미'],
+        ['g-about', '이런 분께'],
+        ['g-steps', isCharm ? '만드는 순서' : '진행 순서'],
+        ['g-ways', isCharm ? '부적 종류' : '모시는 방식'],
+        ['g-prepare', isCharm ? '준비 · 보관' : '준비하실 것'],
+        ['g-monks', '모시는 스님'],
+        ['g-faq', '자주 묻는 질문'],
+      ];
+      const sec = (id, title, body, note = '') => `
+        <section id="${id}" class="g-sec py-10 md:py-12 border-t border-edge/10 first:border-t-0 first:pt-2 scroll-mt-40">
+          <h2 class="text-xl md:text-2xl font-bold tracking-tight">${title}</h2>
+          ${note ? `<p class="mt-2 text-sm text-subtle leading-relaxed">${note}</p>` : ''}
+          <div class="mt-6">${body}</div>
+        </section>`;
+      const checks = (items, icon = 'solar:check-circle-linear') => `<ul class="space-y-3">${items.map(t => `<li class="flex gap-3 text-base text-fg2 leading-relaxed"><iconify-icon icon="${icon}" width="20" class="text-cinnabar shrink-0 mt-[3px]"></iconify-icon><span>${t}</span></li>`).join('')}</ul>`;
+      // 이름 + 설명 목록 (금액 없이)
+      const defs = rows => `<dl class="rounded-2xl ring-1 ring-edge/10 divide-y divide-edge/10">${rows.map(([a, b]) => `<div class="px-5 py-4 sm:flex sm:gap-6"><dt class="font-semibold text-fg sm:w-40 shrink-0">${a}</dt><dd class="mt-0.5 sm:mt-0 text-[15px] text-fg2 leading-relaxed">${b}</dd></div>`).join('')}</dl>`;
+      const sub = t => `<h3 class="mt-10 first:mt-0 mb-4 text-base font-semibold text-fg">${t}</h3>`;
+
+      // ---- 의미 ----
+      const meaningBody = `<div class="space-y-5 text-[17px] text-fg2 leading-[1.85]">${r.meaning.map(t => `<p>${t}</p>`).join('')}</div>`;
+
+      // ---- 부적 종류 / 모시는 방식 ----
+      let waysBody;
+      if (isCharm) {
+        const ids = [...new Set(r.by.flatMap(m => m.charms.map(c => c.id)))];
+        waysBody = `<div class="rounded-2xl ring-1 ring-edge/10 divide-y divide-edge/10">${ids.map(id => {
+            const c = D.CHARM_TYPES[id];
+            const sellers = r.by.filter(m => m.charms.some(x => x.id === id));
+            const href = sellers.length === 1 ? YW.charmUrl(sellers[0].id, id) : '#g-monks';
+            return `<a href="${href}" class="group flex items-start gap-4 px-5 py-4 ease-spring hover:bg-edge/[0.03]">
+              <span class="w-10 shrink-0 rounded-md overflow-hidden mt-0.5">${sellers.length === 1 ? YW.charmArt(sellers[0], id) : charmSVG(c, YW.hash('ritual', id) % 997 + 1)}</span>
+              <span class="flex-1 min-w-0"><span class="font-semibold">${c.name}</span><span class="block mt-1 text-[15px] text-fg2 leading-relaxed">${c.desc}</span></span>
+              <iconify-icon icon="solar:alt-arrow-right-linear" width="16" class="text-subtle mt-1 ease-spring group-hover:translate-x-0.5"></iconify-icon>
+            </a>`;
+          }).join('')}</div>`
+          + sub('만드는 방식') + defs(D.MATERIALS.map(m => [m.name, m.note]));
+      } else {
+        waysBody = sub('함께 모시는 것') + checks(r.includes)
+          + sub('참여 방식') + defs(r.modes.map(k => [D.MODES[k].name, D.MODES[k].note]))
+          + (r.tiers ? sub(r.tierLabel) + defs(r.tiers.map(t => [t.name, t.note])) : '');
+      }
+      waysBody += `<p class="mt-8 text-sm text-subtle leading-relaxed">비용은 스님마다 다르며, ${single ? `<a href="${monkHref}" class="underline underline-offset-2 hover:text-fg">스님 페이지</a>` : '스님 페이지'}에서 미리 확인하실 수 있습니다.</p>`;
+
+      // ---- 준비 ----
+      const prepareBody = (isCharm ? sub('주문하실 때 알려 주세요') : '') + checks(r.prepare, 'solar:pen-linear')
+        + (r.care ? sub('받으신 뒤에는 이렇게 두세요') + checks(r.care, 'solar:shield-check-linear')
+          : `<div class="mt-8 rounded-2xl bg-edge/[0.03] ring-1 ring-edge/10 p-5 flex gap-3">
+              <iconify-icon icon="solar:calendar-mark-linear" width="22" class="text-cinnabar shrink-0 mt-0.5"></iconify-icon>
+              <p class="text-[15px] text-fg2 leading-relaxed"><b class="text-fg">날짜는 3일 전까지 잡아 주세요.</b> 제수와 위패를 준비하는 데 시간이 걸립니다. 예약하시면 스님이 직접 확인 전화를 드리고, 봉행 3일 전까지는 날짜를 바꾸실 수 있습니다.</p>
+            </div>`);
+
+      // ---- 스님 ----
+      const monksBody = r.active ? `<div class="rounded-2xl ring-1 ring-edge/10 divide-y divide-edge/10">${r.by.map(m => `
+          <a href="${monkUrl(m.id)}" class="group flex items-center gap-4 p-5 ease-spring hover:bg-edge/[0.03]">
+            ${monkAvatar(m, 'w-14 h-14 text-lg')}
+            <div class="flex-1 min-w-0">
+              <p class="font-bold flex items-center gap-1">${m.name} 스님<iconify-icon icon="solar:verified-check-linear" width="16" class="text-cinnabar"></iconify-icon></p>
+              <p class="text-sm text-subtle">${m.temple} · ${m.area} · 출가 ${m.years}년</p>
+              <p class="mt-1.5 text-[15px] text-fg2 leading-relaxed">“${m.tagline}”</p>
+            </div>
+            <iconify-icon icon="solar:alt-arrow-right-linear" width="18" class="text-subtle shrink-0 ease-spring group-hover:translate-x-0.5"></iconify-icon>
+          </a>`).join('')}</div>`
+        : `<div class="rounded-2xl border border-dashed border-edge/15 p-8 text-center"><p class="font-semibold">이 의식을 모실 스님을 찾고 있습니다</p><button data-notify class="ease-spring mt-4 h-11 px-5 rounded-full bg-edge/5 border border-edge/10 text-sm font-semibold hover:bg-edge/10">예약 열리면 알림 받기</button></div>`;
+
+      // ---- 진행 순서 ----
+      const stepsBody = `<ol class="relative">
+          <span aria-hidden="true" class="absolute left-[0.95rem] top-3 bottom-3 w-px bg-edge/15"></span>
+          ${r.steps.map((s, i) => `<li class="relative flex gap-5 pb-7 last:pb-0">
+            <span class="relative z-10 w-8 h-8 shrink-0 rounded-full bg-page ring-1 ring-cinnabar/40 text-cinnabar text-sm font-bold flex items-center justify-center tabular-nums">${i + 1}</span>
+            <div class="pt-0.5"><h3 class="font-bold text-fg">${s.t}</h3><p class="mt-1 text-base text-fg2 leading-relaxed">${s.d}</p></div>
+          </li>`).join('')}
+        </ol>`;
+
+      // ---- 오른쪽 상자: 모시는 스님 소개 ----
+      const cta = r.active
+        ? `<a href="${primaryHref}" class="ease-spring flex h-12 rounded-full bg-cinnabar text-white font-semibold items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]"><iconify-icon icon="${isCharm ? 'solar:bag-4-linear' : 'solar:calendar-linear'}" width="18"></iconify-icon>${single ? primaryLabel : `모시는 스님 ${r.by.length}분 보기`}</a>`
+        : `<button data-notify class="ease-spring w-full h-12 rounded-full bg-edge/5 border border-edge/10 font-semibold flex items-center justify-center gap-2 hover:bg-edge/10"><iconify-icon icon="solar:bell-linear" width="18"></iconify-icon>예약 열리면 알림 받기</button>`;
+      const m0 = r.by[0];
+      const box = `
+        <div class="rounded-[1.5rem] bg-surface ring-1 ring-edge/10 shadow-[0_20px_50px_-25px_var(--drop)] overflow-hidden">
+          ${single ? `
+          <div class="relative h-24 overflow-hidden">${YW.monkCover(m0)}<span class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></span></div>
+          <div class="px-6 pb-6 -mt-8 relative">
+            ${monkAvatar(m0, 'w-16 h-16 text-xl ring-4 ring-surface')}
+            <p class="mt-3 text-xs text-subtle">${r.name}을 모시는 스님</p>
+            <p class="mt-0.5 text-lg font-bold flex items-center gap-1">${m0.name} 스님<iconify-icon icon="solar:verified-check-linear" width="16" class="text-cinnabar"></iconify-icon></p>
+            <p class="text-sm text-subtle">${m0.temple} · 출가 ${m0.years}년</p>
+            <p class="mt-4 text-[15px] text-fg2 leading-relaxed">“${m0.tagline}”</p>
+            <div class="mt-6">${cta}</div>
+            <a href="${monkHref}" class="ease-spring mt-3 flex h-11 rounded-full bg-edge/5 border border-edge/10 text-sm font-semibold items-center justify-center gap-1.5 hover:bg-edge/10">스님 만나보기<iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon></a>
+          </div>` : `
+          <div class="p-6">
+            <p class="text-xs text-subtle">${r.name}</p>
+            <p class="mt-1 text-lg font-bold">${r.active ? `모시는 스님 ${r.by.length}분` : '모실 스님을 찾고 있습니다'}</p>
+            <div class="mt-6">${cta}</div>
+          </div>`}
+        </div>`;
+
+      $('#page').innerHTML = `
+        <header id="top" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 md:pt-32">
+          <nav aria-label="현재 위치" class="flex items-center gap-1.5 text-sm text-subtle">
+            <a href="index.html" class="ease-spring hover:text-fg">홈</a><iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon>
+            <a href="index.html#services" class="ease-spring hover:text-fg">의식 안내</a><iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon>
+            <span class="text-fg2">${r.name}</span>
+          </nav>
+          <p class="mt-8 text-sm font-medium text-cinnabar-soft"><span class="font-serif">${r.hanja || r.mark}</span> · ${isCharm ? '스님이 직접 쓰는 부적' : '제례 · 기도'}</p>
+          <h1 class="mt-2 text-3xl md:text-4xl font-bold tracking-tight">${r.name}</h1>
+          <p class="mt-3 text-lg text-fg2 leading-relaxed max-w-[60ch]">${r.desc || r.summary}</p>
+          <dl class="mt-8 grid grid-cols-2 lg:grid-cols-4 rounded-2xl ring-1 ring-edge/10 bg-surface divide-edge/10 overflow-hidden">
+            ${facts.map(([l, v, ic], i) => `<div class="p-4 md:p-5 ${i % 2 ? 'border-l' : ''} ${i > 1 ? 'border-t lg:border-t-0' : ''} ${i === 2 ? 'lg:border-l' : ''} border-edge/10">
+              <dt class="text-xs text-subtle flex items-center gap-1.5"><iconify-icon icon="${ic}" width="14"></iconify-icon>${l}</dt>
+              <dd class="mt-1.5 font-semibold leading-snug ">${v}</dd>
+            </div>`).join('')}
+          </dl>
+        </header>
+
+        <nav id="gTabs" aria-label="이 페이지 목차" class="g-tabs sticky top-[5.25rem] z-30 mt-10 bg-page/85 backdrop-blur-xl border-b border-edge/10">
+          <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-6 overflow-x-auto no-scrollbar">
+            ${sections.map(([id, t]) => `<a href="#${id}" data-tab="${id}" class="ease-spring shrink-0 py-3.5 text-[15px] text-subtle border-b-2 border-transparent -mb-px hover:text-fg aria-[current=true]:text-fg aria-[current=true]:font-semibold aria-[current=true]:border-cinnabar">${t}</a>`).join('')}
+          </div>
+        </nav>
+
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-24 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_20rem] gap-12 xl:gap-16">
+          <article class="min-w-0 max-w-[44rem]">
+            ${sec('g-meaning', `${r.name}의 의미`, meaningBody)}
+            ${sec('g-about', '이런 분께 권합니다', checks(r.forWhom))}
+            ${sec('g-steps', sections[2][1], stepsBody, isCharm ? '' : '세부 절차와 용어는 사찰마다 조금씩 다를 수 있습니다. 예약하시면 스님이 직접 설명해 드립니다.')}
+            ${sec('g-ways', sections[3][1], waysBody)}
+            ${sec('g-prepare', sections[4][1], prepareBody)}
+            ${sec('g-monks', r.active ? `${r.name}을 모시는 스님` : '모시는 스님', monksBody)}
+            ${sec('g-faq', '자주 묻는 질문', `<div id="gFaq" class="border-y border-edge/10 divide-y divide-edge/10"></div><a href="help.html" class="ease-spring mt-5 inline-flex items-center gap-1 text-sm text-cinnabar-soft hover:gap-2">고객센터에서 더 보기<iconify-icon icon="solar:arrow-right-linear" width="14"></iconify-icon></a>`)}
+          </article>
+          <aside class="hidden lg:block"><div class="sticky top-40">${box}</div></aside>
+        </div>
+
+        <section class="border-t border-edge/10 py-12 md:py-16">
+          <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-lg font-bold tracking-tight">다른 의식</h2>
+            <div class="mt-5 flex flex-wrap gap-2">
+              ${YW.visibleRituals().filter(x => x.key !== r.key).map(x => `<a href="${YW.ritualUrl(x.key)}" class="ease-spring inline-flex items-center gap-2 h-11 pl-3 pr-4 rounded-full ring-1 ring-edge/10 bg-surface hover:ring-cinnabar/50 ${x.active ? '' : 'opacity-60'}"><span class="font-serif font-extrabold text-cinnabar-soft">${x.mark}</span><span class="text-[15px] font-medium">${x.name}</span></a>`).join('')}
+            </div>
+          </div>
+        </section>`;
+
+      YW.renderFaq($('#gFaq'), r.faq);
+      // 질문은 바로 보이게 (등장 애니메이션 없이)
+      $$('#gFaq .reveal').forEach(el => el.classList.remove('reveal'));
+
+      // 모바일 하단 고정 바
+      $('#stickyInner').innerHTML = r.active
+        ? `<a href="${primaryHref}" class="flex-1 h-12 rounded-full bg-cinnabar text-white text-sm font-semibold flex items-center justify-center gap-2 active:scale-[0.98] ease-spring"><iconify-icon icon="solar:calendar-linear" width="18"></iconify-icon>${isCharm ? '부적 고르기' : '예약하기'}</a>
+           <a href="${monkHref}" class="flex-1 h-12 rounded-full bg-edge/5 text-sm font-semibold flex items-center justify-center gap-2 active:scale-[0.98] ease-spring">스님 만나보기</a>`
+        : `<button data-notify class="flex-1 h-12 rounded-full bg-edge/5 text-sm font-semibold flex items-center justify-center gap-2"><iconify-icon icon="solar:bell-linear" width="18"></iconify-icon>예약 열리면 알림 받기</button>`;
+      document.addEventListener('click', e => { if (e.target.closest('[data-notify]')) YW.toast('시안에서는 알림 신청이 저장되지 않습니다'); });
+
+      // 지금 읽는 섹션을 탭에 표시
+      const tabs = $$('#gTabs [data-tab]');
+      const mark = id => tabs.forEach(t => {
+        const on = t.dataset.tab === id;
+        t.setAttribute('aria-current', on);
+        // 모바일에서 탭 줄이 넘치면 지금 탭이 보이게 가로로만 밀어 줌
+        if (on) t.parentElement.scrollTo({ left: t.offsetLeft - 16, behavior: 'smooth' });
+      });
+      // 탭이 위에 붙으면 헤더와 탭 사이 틈을 막아 본문이 비치지 않게
+      const tabBar = $('#gTabs');
+      const onScroll = () => tabBar.classList.toggle('is-stuck', tabBar.getBoundingClientRect().top <= 85);
+      addEventListener('scroll', onScroll, { passive: true }); onScroll();
+      const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && mark(e.target.id)), { rootMargin: '-40% 0px -55% 0px' });
+      $$('.g-sec').forEach(s => io.observe(s));
+
+      YW.stickyBar('#stickyBar', '#top');
     }
 
     function render() {
