@@ -127,17 +127,18 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-5">
           <div class="reveal lg:col-span-2 lg:row-span-2 rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10">
-            <div class="relative h-full overflow-hidden rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-8 md:p-12 flex flex-col">
-              <img src="assets/images/monk-prayer.jpg" alt="마애불 앞에서 합장하는 스님" class="absolute inset-y-0 right-0 w-full md:w-3/5 h-full object-cover object-center" loading="lazy" decoding="async">
-              <div aria-hidden="true" class="absolute inset-0 bg-gradient-to-r from-surface via-surface/95 md:via-surface/85 to-surface/40 md:to-transparent"></div>
-              <span class="relative inline-flex w-max items-center gap-2 rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">信 · 안심하고 맡기세요</span>
+            <!-- 사진 배치는 dev 옵션 trustStyle: full(사진 전체 + 위에 흰 글씨) / side(오른쪽 사진 + 왼쪽 글씨). 색은 common.css .yw-trust -->
+            <div id="trustCard" class="yw-trust relative h-full min-h-[30rem] md:min-h-[34rem] overflow-hidden rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-8 md:p-12 flex flex-col" data-style="full">
+              <img src="assets/images/trust-path.jpg" alt="안개 낀 산사 돌길을 나란히 걸어 올라가는 두 스님의 뒷모습" class="yw-trust-img absolute inset-y-0 right-0 h-full object-cover" loading="lazy" decoding="async">
+              <div aria-hidden="true" class="yw-trust-ov absolute inset-0"></div>
+              <span class="yw-trust-badge relative inline-flex w-max items-center gap-2 rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">信 · 안심하고 맡기세요</span>
               <h2 class="relative mt-6 text-3xl md:text-4xl font-bold tracking-tight leading-snug">모시기 전에<br>사찰과 승적을 직접 확인합니다</h2>
-              <p class="relative mt-5 text-muted leading-relaxed max-w-[40ch]">염원 담당자가 사찰을 찾아가 스님을 직접 만납니다. 아래 네 가지를 모두 확인한 스님만 모십니다.</p>
+              <p class="yw-trust-sub relative mt-5 text-muted leading-relaxed max-w-[40ch]">염원 담당자가 사찰을 찾아가 스님을 직접 만납니다. 아래 네 가지를 모두 확인한 스님만 모십니다.</p>
               <ul class="relative mt-auto pt-10 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm md:max-w-[60%]">
-                <li class="flex items-center gap-3 rounded-2xl bg-surface/80 backdrop-blur-sm border border-edge/10 px-4 py-3"><iconify-icon icon="solar:verified-check-linear" width="20" class="text-cinnabar"></iconify-icon>승적 · 소속 종단 확인</li>
-                <li class="flex items-center gap-3 rounded-2xl bg-surface/80 backdrop-blur-sm border border-edge/10 px-4 py-3"><iconify-icon icon="solar:map-point-linear" width="20" class="text-cinnabar"></iconify-icon>사찰 실재 · 주소 방문 확인</li>
-                <li class="flex items-center gap-3 rounded-2xl bg-surface/80 backdrop-blur-sm border border-edge/10 px-4 py-3"><iconify-icon icon="solar:pen-linear" width="20" class="text-cinnabar"></iconify-icon>수기 부적 시연 확인</li>
-                <li class="flex items-center gap-3 rounded-2xl bg-surface/80 backdrop-blur-sm border border-edge/10 px-4 py-3"><iconify-icon icon="solar:chat-round-dots-linear" width="20" class="text-cinnabar"></iconify-icon>후기 정기 점검</li>
+                <li class="yw-trust-chip flex items-center gap-3 rounded-2xl bg-surface/80 backdrop-blur-sm border border-edge/10 px-4 py-3"><iconify-icon icon="solar:verified-check-linear" width="20" class="text-cinnabar"></iconify-icon>승적 · 소속 종단 확인</li>
+                <li class="yw-trust-chip flex items-center gap-3 rounded-2xl bg-surface/80 backdrop-blur-sm border border-edge/10 px-4 py-3"><iconify-icon icon="solar:map-point-linear" width="20" class="text-cinnabar"></iconify-icon>사찰 실재 · 주소 방문 확인</li>
+                <li class="yw-trust-chip flex items-center gap-3 rounded-2xl bg-surface/80 backdrop-blur-sm border border-edge/10 px-4 py-3"><iconify-icon icon="solar:pen-linear" width="20" class="text-cinnabar"></iconify-icon>수기 부적 시연 확인</li>
+                <li class="yw-trust-chip flex items-center gap-3 rounded-2xl bg-surface/80 backdrop-blur-sm border border-edge/10 px-4 py-3"><iconify-icon icon="solar:chat-round-dots-linear" width="20" class="text-cinnabar"></iconify-icon>후기 정기 점검</li>
               </ul>
             </div>
           </div>
@@ -513,6 +514,9 @@
       }).join('');
       YW.observeReveals();
     }
+    // 안심 카드 사진 배치 (dev 옵션)
+    const applyTrust = () => { $('#trustCard').dataset.style = YW.devOpt('trustStyle'); };
+    applyTrust(); YW.onDevChange(k => { if (k === 'trustStyle') applyTrust(); });
     renderServices();
     // 메인 구성을 바꾸면 헤더까지 달라지므로 새로고침, 나머지는 바로 다시 그림
     YW.onDevChange(key => { if (key === 'mainLayout') location.reload(); else { renderServices(); if (shopMode) renderShop(); } });

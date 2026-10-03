@@ -194,3 +194,24 @@ html.gate-pending::before { content: ""; position: fixed; inset: 0; z-index: 65;
   .yw-screen.is-auto .yw-panel:not(.is-open) .yw-panel-img { filter: brightness(0.55) saturate(0.6); }
 }
 @media (prefers-reduced-motion: reduce) { .yw-screen .yw-progress { display: none; } }
+
+/* ---------- 메인 '안심하고 맡기세요' 카드 (dev 옵션 trustStyle) ---------- */
+.yw-trust .yw-trust-img { width: 100%; object-position: 72% center; }
+/* side: 오른쪽 60%에 사진, 왼쪽은 카드 색으로 덮어 글씨 자리 */
+@media (min-width: 768px) { .yw-trust[data-style="side"] .yw-trust-img { width: 60%; } }
+.yw-trust[data-style="side"] .yw-trust-ov { background: linear-gradient(to right, rgb(var(--c-surface)), rgb(var(--c-surface) / 0.95) 50%, rgb(var(--c-surface) / 0.4)); }
+@media (min-width: 768px) { .yw-trust[data-style="side"] .yw-trust-ov { background: linear-gradient(to right, rgb(var(--c-surface)), rgb(var(--c-surface) / 0.85) 50%, transparent); } }
+/* full: 사진 전체, 테마와 상관없이 어두운 막 + 흰 글씨 */
+.yw-trust[data-style="full"] .yw-trust-ov {
+  background:
+    linear-gradient(to right, rgba(12, 10, 9, 0.72) 0%, rgba(12, 10, 9, 0.45) 45%, rgba(12, 10, 9, 0.05) 75%),
+    linear-gradient(to top, rgba(12, 10, 9, 0.55) 0%, transparent 40%);
+}
+.yw-trust[data-style="full"] { color: #fff; }
+.yw-trust[data-style="full"] .yw-trust-sub { color: rgba(255, 255, 255, 0.82); }
+.yw-trust[data-style="full"] .yw-trust-badge { background: rgba(255, 255, 255, 0.14); color: #f3c3b3; backdrop-filter: blur(6px); }
+.yw-trust[data-style="full"] .yw-trust-chip { background: rgba(20, 16, 14, 0.35); border-color: rgba(255, 255, 255, 0.18); color: #fff; }
+.yw-trust[data-style="full"] .yw-trust-chip iconify-icon { color: #f3c3b3; }
+@media (max-width: 767px) {
+  .yw-trust[data-style="full"] .yw-trust-ov { background: linear-gradient(to bottom, rgba(12, 10, 9, 0.7), rgba(12, 10, 9, 0.5) 50%, rgba(12, 10, 9, 0.7)); }
+}
