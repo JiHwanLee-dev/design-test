@@ -622,7 +622,6 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
               <li><a href="index.html#how" class="ease-spring hover:text-fg">이용 방법</a></li>
               <li><a href="help.html" class="ease-spring hover:text-fg">고객센터 · 자주 묻는 질문</a></li>
               <li><a href="help.html#refund" class="ease-spring hover:text-fg">환불 규정</a></li>
-              <li><a href="index.html#join" class="ease-spring hover:text-fg">스님 입점 문의</a></li>
             </ul>
           </div>
           <div class="md:col-span-4 text-sm text-subtle space-y-2">
