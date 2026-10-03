@@ -216,3 +216,12 @@ html.gate-pending::before { content: ""; position: fixed; inset: 0; z-index: 65;
 @media (max-width: 767px) {
   .yw-trust[data-style="full"] .yw-trust-ov { background: linear-gradient(to bottom, rgba(12, 10, 9, 0.7), rgba(12, 10, 9, 0.5) 50%, rgba(12, 10, 9, 0.7)); }
 }
+
+/* 병풍 2분: 펼침 없이 반반, 둘 다 컬러 · 이름 · 말씀 늘 보임. 마우스를 올리면 사진만 살짝 확대 */
+@media (min-width: 768px) {
+  .yw-screen.is-even .yw-panel, .yw-screen.is-even:hover .yw-panel:hover, .yw-screen.is-even .yw-panel.is-open { flex-grow: 1; }
+  .yw-screen.is-even .yw-panel .yw-panel-img, .yw-screen.is-even:hover .yw-panel.is-open:not(:hover) .yw-panel-img { filter: sepia(0.15) saturate(0.85) brightness(0.92); transform: none; }
+  .yw-screen.is-even:hover .yw-panel:hover .yw-panel-img { transform: scale(1.03); }
+  .yw-screen.is-even .yw-panel .yw-panel-info, .yw-screen.is-even:hover .yw-panel.is-open:not(:hover) .yw-panel-info { opacity: 1; transform: none; }
+  .yw-screen.is-even .yw-panel .yw-panel-mark, .yw-screen.is-even:hover .yw-panel.is-open:not(:hover) .yw-panel-mark { opacity: 0; }
+}

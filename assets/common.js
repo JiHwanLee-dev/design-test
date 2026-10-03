@@ -706,6 +706,19 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
       document.addEventListener('keydown', e => { if (e.key === 'Escape') setRitualMenu(false); });
     }
 
+    // 오른쪽 퀵메뉴 (데스크탑만, 모바일은 하단 고정 바가 있음): 카톡 상담 · 전화 상담 · 주문 조회 · 맨 위로
+    // 1440px 미만은 본문 카드와 겹치지 않게 아이콘만 (글씨는 title 툴팁)
+    const qItem = (inner, label, attrs) => `<${attrs.startsWith('href') ? 'a' : 'button type="button"'} ${attrs} title="${label}" aria-label="${label}" class="ease-spring w-full flex flex-col items-center gap-1.5 py-3 min-[1440px]:py-4 text-[13px] font-semibold text-fg hover:bg-edge/[0.04]">${inner}<span class="hidden min-[1440px]:inline" aria-hidden="true">${label}</span></${attrs.startsWith('href') ? 'a' : 'button'}>`;
+    document.body.insertAdjacentHTML('beforeend', `
+      <nav id="ywQuick" aria-label="빠른 메뉴" class="hidden lg:flex fixed right-2 min-[1440px]:right-5 top-1/2 -translate-y-1/2 z-30 w-12 min-[1440px]:w-[5.5rem] flex-col rounded-2xl min-[1440px]:rounded-[1.25rem] overflow-hidden bg-surface/95 backdrop-blur-xl ring-1 ring-edge/15 shadow-[0_20px_40px_-20px_var(--drop)] divide-y divide-edge/10">
+        ${qItem('<span class="w-8 h-8 min-[1440px]:w-9 min-[1440px]:h-9 rounded-full bg-[#FEE500] text-[#191919] flex items-center justify-center"><iconify-icon icon="ri:kakao-talk-fill" width="20"></iconify-icon></span>', '카톡 상담', 'data-kakao')}
+        ${qItem('<iconify-icon icon="solar:phone-linear" width="26"></iconify-icon>', '전화 상담', 'href="tel:16443071"')}
+        ${qItem('<iconify-icon icon="solar:bill-list-linear" width="26"></iconify-icon>', '주문 조회', 'data-order-lookup')}
+        ${qItem('<iconify-icon icon="solar:arrow-up-linear" width="22"></iconify-icon>', 'TOP', 'data-to-top')}
+      </nav>`);
+    $('#ywQuick [data-kakao]').addEventListener('click', () => toast('시안에서는 카카오톡 상담 창이 열리지 않습니다'));
+    $('#ywQuick [data-to-top]').addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+
     // 목록에서 바로 담기 (기본 옵션: 한지 인쇄본, 1개)
     document.addEventListener('click', async e => {
       const q = e.target.closest('[data-quick-add]');
