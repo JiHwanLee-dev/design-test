@@ -373,7 +373,7 @@
       $('#page').innerHTML = `
         ${head}
 
-        <nav id="gTabs" aria-label="이 페이지 목차" class="g-tabs sticky top-[5.25rem] z-30 mt-10 bg-page/85 backdrop-blur-xl border-b border-edge/10">
+        <nav id="gTabs" aria-label="이 페이지 목차" class="g-tabs sticky top-[var(--head-h)] yw-follow z-30 mt-10 bg-page/85 backdrop-blur-xl border-b border-edge/10">
           <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-6 overflow-x-auto no-scrollbar">
             ${sections.map(([id, t]) => `<a href="#${id}" data-tab="${id}" class="ease-spring shrink-0 py-3.5 text-[15px] text-subtle border-b-2 border-transparent -mb-px hover:text-fg aria-[current=true]:text-fg aria-[current=true]:font-semibold aria-[current=true]:border-cinnabar">${t}</a>`).join('')}
           </div>
@@ -423,7 +423,7 @@
       });
       // 탭이 위에 붙으면 헤더와 탭 사이 틈을 막아 본문이 비치지 않게
       const tabBar = $('#gTabs');
-      const onScroll = () => tabBar.classList.toggle('is-stuck', tabBar.getBoundingClientRect().top <= 85);
+      const onScroll = () => tabBar.classList.toggle('is-stuck', tabBar.getBoundingClientRect().top <= parseFloat(getComputedStyle(tabBar).top) + 1);
       addEventListener('scroll', onScroll, { passive: true }); onScroll();
       const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && mark(e.target.id)), { rootMargin: '-40% 0px -55% 0px' });
       $$('.g-sec').forEach(s => io.observe(s));

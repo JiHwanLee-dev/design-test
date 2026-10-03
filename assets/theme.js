@@ -8,6 +8,10 @@
   try { theme = localStorage.getItem('yw-theme') || DEFAULT_THEME; } catch (e) { }
   document.documentElement.dataset.theme = theme;
   // 후기 · 평점 표시 (dev 옵션 reviews, 기본 숨김). 숨김이면 .yw-review 요소를 CSS로 가림
+  // 헤더 모양 (dev 옵션 headStyle, 기본 wide). 고정 탭 위치(--head-h)를 CSS가 이 값으로 정함
+  let head = 'wide';
+  try { head = JSON.parse(localStorage.getItem('yw-dev-opts') || '{}').headStyle || 'wide'; } catch (e) { }
+  document.documentElement.dataset.head = head;
   let reviews = 'hide';
   try { reviews = JSON.parse(localStorage.getItem('yw-dev-opts') || '{}').reviews || 'hide'; } catch (e) { }
   document.documentElement.dataset.reviews = reviews;

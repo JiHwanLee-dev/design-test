@@ -182,7 +182,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'page', charmLayout: 'shop', storeTabs: 'underline', monkCount: '1', monkStyle: 'screen', trustStyle: 'full', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
+  const DEV_DEFAULTS = { profileView: 'page', charmLayout: 'shop', storeTabs: 'underline', monkCount: '1', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -526,7 +526,7 @@ window.YW = (() => {
   function mountShell({ active = '' } = {}) {
     const single = D.MONKS.length === 1;
     const monkHref = single ? monkUrl(D.MONKS[0].id) : 'index.html#monks';
-    const navCls = on => `ease-spring px-3 py-2 rounded-full ${on ? 'text-fg bg-edge/5' : 'hover:text-fg hover:bg-edge/5'}`;
+    const navCls = on => `ease-spring px-4 py-2.5 rounded-full ${on ? 'text-fg bg-edge/[0.07]' : 'hover:text-fg hover:bg-edge/5'}`;
     // 메인 구성 dev 옵션: shop이면 상품 분류 중심 메뉴
     const shop = devOpt('mainLayout') === 'shop';
     const here = (() => {
@@ -538,10 +538,10 @@ window.YW = (() => {
       if (page === 'help.html') return 'help';
       return '';
     })();
-    const brandNav = `          <div class="hidden md:flex items-center gap-1 text-sm text-muted">
+    const brandNav = `          <div class="hidden md:flex items-center gap-0.5 text-[15px] lg:text-base font-medium text-fg2 whitespace-nowrap">
             <div class="relative" id="ywRitualWrap">
               <button id="ywRitualBtn" aria-expanded="false" aria-controls="ywRitualMenu" class="${navCls(active === 'ritual')} flex items-center gap-1">
-                의식 안내 <iconify-icon icon="solar:alt-arrow-down-linear" width="14" class="ease-spring" id="ywRitualChev"></iconify-icon>
+                의식 안내 <iconify-icon icon="solar:alt-arrow-down-linear" width="14" class="ease-spring opacity-60" id="ywRitualChev"></iconify-icon>
               </button>
               <div id="ywRitualMenu" class="hidden absolute left-1/2 -translate-x-1/2 top-full mt-4 w-[22rem] rounded-[1.5rem] p-1.5 bg-surface/95 backdrop-blur-xl ring-1 ring-edge/10 shadow-[0_30px_60px_-20px_var(--drop)]">
                 <div id="ywRitualList" class="flex flex-col"></div>
@@ -554,7 +554,7 @@ window.YW = (() => {
           </div>
 `;
     const shopNav = `
-          <div class="hidden md:flex items-center gap-1 text-sm text-muted">
+          <div class="hidden md:flex items-center gap-0.5 text-[15px] lg:text-base font-medium text-fg2 whitespace-nowrap">
             ${D.SHOP_CATS.map(c => `<a href="${shopUrl(c.key)}" class="${navCls(here === c.key)}">${c.name}</a>`).join('')}
             <a href="${monkHref}" class="${navCls(here === 'monk')}">스님</a>
             <a href="help.html" class="${navCls(here === 'help')}">고객센터</a>
@@ -564,14 +564,14 @@ window.YW = (() => {
           </div>
 `;
     const header = `
-      <header class="fixed top-4 inset-x-0 z-40 px-4">
-        <nav class="mx-auto w-full md:w-max flex items-center justify-between md:justify-start gap-2 md:gap-8 rounded-full pl-5 pr-2 py-2 backdrop-blur-xl bg-deep/60 border border-edge/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" aria-label="주 메뉴">
+      <header id="ywHead" class="yw-head fixed top-4 inset-x-0 z-40 px-4" data-style="${devOpt('headStyle')}">
+        <nav class="yw-head-bar mx-auto w-full md:w-max flex items-center justify-between md:justify-start gap-2 md:gap-6 lg:gap-10 rounded-full pl-5 md:pl-6 pr-2 py-2 md:py-2.5 backdrop-blur-xl bg-deep/60 border border-edge/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" aria-label="주 메뉴">
           <a href="index.html" class="flex items-center gap-2 shrink-0" aria-label="오늘의 부적 홈">
-            <span class="w-8 h-8 shrink-0 rounded-md bg-cinnabar text-white font-serif font-extrabold text-base flex items-center justify-center shadow-[inset_0_0_0_2px_rgba(255,255,255,0.18)]" aria-hidden="true">符</span>
-            <span class="text-[17px] font-bold tracking-[-0.02em] text-fg whitespace-nowrap">오늘의 부적</span>
+            <span class="w-8 h-8 md:w-9 md:h-9 shrink-0 rounded-md bg-cinnabar text-white font-serif font-extrabold text-base md:text-lg flex items-center justify-center shadow-[inset_0_0_0_2px_rgba(255,255,255,0.18)]" aria-hidden="true">符</span>
+            <span class="text-[17px] md:text-[19px] font-bold tracking-[-0.02em] text-fg whitespace-nowrap">오늘의 부적</span>
           </a>
 ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
-            <button data-open-cart aria-label="장바구니 열기" class="ease-spring relative flex items-center gap-2 rounded-full bg-fg text-page pl-4 pr-3 h-11 text-sm font-semibold hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-cinnabar">
+            <button data-open-cart aria-label="장바구니 열기" class="ease-spring relative flex items-center gap-2 rounded-full bg-fg text-page pl-4 md:pl-5 pr-3 h-11 md:h-12 text-sm md:text-[15px] font-semibold hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-cinnabar">
               <iconify-icon icon="solar:bag-4-linear" width="18"></iconify-icon>
               <span class="hidden sm:inline">장바구니</span>
               <span data-cart-count class="min-w-[1.4rem] h-[1.4rem] px-1 rounded-full bg-cinnabar text-white text-[11px] font-bold flex items-center justify-center">0</span>
@@ -585,7 +585,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
       <div id="ywMenu" class="fixed inset-0 z-50 hidden backdrop-blur-3xl bg-page/90">
         <div class="flex flex-col h-full px-6 pt-6 pb-10 overflow-y-auto">
           <div class="flex items-center justify-between">
-            <span class="flex items-center gap-2"><span class="w-8 h-8 shrink-0 rounded-md bg-cinnabar text-white font-serif font-extrabold text-base flex items-center justify-center shadow-[inset_0_0_0_2px_rgba(255,255,255,0.18)]" aria-hidden="true">符</span><span class="text-lg font-bold tracking-[-0.02em] text-fg">오늘의 부적</span></span>
+            <span class="flex items-center gap-2"><span class="w-8 h-8 md:w-9 md:h-9 shrink-0 rounded-md bg-cinnabar text-white font-serif font-extrabold text-base md:text-lg flex items-center justify-center shadow-[inset_0_0_0_2px_rgba(255,255,255,0.18)]" aria-hidden="true">符</span><span class="text-lg font-bold tracking-[-0.02em] text-fg">오늘의 부적</span></span>
             <button id="ywMenuClose" aria-label="메뉴 닫기" class="w-11 h-11 rounded-full flex items-center justify-center bg-edge/5 text-fg"><iconify-icon icon="solar:close-circle-linear" width="24"></iconify-icon></button>
           </div>
           ${shop ? `
@@ -752,6 +752,24 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
 
     renderCartCount();
     devPanel();
+    // 헤더: 스크롤하면 html.yw-scrolled → (wide) 넓은 알약이 꽉 찬 막대로 펴짐. 모양은 common.css .yw-head
+    const onHeadScroll = () => document.documentElement.classList.toggle('yw-scrolled', scrollY > 24);
+    addEventListener('scroll', onHeadScroll, { passive: true }); onHeadScroll();
+    // 가운데 알약의 원래 폭을 재서 --pill-w로 (폭이 정해져 있어야 펼칠 때 애니메이션이 됨)
+    const measurePill = () => {
+      const bar = $('#ywHead .yw-head-bar'); if (!bar) return;
+      bar.style.transition = 'none'; bar.style.maxWidth = 'none'; // 잴 때는 폭 제한을 풀어야 글자가 꺾이지 않음
+      const cs = getComputedStyle(bar), kids = [...bar.children].filter(c => c.offsetWidth);
+      const w = kids.reduce((a, c) => a + c.offsetWidth, 0) + parseFloat(cs.columnGap || 0) * (kids.length - 1)
+        + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) + 2;
+      bar.style.setProperty('--pill-w', Math.ceil(w) + 'px');
+      bar.style.maxWidth = ''; bar.offsetWidth; bar.style.transition = '';
+    };
+    // 메뉴 · 아이콘 · 글꼴이 늦게 그려지므로, 안쪽 요소 크기가 바뀔 때마다 다시 잼
+    const headBar = $('#ywHead .yw-head-bar');
+    if (headBar && window.ResizeObserver) { const ro = new ResizeObserver(() => measurePill()); [...headBar.children].forEach(c => ro.observe(c)); }
+    measurePill(); addEventListener('resize', measurePill); addEventListener('load', measurePill);
+    document.fonts?.ready.then(measurePill);
   }
 
   // ---------- 개발용 테마 패널 (?dev=1 로 켜고 ?dev=0 으로 끔) ----------
@@ -767,6 +785,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     $$('#ywDev [data-theme-id]').forEach(b => b.setAttribute('aria-pressed', b.dataset.themeId === id));
   }
   const DEV_OPTIONS = [
+    { key: 'headStyle', label: '헤더 모양', choices: [['wide', '스크롤하면 펴짐'], ['pill', '알약 고정']] },
     { key: 'trustStyle', label: '안심 카드 사진', choices: [['full', '사진 전체 + 위에 글씨'], ['side', '오른쪽 사진']] },
     { key: 'monkCount', label: '스님 수 (시안, 예시 스님 합침)', choices: [['1', '1분'], ['2', '2분'], ['3', '3분'], ['4', '4분'], ['5', '5분']] },
     { key: 'screenAuto', label: '(병풍) 자동 넘김', choices: [['on', '켬'], ['off', '끔']] },
@@ -792,6 +811,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
   function setDevOpt(key, val) {
     const o = store.get('yw-dev-opts', {}); o[key] = val; store.set('yw-dev-opts', o);
     if (key === 'reviews') document.documentElement.dataset.reviews = val;
+    if (key === 'headStyle') { $('#ywHead').dataset.style = val; document.documentElement.dataset.head = val; $$(`#ywDev [data-opt="${key}"]`).forEach(b => b.setAttribute('aria-pressed', b.dataset.val === val)); return; }
     $$(`#ywDev [data-opt="${key}"]`).forEach(b => b.setAttribute('aria-pressed', b.dataset.val === val));
     renderNavRituals();
     // 페이지가 직접 다시 그리지 못하면 새로고침
