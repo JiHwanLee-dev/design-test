@@ -182,7 +182,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'page', charmLayout: 'shop', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
+  const DEV_DEFAULTS = { profileView: 'page', charmLayout: 'shop', monkCount: '1', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -316,6 +316,8 @@ window.YW = (() => {
 
   // ---------- 장바구니 (한 번에 한 스님만) ----------
   let cart = store.get('yw-cart', { monkId: null, items: [] });
+  // 스님 수를 줄였을 때(시안) 없는 스님의 장바구니는 비움
+  if (cart.monkId && !D.MONKS.some(m => m.id === cart.monkId)) cart = { monkId: null, items: [] };
   if (!cart || !Array.isArray(cart.items)) cart = { monkId: null, items: [] };
   const saveCart = () => { if (!cart.items.length) cart.monkId = null; store.set('yw-cart', cart); renderCartCount(); };
 
@@ -753,6 +755,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     $$('#ywDev [data-theme-id]').forEach(b => b.setAttribute('aria-pressed', b.dataset.themeId === id));
   }
   const DEV_OPTIONS = [
+    { key: 'monkCount', label: '스님 수 (시안, 예시 스님 합침)', choices: [['1', '1분'], ['3', '3분'], ['5', '5분']] },
     { key: 'heroImage', label: '메인 히어로 사진', choices: [['eaves', '처마 풍경'], ['room', '다실 햇살'], ['incense', '향 연기']] },
     { key: 'reviews', label: '후기 · 평점 (사이트 전체)', choices: [['hide', '숨김'], ['show', '표시']] },
     { key: 'mainLayout', label: '메인 구성 (헤더 포함)', choices: [['brand', '랜딩형'], ['shop', '쇼핑몰형']] },
@@ -775,7 +778,8 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     $$(`#ywDev [data-opt="${key}"]`).forEach(b => b.setAttribute('aria-pressed', b.dataset.val === val));
     renderNavRituals();
     // 페이지가 직접 다시 그리지 못하면 새로고침
-    if (devHandlers.length) devHandlers.forEach(fn => fn(key, val)); else location.reload();
+    // 스님 수는 데이터부터 바뀌므로 늘 새로고침
+    if (devHandlers.length && key !== 'monkCount') devHandlers.forEach(fn => fn(key, val)); else location.reload();
   }
   function devPanel() {
     const dev = new URLSearchParams(location.search).get('dev');

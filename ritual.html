@@ -268,13 +268,18 @@
             </div>`);
 
       // ---- 스님 ----
-      const monksBody = r.active ? `<div class="rounded-2xl ring-1 ring-edge/10 divide-y divide-edge/10">${r.by.map(m => `
+      const chip = t => `<span class="rounded-full px-2.5 py-0.5 text-xs bg-edge/5 ring-1 ring-edge/10 text-fg2">${t}</span>`;
+      const wayOf = m => (m.services.find(x => x.id === r.key) || {}).way?.[0];
+      const monksBody = r.active ? (single ? '' : `<p class="-mt-2 mb-5 text-[15px] text-muted leading-relaxed">기본 절차는 같고, 스님마다 모시는 방식이 조금씩 다릅니다. 가까운 사찰이나 마음이 가는 스님을 골라 주세요.</p>`)
+        + `<div class="rounded-2xl ring-1 ring-edge/10 divide-y divide-edge/10">${r.by.map(m => `
           <a href="${monkUrl(m.id)}" class="group flex items-center gap-4 p-5 ease-spring hover:bg-edge/[0.03]">
             ${monkAvatar(m, 'w-14 h-14 text-lg')}
             <div class="flex-1 min-w-0">
               <p class="font-bold flex items-center gap-1">${m.name} 스님<iconify-icon icon="solar:verified-check-linear" width="16" class="text-cinnabar"></iconify-icon></p>
-              <p class="text-sm text-subtle">${m.temple} · ${m.area} · 출가 ${m.years}년</p>
+              <p class="text-sm text-subtle">${m.temple}</p>
               <p class="mt-1.5 text-[15px] text-fg2 leading-relaxed">“${m.tagline}”</p>
+              ${!single ? `<div class="mt-3 flex flex-wrap gap-1.5">${chip(`<iconify-icon icon="solar:map-point-linear" width="12" class="align-[-1px]"></iconify-icon> ${m.area}`)}${chip(`출가 ${m.years}년`)}</div>` : ''}
+              ${!single && wayOf(m) ? `<p class="mt-2 text-sm text-muted leading-relaxed">${wayOf(m)}</p>` : ''}
             </div>
             <iconify-icon icon="solar:alt-arrow-right-linear" width="18" class="text-subtle shrink-0 ease-spring group-hover:translate-x-0.5"></iconify-icon>
           </a>`).join('')}</div>`
@@ -308,9 +313,14 @@
             <a href="${monkHref}" class="ease-spring mt-3 flex h-11 rounded-full bg-edge/5 border border-edge/10 text-sm font-semibold items-center justify-center gap-1.5 hover:bg-edge/10">스님 만나보기<iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon></a>
           </div>` : `
           <div class="p-6">
-            <p class="text-xs text-subtle">${r.name}</p>
-            <p class="mt-1 text-lg font-bold">${r.active ? `모시는 스님 ${r.by.length}분` : '모실 스님을 찾고 있습니다'}</p>
-            <div class="mt-6">${cta}</div>
+            <p class="text-xs text-subtle">${r.name}을 모시는 스님</p>
+            <p class="mt-1 text-lg font-bold">${r.active ? `${r.by.length}분이 모십니다` : '모실 스님을 찾고 있습니다'}</p>
+            ${r.active ? `<ul class="mt-4 -mx-2">${r.by.map(m => `<li><a href="${monkUrl(m.id)}" class="group flex items-center gap-3 rounded-xl px-2 py-2 ease-spring hover:bg-edge/5">
+              ${monkAvatar(m, 'w-10 h-10 text-xs')}
+              <span class="flex-1 min-w-0"><b class="block text-sm">${m.name} 스님</b><span class="block text-xs text-subtle truncate">${m.region} · ${m.temple}</span></span>
+              <iconify-icon icon="solar:alt-arrow-right-linear" width="16" class="text-subtle ease-spring group-hover:translate-x-0.5"></iconify-icon>
+            </a></li>`).join('')}</ul>` : ''}
+            <div class="mt-5">${r.active ? `<a href="#g-monks" class="ease-spring flex h-12 rounded-full bg-cinnabar text-white font-semibold items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]">스님 비교해 보기<iconify-icon icon="solar:alt-arrow-down-linear" width="18"></iconify-icon></a>` : cta}</div>
           </div>`}
         </div>`;
 
@@ -357,7 +367,7 @@
             <figure class="my-4 rounded-[2rem] bg-deep/70 ring-1 ring-edge/5 px-7 py-9 md:px-12 md:py-12 relative overflow-hidden">
               <span aria-hidden="true" class="absolute -top-6 left-5 font-serif font-extrabold text-[8rem] leading-none text-cinnabar/20 select-none">“</span>
               <blockquote class="relative font-serif font-bold text-xl md:text-2xl leading-[1.7] text-fg tracking-tight">${r.quote}</blockquote>
-              ${single ? `<figcaption class="relative mt-6 flex items-center gap-3">${monkAvatar(r.by[0], 'w-10 h-10 text-xs')}<span class="text-sm"><b class="text-fg">${r.by[0].name} 스님</b><span class="text-subtle"> · ${r.by[0].temple}</span></span></figcaption>` : ''}
+              ${r.by[0] ? `<figcaption class="relative mt-6 flex items-center gap-3">${monkAvatar(r.by[0], 'w-10 h-10 text-xs')}<span class="text-sm"><b class="text-fg">${r.by[0].name} 스님</b><span class="text-subtle"> · ${r.by[0].temple}</span></span></figcaption>` : ''}
             </figure>` : '';
 
       $('#page').innerHTML = `
