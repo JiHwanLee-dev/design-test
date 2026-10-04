@@ -158,6 +158,123 @@
     </section>
   </main>
 
+  <!-- ============ 쇼핑몰형 의식 상세 (dev 옵션 riteLayout = shop) — 부적 상세(charm.html 쇼핑몰형)와 같은 틀 ============ -->
+  <main id="shopPage" class="hidden pt-24 md:pt-28 pb-24">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav aria-label="현재 위치" class="flex flex-wrap items-center gap-1 text-xs text-subtle">
+        <a href="index.html" class="hover:text-fg">홈</a><iconify-icon icon="solar:alt-arrow-right-linear" width="12"></iconify-icon>
+        <a id="spCrumbMonk" class="hover:text-fg"></a><iconify-icon icon="solar:alt-arrow-right-linear" width="12"></iconify-icon>
+        <a id="spCrumbRites" class="hover:text-fg">제례 · 기도</a><iconify-icon icon="solar:alt-arrow-right-linear" width="12"></iconify-icon>
+        <span id="spCrumbName" class="text-fg2"></span>
+      </nav>
+
+      <!-- 상단: 사진(따라옴) + 예약 영역 -->
+      <div class="mt-5 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div class="lg:col-span-6 lg:sticky lg:top-28">
+          <div id="spMain" class="relative aspect-square rounded-2xl bg-deep/60 ring-1 ring-edge/10 overflow-hidden"></div>
+        </div>
+        <div id="spBuy" class="lg:col-span-6">
+          <a id="spSeller" class="inline-flex items-center gap-2 text-sm text-muted hover:text-fg"></a>
+          <h1 id="spName" class="mt-2 text-2xl md:text-3xl font-bold tracking-tight"></h1>
+          <p id="spDesc" class="mt-2 text-sm text-muted leading-relaxed"></p>
+          <div id="spRating" class="yw-review mt-2 flex items-center gap-1.5 text-sm"></div>
+          <p class="mt-4 text-3xl font-bold tracking-tight tabular-nums"><span id="spPrice"></span><span class="ml-1 text-sm font-normal text-subtle">부터</span></p>
+          <dl id="spInfo" class="mt-5 border-y border-edge/10 py-4 space-y-2.5 text-sm"></dl>
+          <!-- 예약 위젯 (booking.js): 날짜 · 시간 · 참여 방식 · 등급 · 신청자 · 예약 담기 -->
+          <div id="bookingRoot" class="mt-2 scroll-mt-28"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 탭 (밑줄형, 부적 상세와 같음) -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-14">
+      <nav id="spTabs" class="flex gap-8 overflow-x-auto no-scrollbar border-b border-edge/15" aria-label="상세 메뉴"></nav>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <div class="lg:col-span-8 space-y-16">
+        <!-- 상세정보 -->
+        <section id="spDetail" class="scroll-mt-40 space-y-10">
+          <div id="spHero" class="relative aspect-[16/9] rounded-2xl overflow-hidden ring-1 ring-edge/10"></div>
+          <div>
+            <h2 class="text-lg font-bold">이 의식은</h2>
+            <div id="spAbout" class="mt-3 space-y-3 text-fg2 leading-relaxed"></div>
+            <p id="spWord" class="mt-4 text-sm text-muted border-l-2 border-cinnabar/50 pl-4"></p>
+          </div>
+          <div>
+            <h2 id="spWayTitle" class="text-lg font-bold"></h2>
+            <ol id="spWay" class="mt-3 divide-y divide-edge/10 rounded-xl ring-1 ring-edge/10"></ol>
+          </div>
+          <div>
+            <h2 class="text-lg font-bold">비용에 포함된 것</h2>
+            <ul id="spIncludes" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-fg2"></ul>
+          </div>
+          <div id="spTierSec">
+            <h2 id="spTierTitle" class="text-lg font-bold"></h2>
+            <div class="mt-3 overflow-x-auto rounded-xl ring-1 ring-edge/10"><table class="w-full text-sm min-w-[28rem]"><thead class="bg-deep/60 text-subtle"><tr><th class="text-left font-medium px-4 py-3">구분</th><th class="text-left font-medium px-4 py-3">가격</th><th class="text-left font-medium px-4 py-3">내용</th></tr></thead><tbody id="spTierTable"></tbody></table></div>
+          </div>
+          <div>
+            <h2 class="text-lg font-bold">진행 순서</h2>
+            <ol id="spSteps" class="mt-3 divide-y divide-edge/10 rounded-xl ring-1 ring-edge/10"></ol>
+          </div>
+          <div>
+            <h2 class="text-lg font-bold">예약하실 때 알려 주세요</h2>
+            <ul id="spPrepare" class="mt-3 space-y-2 text-sm text-fg2"></ul>
+          </div>
+        </section>
+
+        <!-- 예약 안내 -->
+        <section id="spGuide" class="scroll-mt-40">
+          <h2 class="text-lg font-bold">예약 안내</h2>
+          <dl id="spPolicy" class="mt-3 rounded-xl ring-1 ring-edge/10 divide-y divide-edge/10 text-sm"></dl>
+          <h3 class="mt-8 text-base font-bold">오시는 길 · <span id="spTemple"></span></h3>
+          <dl id="spVisit" class="mt-3 rounded-xl ring-1 ring-edge/10 divide-y divide-edge/10 text-sm"></dl>
+        </section>
+
+        <!-- 후기 -->
+        <section id="spReviews" class="yw-review scroll-mt-40">
+          <h2 class="text-lg font-bold">후기 <span id="spReviewCount" class="text-sm font-normal text-subtle"></span></h2>
+          <div id="spReviewList" class="mt-3 divide-y divide-edge/10 border-y border-edge/10"></div>
+        </section>
+
+        <!-- 문의 -->
+        <section id="spQna" class="scroll-mt-40">
+          <div class="flex items-end justify-between gap-4">
+            <h2 class="text-lg font-bold">문의</h2>
+            <button type="button" data-ask class="h-10 px-4 rounded-full border border-edge/15 text-sm font-semibold hover:bg-edge/5 flex items-center gap-1.5"><iconify-icon icon="solar:chat-round-dots-linear" width="16"></iconify-icon>스님께 문의하기</button>
+          </div>
+          <div id="spFaq" class="mt-3 divide-y divide-edge/10 border-y border-edge/10"></div>
+        </section>
+      </div>
+
+      <!-- 데스크톱: 따라오는 작은 예약 상자 (위젯의 선택 · 금액을 그대로 비춤) -->
+      <aside class="hidden lg:block lg:col-span-4">
+        <div class="sticky top-40 rounded-2xl ring-1 ring-edge/10 bg-surface p-5">
+          <p id="spMiniName" class="font-semibold"></p>
+          <p id="spMiniOpt" class="mt-1 text-xs text-subtle leading-relaxed"></p>
+          <div class="mt-4 flex items-end justify-between"><span class="text-sm text-fg2">예약 금액</span><b id="spMiniTotal" class="text-xl tabular-nums text-cinnabar"></b></div>
+          <button type="button" data-sp-book class="mt-4 w-full h-11 rounded-xl bg-cinnabar text-white text-sm font-semibold hover:brightness-105 flex items-center justify-center gap-1.5"><iconify-icon icon="solar:calendar-linear" width="16"></iconify-icon>날짜 고르고 예약하기</button>
+        </div>
+      </aside>
+    </div>
+
+    <!-- 같은 스님의 다른 의식 (스님 페이지 진열과 같은 카드) -->
+    <section id="spMoreSec" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+      <div class="flex items-end justify-between gap-4">
+        <h2 id="spMoreTitle" class="text-lg font-bold"></h2>
+        <a id="spMoreAll" class="text-sm text-muted hover:text-fg flex items-center gap-1">전체 보기<iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon></a>
+      </div>
+      <div id="spMore" class="mt-5 grid grid-cols-2 md:grid-cols-4 gap-x-3 md:gap-x-4 gap-y-9"></div>
+    </section>
+  </main>
+
+  <!-- 쇼핑몰형 모바일 하단 바 -->
+  <div id="spBar" class="hidden lg:hidden fixed bottom-0 inset-x-0 z-40 px-4 pb-4 translate-y-full opacity-0 ease-spring">
+    <div class="rounded-2xl p-2 bg-surface/95 backdrop-blur-xl border border-edge/10 shadow-[0_-10px_30px_-15px_var(--drop)]">
+      <button type="button" data-sp-book class="w-full h-12 rounded-xl bg-cinnabar text-white text-sm font-semibold">날짜 고르고 예약하기 · <span data-sp-total class="tabular-nums"></span></button>
+    </div>
+  </div>
+
   <main id="notFound" class="hidden min-h-[100dvh] items-center justify-center px-4">
     <div class="text-center">
       <span class="font-serif text-7xl font-extrabold text-edge/10">無</span>
@@ -188,11 +305,126 @@
     const m = YW.monkById(params.get('monk'));
     const entry = m && m.services.find(s => s.id === params.get('id'));
 
+    // dev 옵션 riteLayout: shop(쇼핑몰형, 부적 상세와 같은 틀 · 기본) | landing(랜딩형, 이전)
     if (!entry) {
-      $('#page').remove(); $('#stickyBar').remove();
+      $('#page').remove(); $('#stickyBar').remove(); $('#shopPage').remove(); $('#spBar').remove();
       $('#notFound').classList.remove('hidden'); $('#notFound').classList.add('flex');
+    } else if (YW.devOpt('riteLayout') === 'shop') {
+      $('#page').remove(); $('#stickyBar').remove();
+      renderShop();
     } else {
+      $('#shopPage').remove(); $('#spBar').remove();
       render();
+    }
+
+    // ---------- 쇼핑몰형 ----------
+    function renderShop() {
+      const key = entry.id;
+      const s = { ...D.SERVICE_TYPES[key], ...entry };
+      const info = D.RITUAL_DETAILS[key];
+      const reviews = YW.serviceReviews(m.id, key);
+      const early = YW.earliestDate(m.id, key);
+      document.title = `${s.name} 예약 · ${m.name} 스님 | 오늘의 부적`;
+      document.querySelector('meta[name=description]').setAttribute('content', `${m.name} 스님(${m.temple})께 ${s.name}을 예약하세요. ${info.summary}`);
+      $('#shopPage').classList.remove('hidden');
+      $('#spBar').classList.remove('hidden');
+
+      $('#spCrumbMonk').textContent = `${m.name} 스님`; $('#spCrumbMonk').href = monkUrl(m.id);
+      $('#spCrumbRites').href = `${monkUrl(m.id)}#rituals`;
+      $('#spCrumbName').textContent = s.name;
+
+      // 사진: 스님 페이지 화첩 카드와 같은 낙관
+      $('#spMain').innerHTML = YW.photo(YW.ritualImg(key), s.name, 'absolute inset-0 w-full h-full object-cover')
+        + `<span class="absolute left-4 top-4 rounded-md px-1.5 py-2 bg-cinnabar/90 text-white font-serif font-extrabold text-base leading-[1.2] [writing-mode:vertical-rl] tracking-[0.12em] shadow-[0_8px_18px_-8px_rgba(0,0,0,0.5)]">${s.hanja}</span>`;
+
+      // 예약 정보
+      $('#spSeller').href = monkUrl(m.id);
+      $('#spSeller').innerHTML = `${monkAvatar(m, 'w-6 h-6 text-[8px]')}<span><b class="text-fg">${m.name} 스님</b> · ${m.temple}</span><iconify-icon icon="solar:alt-arrow-right-linear" width="14"></iconify-icon>`;
+      $('#spName').textContent = s.name;
+      $('#spDesc').textContent = info.summary;
+      $('#spRating').innerHTML = `<span class="flex text-cinnabar">${stars(s.rating || m.rating, 14)}</span><b>${s.rating || m.rating}</b><span class="text-subtle">후기 ${(s.reviews || reviews.length).toLocaleString('ko-KR')}</span>`;
+      $('#spPrice').textContent = won(s.price);
+      const infoRow = (k, v) => `<div class="flex gap-4"><dt class="w-16 shrink-0 text-subtle">${k}</dt><dd class="text-fg2">${v}</dd></div>`;
+      $('#spInfo').innerHTML = [
+        infoRow('소요 시간', `${s.dur} · ${info.count}`),
+        infoRow('예약', early ? `가장 빠른 날 <b class="text-fg">${YW.shortDate(early)}</b> · 3일 뒤부터 가능` : '스님께 문의'),
+        infoRow('참여', s.modes.map(k => D.MODES[k].name + (D.MODES[k].add ? ` (+${manwon(D.MODES[k].add)})` : '')).join(' · ')),
+        infoRow('장소', `${m.temple} · ${m.area}`),
+      ].join('');
+      YW.mountBooking($('#bookingRoot'), { monk: m, serviceId: key, showDetail: false });
+
+      // 따라오는 상자 · 모바일 바: 위젯의 요약 · 금액을 그대로 비춤
+      const mirror = () => {
+        $('#spMiniName').textContent = `${s.name} · ${m.name} 스님`;
+        $('#spMiniOpt').innerHTML = $('#ritualSummary').innerHTML;
+        $('#spMiniTotal').textContent = $('#ritualTotal').textContent;
+        $$('[data-sp-total]').forEach(el => { el.textContent = $('#ritualTotal').textContent; });
+      };
+      new MutationObserver(mirror).observe($('#bookingRoot'), { subtree: true, childList: true, characterData: true });
+      mirror();
+      $$('[data-sp-book]').forEach(b => b.addEventListener('click', () => $('#bookingRoot').scrollIntoView({ behavior: 'smooth' })));
+
+      // 탭 (밑줄형)
+      const tabs = [['spDetail', '상세정보'], ['spGuide', '예약 안내'], YW.showReviews() && ['spReviews', `후기 ${reviews.length}`], ['spQna', '문의']].filter(Boolean);
+      $('#spTabs').innerHTML = tabs.map(([id, label]) => `<a href="#${id}" data-tab="${id}" class="relative shrink-0 py-4 text-sm font-semibold text-subtle hover:text-fg">${label}<span class="absolute inset-x-0 -bottom-px h-0.5 bg-transparent"></span></a>`).join('');
+      const setTab = id => $$('#spTabs [data-tab]').forEach(a => {
+        const on = a.dataset.tab === id;
+        a.classList.toggle('text-fg', on); a.classList.toggle('text-subtle', !on);
+        a.lastElementChild.classList.toggle('bg-fg', on); a.lastElementChild.classList.toggle('bg-transparent', !on);
+      });
+      const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) setTab(en.target.id); }), { rootMargin: '-35% 0px -60% 0px' });
+      tabs.forEach(([id]) => io.observe($('#' + id)));
+      setTab('spDetail');
+
+      // 상세정보
+      // 위 사진과 겹치지 않게: 의식을 모시는 스님 사진 (없으면 절 풍경)
+      $('#spHero').innerHTML = YW.photo(m.storyPhoto || 'assets/images/temple-panorama.jpg', `${m.temple}에서 의식을 모시는 ${m.name} 스님`, 'absolute inset-0 w-full h-full object-cover');
+      $('#spAbout').innerHTML = (info.meaning || [info.summary]).map(t => `<p>${t}</p>`).join('');
+      $('#spWord').innerHTML = `“${info.quote || m.tagline}” — ${m.name} 스님`;
+      $('#spWayTitle').textContent = `${m.name} 스님은 이렇게 모십니다`;
+      const numRow = (i, t, d) => `<li class="flex gap-4 px-4 py-3.5"><span class="w-6 h-6 shrink-0 rounded-full bg-cinnabar/10 text-cinnabar text-xs font-bold flex items-center justify-center">${i + 1}</span><div>${t ? `<b class="text-sm">${t}</b>` : ''}<p class="${t ? 'mt-0.5 text-muted' : 'text-fg2'} text-sm">${d}</p></div></li>`;
+      $('#spWay').innerHTML = (s.way || [m.intro]).map((t, i) => numRow(i, '', t)).join('');
+      $('#spIncludes').innerHTML = s.includes.map(t => `<li class="flex items-center gap-2 rounded-xl ring-1 ring-edge/10 px-4 py-3"><iconify-icon icon="solar:check-circle-linear" width="18" class="text-cinnabar shrink-0"></iconify-icon>${t}</li>`).join('');
+      if (s.tiers) {
+        $('#spTierTitle').textContent = `${s.tierLabel} 비교`;
+        $('#spTierTable').innerHTML = s.tiers.map(t => `<tr class="border-t border-edge/10"><td class="px-4 py-3 font-medium">${t.name}</td><td class="px-4 py-3 tabular-nums">${won(s.price + t.add)}</td><td class="px-4 py-3 text-fg2">${t.note}</td></tr>`).join('');
+      } else $('#spTierSec').remove();
+      $('#spSteps').innerHTML = info.steps.map((st, i) => numRow(i, st.t, st.d)).join('');
+      $('#spPrepare').innerHTML = info.prepare.map(t => `<li class="flex gap-2"><span class="text-cinnabar">·</span>${t}</li>`).join('');
+
+      // 예약 안내 · 오시는 길
+      const row = (k, v) => `<div class="grid grid-cols-[7rem_1fr] gap-4 px-4 py-3"><dt class="text-subtle">${k}</dt><dd class="text-fg2 leading-relaxed">${v}</dd></div>`;
+      $('#spPolicy').innerHTML = [
+        row('예약 방법', '날짜 · 시간을 고르고 예약을 담아 결제하시면 접수됩니다'),
+        row('예약 확정', '결제 후 스님이 직접 전화를 드려 사연과 준비할 것을 여쭙고 확정합니다'),
+        row('날짜 변경', '봉행 3일 전까지 무료로 바꿀 수 있습니다'),
+        ...D.REFUND_RULES.filter(r => r.item === '제례 · 기도').map(r => row(`환불 · ${r.when}`, r.rate)),
+        row('진행', `${m.name} 스님 (${m.temple}) · 오늘의 부적은 통신판매중개자입니다`),
+      ].join('') + `<div class="px-4 py-3"><a href="help.html#refund" class="text-cinnabar-soft hover:underline">전체 환불 규정 보기</a></div>`;
+      $('#spTemple').textContent = m.temple;
+      $('#spVisit').innerHTML = [row('주소', m.address), row('오시는 길', m.directions), row('참배 · 상담', m.hours)].join('');
+
+      // 후기
+      const shown = reviews.length ? reviews : D.REVIEWS.filter(r => r.monk === m.id).slice(0, 3);
+      $('#spReviewCount').textContent = reviews.length ? `${reviews.length}건` : '아직 없음 · 스님의 다른 후기';
+      $('#spReviewList').innerHTML = shown.map(r => `<article class="py-4"><div class="flex items-center gap-2 text-xs"><span class="flex text-cinnabar">${stars(r.stars, 12)}</span><b>${r.name}</b><span class="text-subtle">${r.date} · ${r.service}</span></div><p class="mt-2 text-sm text-fg2 leading-relaxed">${r.body}</p></article>`).join('');
+
+      // 문의
+      YW.renderFaq($('#spFaq'), info.faq);
+      $('[data-ask]').addEventListener('click', () => YW.toast('시안에서는 문의 창이 열리지 않습니다'));
+
+      // 같은 스님의 다른 의식
+      const others = YW.shopProducts().filter(p => p.kind === 'rite' && p.monk.id === m.id && p.id !== key).sort((a, b) => b.reviews - a.reviews);
+      if (!others.length) $('#spMoreSec').remove();
+      else {
+        $('#spMoreTitle').textContent = `${m.name} 스님의 다른 의식`;
+        $('#spMoreAll').href = `${monkUrl(m.id)}#rituals`;
+        $('#spMore').innerHTML = others.slice(0, 4).map(p => YW.riteGalleryCard(p, { tag: true })).join('');
+      }
+
+      // 모바일 하단 바: 예약 영역을 지나면 보임
+      YW.stickyBar('#spBar', '#spBuy');
+      if (location.hash && $(location.hash)) setTimeout(() => $(location.hash).scrollIntoView({ behavior: 'smooth' }), 150);
     }
 
     function render() {
