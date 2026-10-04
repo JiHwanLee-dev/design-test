@@ -244,12 +244,47 @@ window.YW = (() => {
     </article>`;
   }
 
+  // 제례 · 기도 목록형 (하이엔드 · 에디토리얼): 상자 대신 머리카락 선, 명조 제목, 번호, 사진은 차분하게 → 올리면 색이 돌아옴
+  // 의식은 '상품'이 아니라 '모심'이라 진열장보다 코스 차림표처럼 한 줄씩 읽히게
+  function riteIndexRow(p, i, { tag = false } = {}) {
+    const t = D.SERVICE_TYPES[p.id];
+    const early = earliestDate(p.monk.id, p.id);
+    const way = ((p.monk.services.find(s => s.id === p.id) || {}).way || [])[0] || t.desc;
+    const cat = D.SHOP_CATS.find(c => c.key === p.group);
+    const price = `<p class="text-lg md:text-xl font-semibold tracking-tight tabular-nums">${won(p.price)}<span class="ml-1 text-xs font-normal text-subtle">부터</span></p>`;
+    const date = `<p class="text-[13px] text-subtle tabular-nums">${early ? `가장 빠른 날 <span class="text-fg2">${shortDate(early)}</span>` : '예약 문의'}</p>`;
+    return `
+    <li class="border-b border-edge/15">
+      <a href="${p.url}" class="group grid grid-cols-[6.5rem_minmax(0,1fr)] md:grid-cols-[2.75rem_9.5rem_minmax(0,1fr)_auto] gap-x-5 md:gap-x-7 py-7 md:py-9 items-start md:items-center">
+        <span class="hidden md:block self-start pt-1 font-serif font-extrabold text-sm text-subtle tabular-nums">${String(i + 1).padStart(2, '0')}</span>
+        <span class="relative block aspect-[4/5] rounded-xl overflow-hidden bg-deep ring-1 ring-edge/10">
+          ${photo(ritualImg(p.id), t.name, 'absolute inset-0 w-full h-full object-cover saturate-[0.55] brightness-[0.95] ease-spring duration-700 group-hover:saturate-100 group-hover:brightness-100 group-hover:scale-[1.04]')}
+        </span>
+        <div class="min-w-0">
+          <p class="flex flex-wrap items-center gap-x-2 text-xs tracking-[0.08em] text-subtle">
+            ${tag && cat ? `<span><span class="font-serif font-extrabold text-cinnabar-soft mr-1">${cat.hanja}</span>${cat.name}</span><span class="w-4 h-px bg-edge/30"></span>` : ''}
+            <span>${t.dur}</span>
+          </p>
+          <h3 class="mt-2 flex items-baseline gap-3 font-serif font-extrabold text-[1.6rem] md:text-[2.1rem] leading-[1.15] tracking-tight text-fg">
+            ${t.name}<span class="font-serif text-sm md:text-base font-extrabold tracking-[0.2em] text-cinnabar">${t.hanja}</span>
+          </h3>
+          <p class="mt-3 max-w-xl text-[15px] leading-relaxed text-fg2 line-clamp-2">${way}</p>
+          <div class="md:hidden mt-4">${price}<div class="mt-0.5">${date}</div></div>
+        </div>
+        <div class="hidden md:flex items-center gap-7 text-right">
+          <div>${price}<div class="mt-1">${date}</div></div>
+          <span class="ease-spring w-12 h-12 shrink-0 rounded-full ring-1 ring-edge/25 flex items-center justify-center text-fg group-hover:bg-fg group-hover:text-page group-hover:ring-fg"><iconify-icon icon="solar:arrow-right-up-linear" width="20" class="ease-spring group-hover:rotate-45"></iconify-icon></span>
+        </div>
+      </a>
+    </li>`;
+  }
+
   // 메뉴·목록에 보여줄 의식 (dev 옵션 '준비 중 표시'면 모시는 스님이 없는 의식도 포함)
   const visibleRituals = () => D.CATEGORIES.map(c => ritualInfo(c.key)).filter(r => r && (r.active || devOpt('emptyRitual') === 'soon'))
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page', riteCard: 'aligned', navMerge: 'merged', navSticky: 'on', riteLook: 'row' };
+  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page', riteCard: 'aligned', navMerge: 'merged', navSticky: 'on', riteLook: 'index' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -864,7 +899,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     { key: 'monkLayout', label: '스님 페이지 구성', choices: [['mix', '혼합형'], ['store', '스토어형'], ['intro', '소개형']] },
     { key: 'storeTabs', label: '스님 페이지 분류 탭', choices: [['underline', '큰 밑줄 탭'], ['tiles', '분류 타일'], ['pill', '막대 (크게)']] },
     { key: 'riteCard', label: '스님 페이지 제례 · 기도 카드', choices: [['aligned', '2단 맞춤'], ['feature', '큰 사진 + 분류'], ['compact', '작은 카드']] },
-    { key: 'riteLook', label: '(2단 맞춤) 제례 카드 모양', choices: [['row', '부적형 가로'], ['cover', '큰 사진 표지']] },
+    { key: 'riteLook', label: '(2단 맞춤) 제례 카드 모양', choices: [['index', '차림표 목록'], ['row', '부적형 가로'], ['cover', '큰 사진 표지']] },
     { key: 'navMerge', label: '(2단 맞춤) 왼쪽 목차', choices: [['merged', '하나로 합침'], ['split', '구역마다 따로']] },
     { key: 'navSticky', label: '(스님 페이지) 왼쪽 목차 고정', choices: [['on', '따라오게 고정'], ['off', '고정 안 함']] },
     { key: 'profileView', label: '스님 소개 보기', choices: [['page', '별도 페이지'], ['panel', '옆 패널']] },
@@ -995,7 +1030,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     D, $, $$, won, manwon, esc, hash, rng, monkById, monkUrl, phoneOk,
     ritualUrl, ritualInfo, visibleRituals, offeredBy, bookUrl, priceAt, devOpt, onDevChange,
     charmUrl, charmSeed, charmUnit, charmPhotos, charmArt, showReviews, monkInfo, charmCartItem, charmReviews, calc, riteUrl, serviceReviews,
-    dateStatus, earliestDate, shortDate, shopUrl, charmCard, riteCard, riteFeatureCard, riteRowCard, shopProducts,
+    dateStatus, earliestDate, shortDate, shopUrl, charmCard, riteCard, riteFeatureCard, riteRowCard, riteIndexRow, shopProducts,
     charmSVG, monkAvatar, landscapeSVG, monkCover, ritualImg, photo, stars,
     openLayer, closeLayer, toast, confirmDialog,
     addToCart, openCart, openCheckout, mountShell, observeReveals, observeCounters, stickyBar, renderFaq,

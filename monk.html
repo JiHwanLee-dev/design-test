@@ -546,7 +546,7 @@
                   <p class="mt-1.5 text-[15px] text-subtle">${m.name} 스님이 직접 모시는 의식입니다. 날짜를 고르면 바로 예약됩니다.</p>
                 </div>
                 ${chips}
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-3 md:gap-x-4 gap-y-7">${shown.map(p => YW.devOpt('riteLook') === 'cover' ? YW.riteFeatureCard(p, { tag: st.rcat === 'all', wide: true }) : YW.riteRowCard(p, { tag: st.rcat === 'all' })).join('')}</div>`;
+                ${YW.devOpt('riteLook') === 'index' ? `<ol class="border-t border-fg/70">${shown.map((p, i) => YW.riteIndexRow(p, i, { tag: st.rcat === 'all' })).join('')}</ol>` : `<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-3 md:gap-x-4 gap-y-7">${shown.map(p => YW.devOpt('riteLook') === 'cover' ? YW.riteFeatureCard(p, { tag: st.rcat === 'all', wide: true }) : YW.riteRowCard(p, { tag: st.rcat === 'all' })).join('')}</div>`}`;
               if (merged) return `<div id="stRites" class="scroll-mt-40">${body}</div>`;
               return `<div id="stRites" class="scroll-mt-40 ${sideOn ? 'lg:grid lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:gap-12' : ''}">${side}<div class="min-w-0">${body}</div></div>`;
             }
