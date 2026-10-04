@@ -214,12 +214,42 @@ window.YW = (() => {
     </a>`;
   }
 
+  // 제례 · 기도 가로 카드 (부적 카드와 같은 말투: 상자 없이 사진 타일 + 아래 · 옆 글)
+  // 2열 진열에서 카드 안을 다시 2칸으로 나눠, 사진이 부적 카드 한 장과 정확히 같은 크기 · 같은 세로줄에 옴
+  function riteRowCard(p, { tag = false } = {}) {
+    const t = D.SERVICE_TYPES[p.id];
+    const early = earliestDate(p.monk.id, p.id);
+    const way = ((p.monk.services.find(s => s.id === p.id) || {}).way || [])[0] || t.desc;
+    const cat = D.SHOP_CATS.find(c => c.key === p.group);
+    return `
+    <article class="group relative grid grid-cols-[40%_minmax(0,1fr)] sm:grid-cols-2 gap-x-3 md:gap-x-4">
+      <a href="${p.url}" class="relative block aspect-square rounded-[1.25rem] bg-deep/60 ring-1 ring-edge/10 overflow-hidden ease-spring group-hover:ring-cinnabar/40" aria-label="${t.name} 자세히 보기">
+        ${photo(ritualImg(p.id), t.name, 'absolute inset-0 w-full h-full object-cover ease-spring group-hover:scale-105')}
+        <span class="absolute right-2.5 top-2.5 rounded-md px-1.5 py-1 bg-cinnabar text-white font-serif font-extrabold text-[13px] leading-[1.15] [writing-mode:vertical-rl] tracking-[0.05em] shadow-[0_6px_14px_-6px_rgba(0,0,0,0.5)]">${t.hanja}</span>
+      </a>
+      <div class="min-w-0 flex flex-col py-1">
+        ${tag && cat ? `<p class="text-xs text-subtle"><span class="font-serif font-extrabold text-cinnabar-soft mr-1">${cat.hanja}</span>${cat.name}</p>` : ''}
+        <h3 class="${tag ? 'mt-1' : ''} text-lg md:text-xl font-bold tracking-tight leading-snug"><a href="${p.url}" class="hover:underline underline-offset-2">${t.name}</a></h3>
+        <p class="mt-0.5 text-[13px] text-subtle">${t.dur}</p>
+        <p class="mt-3 text-sm leading-relaxed text-fg2 line-clamp-2 hidden sm:block">${way}</p>
+        <div class="mt-auto pt-3">
+          <p class="text-xs text-fg2 flex items-center gap-1"><iconify-icon icon="solar:calendar-linear" width="14" class="text-cinnabar"></iconify-icon>${early ? `가장 빠른 날 <b class="text-fg">${shortDate(early)}</b>` : '예약 문의'}</p>
+          <div class="mt-1.5 flex items-end justify-between gap-2">
+            <p class="font-bold tabular-nums">${won(p.price)}<span class="ml-0.5 text-[11px] font-normal text-subtle">부터</span></p>
+            <a href="${p.url}" class="ease-spring shrink-0 inline-flex items-center gap-0.5 text-sm font-semibold text-cinnabar hover:gap-1.5">예약<iconify-icon icon="solar:alt-arrow-right-linear" width="16"></iconify-icon></a>
+          </div>
+          <div class="mt-1">${ratingLine(p)}</div>
+        </div>
+      </div>
+    </article>`;
+  }
+
   // 메뉴·목록에 보여줄 의식 (dev 옵션 '준비 중 표시'면 모시는 스님이 없는 의식도 포함)
   const visibleRituals = () => D.CATEGORIES.map(c => ritualInfo(c.key)).filter(r => r && (r.active || devOpt('emptyRitual') === 'soon'))
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page', riteCard: 'aligned', navMerge: 'merged', navSticky: 'on' };
+  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page', riteCard: 'aligned', navMerge: 'merged', navSticky: 'on', riteLook: 'row' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -834,6 +864,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     { key: 'monkLayout', label: '스님 페이지 구성', choices: [['mix', '혼합형'], ['store', '스토어형'], ['intro', '소개형']] },
     { key: 'storeTabs', label: '스님 페이지 분류 탭', choices: [['underline', '큰 밑줄 탭'], ['tiles', '분류 타일'], ['pill', '막대 (크게)']] },
     { key: 'riteCard', label: '스님 페이지 제례 · 기도 카드', choices: [['aligned', '2단 맞춤'], ['feature', '큰 사진 + 분류'], ['compact', '작은 카드']] },
+    { key: 'riteLook', label: '(2단 맞춤) 제례 카드 모양', choices: [['row', '부적형 가로'], ['cover', '큰 사진 표지']] },
     { key: 'navMerge', label: '(2단 맞춤) 왼쪽 목차', choices: [['merged', '하나로 합침'], ['split', '구역마다 따로']] },
     { key: 'navSticky', label: '(스님 페이지) 왼쪽 목차 고정', choices: [['on', '따라오게 고정'], ['off', '고정 안 함']] },
     { key: 'profileView', label: '스님 소개 보기', choices: [['page', '별도 페이지'], ['panel', '옆 패널']] },
@@ -964,7 +995,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     D, $, $$, won, manwon, esc, hash, rng, monkById, monkUrl, phoneOk,
     ritualUrl, ritualInfo, visibleRituals, offeredBy, bookUrl, priceAt, devOpt, onDevChange,
     charmUrl, charmSeed, charmUnit, charmPhotos, charmArt, showReviews, monkInfo, charmCartItem, charmReviews, calc, riteUrl, serviceReviews,
-    dateStatus, earliestDate, shortDate, shopUrl, charmCard, riteCard, riteFeatureCard, shopProducts,
+    dateStatus, earliestDate, shortDate, shopUrl, charmCard, riteCard, riteFeatureCard, riteRowCard, shopProducts,
     charmSVG, monkAvatar, landscapeSVG, monkCover, ritualImg, photo, stars,
     openLayer, closeLayer, toast, confirmDialog,
     addToCart, openCart, openCheckout, mountShell, observeReveals, observeCounters, stickyBar, renderFaq,
