@@ -476,8 +476,8 @@
           const sideNav = `
             <aside class="hidden lg:block">
               <nav aria-label="부적 분류" class="sticky top-[calc(var(--head-h)+4.75rem)] yw-follow">
-                <p class="px-4 text-xs font-semibold tracking-[0.2em] text-subtle">符 · 부적 분류</p>
-                <ul class="mt-4 border-l border-edge/15">
+                <p class="px-4 flex items-center gap-2.5 text-lg md:text-xl font-bold tracking-tight text-fg"><span class="font-serif font-extrabold text-2xl leading-none text-cinnabar">符</span>부적 분류</p>
+                <ul class="mt-5 border-l border-edge/15">
                   ${catList.map(([k, name, n, mk]) => `<li><button type="button" data-ccat="${k}" aria-pressed="${st.ccat === k}" class="ease-spring group -ml-px w-full flex items-center gap-3 py-3 pl-4 pr-2 text-left border-l-2 ${st.ccat === k ? 'border-cinnabar text-fg' : 'border-transparent text-muted hover:text-fg hover:border-edge/40'}">
                     <span class="w-6 text-center font-serif font-extrabold text-lg leading-none ${st.ccat === k ? 'text-cinnabar' : 'text-cinnabar-soft/70 group-hover:text-cinnabar-soft'}">${mk}</span>
                     <span class="flex-1 text-base ${st.ccat === k ? 'font-bold' : 'font-medium'}">${name}</span>
@@ -532,8 +532,8 @@
               const side = sideOn ? `
                 <aside class="hidden lg:block">
                   <nav aria-label="제례 · 기도 분류" class="sticky top-[calc(var(--head-h)+4.75rem)] yw-follow">
-                    <p class="px-4 text-xs font-semibold tracking-[0.2em] text-subtle">祭 · 의식 분류</p>
-                    <ul class="mt-4 border-l border-edge/15">
+                    <p class="px-4 flex items-center gap-2.5 text-lg md:text-xl font-bold tracking-tight text-fg"><span class="font-serif font-extrabold text-2xl leading-none text-cinnabar">祭</span>의식 분류</p>
+                    <ul class="mt-5 border-l border-edge/15">
                       ${rList.map(([k, name, n, mk]) => `<li><button type="button" data-rcat="${k}" aria-pressed="${st.rcat === k}" class="ease-spring group -ml-px w-full flex items-center gap-3 py-3 pl-4 pr-2 text-left border-l-2 ${st.rcat === k ? 'border-cinnabar text-fg' : 'border-transparent text-muted hover:text-fg hover:border-edge/40'}">
                         <span class="w-6 text-center font-serif font-extrabold text-lg leading-none ${st.rcat === k ? 'text-cinnabar' : 'text-cinnabar-soft/70 group-hover:text-cinnabar-soft'}">${mk}</span>
                         <span class="flex-1 text-base ${st.rcat === k ? 'font-bold' : 'font-medium'}">${name}</span>
