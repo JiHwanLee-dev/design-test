@@ -279,12 +279,40 @@ window.YW = (() => {
     </li>`;
   }
 
+  // 제례 · 기도 화첩형: 부적과 같은 4열 격자(같은 칸 · 같은 사진 크기)에 에디토리얼 말투
+  // 사진은 차분하게(올리면 색이 돌아옴), 명조 제목 + 주홍 낙관, 머리카락 선 아래 가격 · 날짜. 10개가 넘어도 3줄이면 끝남
+  function riteGalleryCard(p, { tag = false } = {}) {
+    const t = D.SERVICE_TYPES[p.id];
+    const early = earliestDate(p.monk.id, p.id);
+    const way = ((p.monk.services.find(s => s.id === p.id) || {}).way || [])[0] || t.desc;
+    const cat = D.SHOP_CATS.find(c => c.key === p.group);
+    return `
+    <a href="${p.url}" class="group flex flex-col">
+      <span class="relative block aspect-square rounded-[1.25rem] overflow-hidden bg-deep ring-1 ring-edge/10 ease-spring group-hover:ring-cinnabar/40">
+        ${photo(ritualImg(p.id), t.name, 'absolute inset-0 w-full h-full object-cover saturate-[0.6] ease-spring duration-700 group-hover:saturate-100 group-hover:scale-[1.04]')}
+        <span class="absolute left-3 top-3 rounded-[0.4rem] px-1 py-1.5 bg-cinnabar/90 text-white font-serif font-extrabold text-xs leading-[1.2] [writing-mode:vertical-rl] tracking-[0.12em] shadow-[0_6px_14px_-6px_rgba(0,0,0,0.5)]">${t.hanja}</span>
+        <span class="ease-spring absolute right-3 bottom-3 w-9 h-9 rounded-full bg-surface/90 backdrop-blur-md text-fg flex items-center justify-center opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0"><iconify-icon icon="solar:arrow-right-up-linear" width="17"></iconify-icon></span>
+      </span>
+      <div class="mt-3.5 px-0.5 flex-1 flex flex-col">
+        <p class="text-[11px] tracking-[0.06em] text-subtle truncate">${tag && cat ? `<span class="font-serif font-extrabold text-cinnabar-soft mr-1">${cat.hanja}</span>${cat.name} · ` : ''}${t.dur}</p>
+        <h3 class="mt-1 font-serif font-extrabold text-lg md:text-xl leading-snug tracking-tight text-fg group-hover:text-cinnabar ease-spring">${t.name}</h3>
+        <p class="mt-1.5 text-[13px] leading-relaxed text-muted line-clamp-2">${way}</p>
+        <div class="mt-auto pt-3">
+          <div class="pt-3 border-t border-edge/15 flex items-baseline justify-between gap-2">
+            <p class="font-semibold tabular-nums">${won(p.price)}<span class="ml-0.5 text-[11px] font-normal text-subtle">부터</span></p>
+            <p class="text-[11px] text-subtle tabular-nums truncate">${early ? shortDate(early) + ' 가능' : '예약 문의'}</p>
+          </div>
+        </div>
+      </div>
+    </a>`;
+  }
+
   // 메뉴·목록에 보여줄 의식 (dev 옵션 '준비 중 표시'면 모시는 스님이 없는 의식도 포함)
   const visibleRituals = () => D.CATEGORIES.map(c => ritualInfo(c.key)).filter(r => r && (r.active || devOpt('emptyRitual') === 'soon'))
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page', riteCard: 'aligned', navMerge: 'merged', navSticky: 'on', riteLook: 'index' };
+  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page', riteCard: 'aligned', navMerge: 'merged', navSticky: 'on', riteLook: 'gallery' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -899,7 +927,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     { key: 'monkLayout', label: '스님 페이지 구성', choices: [['mix', '혼합형'], ['store', '스토어형'], ['intro', '소개형']] },
     { key: 'storeTabs', label: '스님 페이지 분류 탭', choices: [['underline', '큰 밑줄 탭'], ['tiles', '분류 타일'], ['pill', '막대 (크게)']] },
     { key: 'riteCard', label: '스님 페이지 제례 · 기도 카드', choices: [['aligned', '2단 맞춤'], ['feature', '큰 사진 + 분류'], ['compact', '작은 카드']] },
-    { key: 'riteLook', label: '(2단 맞춤) 제례 카드 모양', choices: [['index', '차림표 목록'], ['row', '부적형 가로'], ['cover', '큰 사진 표지']] },
+    { key: 'riteLook', label: '(2단 맞춤) 제례 카드 모양', choices: [['gallery', '화첩 (4열)'], ['index', '차림표 목록'], ['row', '부적형 가로'], ['cover', '큰 사진 표지']] },
     { key: 'navMerge', label: '(2단 맞춤) 왼쪽 목차', choices: [['merged', '하나로 합침'], ['split', '구역마다 따로']] },
     { key: 'navSticky', label: '(스님 페이지) 왼쪽 목차 고정', choices: [['on', '따라오게 고정'], ['off', '고정 안 함']] },
     { key: 'profileView', label: '스님 소개 보기', choices: [['page', '별도 페이지'], ['panel', '옆 패널']] },
@@ -1030,7 +1058,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     D, $, $$, won, manwon, esc, hash, rng, monkById, monkUrl, phoneOk,
     ritualUrl, ritualInfo, visibleRituals, offeredBy, bookUrl, priceAt, devOpt, onDevChange,
     charmUrl, charmSeed, charmUnit, charmPhotos, charmArt, showReviews, monkInfo, charmCartItem, charmReviews, calc, riteUrl, serviceReviews,
-    dateStatus, earliestDate, shortDate, shopUrl, charmCard, riteCard, riteFeatureCard, riteRowCard, riteIndexRow, shopProducts,
+    dateStatus, earliestDate, shortDate, shopUrl, charmCard, riteCard, riteFeatureCard, riteRowCard, riteIndexRow, riteGalleryCard, shopProducts,
     charmSVG, monkAvatar, landscapeSVG, monkCover, ritualImg, photo, stars,
     openLayer, closeLayer, toast, confirmDialog,
     addToCart, openCart, openCheckout, mountShell, observeReveals, observeCounters, stickyBar, renderFaq,
