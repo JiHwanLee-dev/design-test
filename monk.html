@@ -54,13 +54,15 @@
         <!-- 모양은 dev 옵션 storeTabs(밑줄 탭 / 분류 타일 / 막대)에 따라 스크립트에서 정함 -->
         <div id="stBar" class="max-w-7xl mx-auto flex items-center justify-between gap-3">
           <div id="stTabs" role="tablist" aria-label="상품 분류" class="flex gap-1 overflow-x-auto no-scrollbar"></div>
-          <label class="sr-only" for="stSort">정렬</label>
-          <select id="stSort" class="shrink-0 h-9 rounded-full bg-transparent border-0 pl-2 pr-6 sm:pl-3 sm:pr-7 mb-2.5 text-sm text-muted focus:outline-none">
-            <option value="popular">후기 많은 순</option>
-            <option value="rating">평점 높은 순</option>
-            <option value="low">낮은 가격 순</option>
-            <option value="high">높은 가격 순</option>
-          </select>
+          <!-- 정렬: 알약 버튼 + 펼침 메뉴 (항목은 스크립트에서 채움) -->
+          <div id="stSortWrap" class="relative shrink-0 self-end sm:self-auto">
+            <button type="button" id="stSortBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 바꾸기" class="ease-spring h-11 md:h-12 pl-4 pr-3.5 rounded-full bg-surface ring-1 ring-edge/15 hover:ring-edge/30 flex items-center gap-2 text-[15px] md:text-base font-semibold text-fg shadow-[0_8px_20px_-14px_var(--drop)]">
+              <iconify-icon icon="solar:sort-vertical-linear" width="18" class="text-cinnabar-soft"></iconify-icon>
+              <span id="stSortLabel"></span>
+              <iconify-icon id="stSortArrow" icon="solar:alt-arrow-down-linear" width="16" class="ease-spring text-subtle"></iconify-icon>
+            </button>
+            <ul id="stSortMenu" role="listbox" aria-label="정렬" class="hidden absolute right-0 top-full mt-2 z-40 w-52 rounded-2xl bg-surface ring-1 ring-edge/15 p-1.5 shadow-[0_24px_48px_-18px_var(--drop)]"></ul>
+          </div>
         </div>
         <!-- 부적이 많을 때만 나타나는 분류 칩 (CHARM_MANY 이상) -->
         <div id="stChips" class="hidden max-w-7xl mx-auto"></div>
@@ -449,6 +451,7 @@
             tabsEl.className = 'flex gap-5 md:gap-9 overflow-x-auto no-scrollbar min-w-0';
             tabsEl.innerHTML = tabsDef.map(([k, name, n]) => `<button type="button" role="tab" aria-selected="${st.cat === k}" data-stcat="${k}" class="ease-spring relative shrink-0 h-14 md:h-16 text-base sm:text-lg md:text-xl font-bold tracking-tight ${st.cat === k ? 'text-fg after:absolute after:inset-x-0 after:-bottom-px after:h-[3px] after:rounded-full after:bg-cinnabar' : 'text-subtle hover:text-fg'}">${name}<sup class="ml-1 text-xs font-semibold tabular-nums ${st.cat === k ? 'text-cinnabar-soft' : ''}">${n}</sup></button>`).join('');
           }
+          $('#stSortWrap').classList.toggle('mb-2', tabStyle === 'underline'); // 밑줄 탭 높이에 맞춰 살짝 띄움
           const list = products.filter(p => st.cat === 'all' || (st.cat === 'charm' ? p.kind === 'charm' : p.kind === 'rite')).sort(sorters[st.sort]);
           const charms = list.filter(p => p.kind === 'charm'), rites = list.filter(p => p.kind === 'rite');
           const head = (t, n, id) => `<h2 id="${id}" class="mb-6 text-2xl md:text-3xl font-bold tracking-tight scroll-mt-40">${t} <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${n}</span></h2>`;
@@ -551,8 +554,23 @@
           const grid = $('#stGrid'), offset = $('#stTools').offsetHeight + ($('#ywHead')?.offsetHeight || 72) + 24;
           if (grid.getBoundingClientRect().top < offset) { grid.style.scrollMarginTop = offset + 'px'; grid.scrollIntoView({ behavior: 'smooth' }); }
         });
-        if (!YW.showReviews()) { $('#stSort option[value=rating]').remove(); $('#stSort option[value=popular]').textContent = '추천순'; }
-        $('#stSort').addEventListener('change', e => { st.sort = e.target.value; st.page = 1; st.dir = 0; draw(); });
+        // 정렬 메뉴 (후기를 숨기면 '평점 높은 순' 빼고 '후기 많은 순'은 '추천순'으로)
+        const SORTS = [['popular', YW.showReviews() ? '후기 많은 순' : '추천순', 'solar:fire-linear'], ['rating', '평점 높은 순', 'solar:star-linear'], ['low', '낮은 가격 순', 'solar:sort-from-top-to-bottom-linear'], ['high', '높은 가격 순', 'solar:sort-from-bottom-to-top-linear']]
+          .filter(([k]) => k !== 'rating' || YW.showReviews());
+        const sortMenu = $('#stSortMenu'), sortBtn = $('#stSortBtn');
+        const drawSort = () => {
+          $('#stSortLabel').textContent = SORTS.find(([k]) => k === st.sort)[1];
+          sortMenu.innerHTML = SORTS.map(([k, name, icon]) => `<li><button type="button" role="option" aria-selected="${st.sort === k}" data-sort="${k}" class="ease-spring w-full h-11 px-3 rounded-xl flex items-center gap-2.5 text-[15px] text-left ${st.sort === k ? 'bg-edge/[0.06] text-fg font-semibold' : 'text-fg2 hover:bg-edge/[0.04]'}"><iconify-icon icon="${icon}" width="18" class="${st.sort === k ? 'text-cinnabar' : 'text-subtle'}"></iconify-icon><span class="flex-1">${name}</span>${st.sort === k ? '<iconify-icon icon="solar:check-read-linear" width="18" class="text-cinnabar"></iconify-icon>' : ''}</button></li>`).join('');
+        };
+        const openSort = open => { sortMenu.classList.toggle('hidden', !open); sortBtn.setAttribute('aria-expanded', open); $('#stSortArrow').classList.toggle('rotate-180', open); };
+        sortBtn.addEventListener('click', () => openSort(sortMenu.classList.contains('hidden')));
+        sortMenu.addEventListener('click', e => {
+          const b = e.target.closest('[data-sort]'); if (!b) return;
+          st.sort = b.dataset.sort; st.page = 1; st.dir = 0; openSort(false); drawSort(); draw();
+        });
+        document.addEventListener('click', e => { if (!e.target.closest('#stSortWrap')) openSort(false); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') openSort(false); });
+        drawSort();
         $('[data-ask]').addEventListener('click', () => YW.toast('시안에서는 상담 창이 열리지 않습니다'));
         draw();
         // 혼합형: 상단 [부적 고르기] [제례 · 기도 예약] → 진열로 내려가며 분류 선택
