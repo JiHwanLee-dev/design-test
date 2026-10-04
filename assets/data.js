@@ -502,6 +502,35 @@ window.YW_DATA = (() => {
     }
   }
 
+  // 시안용: dev 패널 '제례 · 기도 수: 많이'면 해월 스님 의식을 예시로 늘림 (4 → 18)
+  // 상세 페이지는 같은 무리의 의식(천도재 / 백일기도) 내용을 빌려 씀. 실제 공개 전 스님 확인 필요
+  const EXTRA_SERVICE_TYPES = {
+    yeongsan: { g: 'rite', hanja: '靈山', name: '영산재', dur: '약 5시간', desc: '석가모니가 영취산에서 설법하던 자리를 재현해 영가를 천도하는 큰 재입니다.', img: 'temple-panorama' },
+    suryuk:   { g: 'rite', hanja: '水陸', name: '수륙재', dur: '약 6시간', desc: '물과 뭍을 떠도는 외로운 영가까지 두루 공양하고 천도합니다.', img: 'gallery-3' },
+    yesu:     { g: 'rite', hanja: '預修', name: '생전예수재', dur: '약 4시간', desc: '살아 있을 때 미리 공덕을 닦아 다음 생을 준비하는 재입니다.', img: 'gallery-1' },
+    baekjae:  { g: 'rite', hanja: '百齋', name: '백재', dur: '약 2시간', desc: '돌아가신 지 100일째 되는 날 다시 한번 왕생을 빕니다.', img: 'hero-incense' },
+    sosang:   { g: 'rite', hanja: '小祥', name: '소상 · 대상', dur: '약 2시간', desc: '첫 기일(소상)과 두 번째 기일(대상)에 모시는 재입니다.', img: 'svc-ritual' },
+    hapdong:  { g: 'rite', hanja: '合同', name: '합동 천도재', dur: '약 2시간', desc: '백중 등 정해진 날 여러 가족이 함께 영가를 천도합니다.', img: 'gallery-4' },
+    gajok:    { g: 'rite', hanja: '家族', name: '조상 천도재', dur: '약 3시간', desc: '윗대 조상님들을 한꺼번에 모셔 극락왕생을 빕니다.', img: 'gallery-2' },
+    cheonil:  { g: 'pray', hanja: '千日', name: '천일기도', dur: '1000일', desc: '큰 발원 하나를 천 일 동안 매일 새벽 축원합니다.', img: 'rock-buddha' },
+    chilil:   { g: 'pray', hanja: '七日', name: '칠일기도', dur: '7일', desc: '급한 일을 앞두고 일주일 동안 집중해서 축원합니다.', img: 'svc-prayer' },
+    sinjung:  { g: 'pray', hanja: '神衆', name: '초하루 신중기도', dur: '매월 3일', desc: '매달 초하루부터 사흘 동안 한 달의 무탈을 빕니다.', img: 'trust-path' },
+    jijang:   { g: 'pray', hanja: '地藏', name: '지장기도', dur: '21일', desc: '지장보살께 먼저 떠난 가족의 평안을 21일 동안 빕니다.', img: 'gallery-5' },
+    gwaneum:  { g: 'pray', hanja: '觀音', name: '관음기도', dur: '21일', desc: '관세음보살께 가족의 건강과 고난 해소를 빕니다.', img: 'hero-room' },
+    ipsi:     { g: 'pray', hanja: '入試', name: '수험 기도', dur: '시험일까지', desc: '수능 · 고시 등 시험일까지 매일 이름을 올려 축원합니다.', img: 'join-envelope' },
+    chaeryang:{ g: 'pray', hanja: '安車', name: '차량 축원', dur: '약 30분', desc: '새 차를 받은 날 오가는 길의 무사를 빕니다.', img: 'hero-scene' },
+  };
+  if ((devOpts.riteCount || 'many') === 'many') {
+    Object.entries(EXTRA_SERVICE_TYPES).forEach(([id, x], i) => {
+      const base = x.g === 'rite' ? 'cheondo' : 'baegil';
+      SERVICE_TYPES[id] = { ...SERVICE_TYPES[base], hanja: x.hanja, name: x.name, dur: x.dur, desc: x.desc };
+      RITUAL_DETAILS[id] = { ...RITUAL_DETAILS[base], hanja: x.hanja, name: x.name, dur: x.dur, summary: x.desc };
+      RITUAL_IMAGES[id] = `assets/images/${x.img}.jpg`;
+      SHOP_CATS.find(c => c.key === x.g).services.push(id);
+      MONKS[0].services.push({ id, price: x.g === 'rite' ? 300000 + (i * 7919 % 17) * 50000 : 30000 + (i * 7919 % 13) * 10000, reviews: (i * 41) % 150 });
+    });
+  }
+
   // 시안용: dev 패널 '스님 수'로 예시 스님을 잠시 합쳐 봄 (실제 입점은 EXAMPLE_MONKS → MONKS로 옮기기)
   {
     const n = Number(devOpts.monkCount || 2);
