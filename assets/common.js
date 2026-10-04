@@ -219,7 +219,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page', riteCard: 'aligned' };
+  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page', riteCard: 'aligned', navMerge: 'merged' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -834,6 +834,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     { key: 'monkLayout', label: '스님 페이지 구성', choices: [['mix', '혼합형'], ['store', '스토어형'], ['intro', '소개형']] },
     { key: 'storeTabs', label: '스님 페이지 분류 탭', choices: [['underline', '큰 밑줄 탭'], ['tiles', '분류 타일'], ['pill', '막대 (크게)']] },
     { key: 'riteCard', label: '스님 페이지 제례 · 기도 카드', choices: [['aligned', '2단 맞춤'], ['feature', '큰 사진 + 분류'], ['compact', '작은 카드']] },
+    { key: 'navMerge', label: '(2단 맞춤) 왼쪽 목차', choices: [['merged', '하나로 합침'], ['split', '구역마다 따로']] },
     { key: 'profileView', label: '스님 소개 보기', choices: [['page', '별도 페이지'], ['panel', '옆 패널']] },
     { key: 'ritualLayout', label: '의식 안내 페이지 구성', choices: [['guide', '안내서형'], ['landing', '랜딩형']] },
     { key: 'guideDeco', label: '(안내서형) 꾸밈', choices: [['rich', '표지 · 해부도 · 말씀'], ['plain', '글만']] },
