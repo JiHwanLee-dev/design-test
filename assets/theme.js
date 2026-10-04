@@ -3,7 +3,7 @@
 // 기본 테마를 바꾸려면 DEFAULT_THEME 값만 바꾸면 됩니다. (dark | hanji | dawn | white)
 
 (() => {
-  const DEFAULT_THEME = 'dark';
+  const DEFAULT_THEME = 'dawn';
   let theme = DEFAULT_THEME;
   try { theme = localStorage.getItem('yw-theme') || DEFAULT_THEME; } catch (e) { }
   document.documentElement.dataset.theme = theme;

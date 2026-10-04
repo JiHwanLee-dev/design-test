@@ -217,7 +217,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'page', charmLayout: 'shop', storeTabs: 'underline', monkCount: '1', charmCount: 'normal', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'once', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page', riteCard: 'feature' };
+  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page', riteCard: 'feature' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -822,7 +822,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
   const DEV_OPTIONS = [
     { key: 'headStyle', label: '헤더 모양', choices: [['wide', '스크롤하면 펴짐'], ['pill', '알약 고정']] },
     { key: 'trustStyle', label: '안심 카드 사진', choices: [['full', '사진 전체 + 위에 글씨'], ['side', '오른쪽 사진']] },
-    { key: 'charmCount', label: '부적 수 (시안, 해월 스님)', choices: [['normal', '지금 (8개)'], ['many', '많이 (37개)']] },
+    { key: 'charmCount', label: '부적 수 (시안, 해월 스님)', choices: [['many', '많이 (37개)'], ['normal', '적게 (8개)']] },
     { key: 'monkCount', label: '스님 수 (시안, 예시 스님 합침)', choices: [['1', '1분'], ['2', '2분'], ['3', '3분'], ['4', '4분'], ['5', '5분']] },
     { key: 'screenAuto', label: '(병풍) 자동 넘김', choices: [['on', '켬'], ['off', '끔']] },
     { key: 'monkStyle', label: '메인 스님 배치 (2분 이상)', choices: [['screen', '병풍'], ['index', '이름 색인'], ['portrait', '여백 초상'], ['cards', '카드']] },

@@ -20,8 +20,8 @@
   const pct = n => `${(n / 1254) * 100}%`;
   const DOOR = { top: pct(37), height: pct(1134), width: pct(482), left: pct(146), right: pct(628) };
 
-  let mode = 'once';
-  try { mode = (JSON.parse(localStorage.getItem('yw-dev-opts') || '{}').gate) || 'once'; } catch (e) { }
+  let mode = 'always'; // 기본값은 common.js DEV_DEFAULTS와 맞춤
+  try { mode = (JSON.parse(localStorage.getItem('yw-dev-opts') || '{}').gate) || 'always'; } catch (e) { }
   if (mode === 'none') return;
   if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (mode === 'once') { try { if (sessionStorage.getItem(SEEN_KEY)) return; } catch (e) { } }

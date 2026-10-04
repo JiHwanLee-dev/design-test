@@ -492,18 +492,21 @@ window.YW_DATA = (() => {
   const SLOTS = ['07:00', '10:00', '13:30', '16:00'];
 
   // 시안용: dev 패널 '부적 수: 많이'면 해월 스님 부적을 예시로 늘림
-  try {
-    if (JSON.parse(localStorage.getItem('yw-dev-opts') || '{}').charmCount === 'many') {
+  // 기본값은 common.js DEV_DEFAULTS와 맞춤 (charmCount: many, monkCount: 2)
+  let devOpts = {};
+  try { devOpts = JSON.parse(localStorage.getItem('yw-dev-opts') || '{}'); } catch (e) { }
+  {
+    if ((devOpts.charmCount || 'many') === 'many') {
       Object.assign(CHARM_TYPES, EXTRA_CHARM_TYPES);
       Object.keys(EXTRA_CHARM_TYPES).forEach((id, i) => MONKS[0].charms.push({ id, price: 29000 + (i * 7919 % 21) * 1000, reviews: (i * 37) % 120 }));
     }
-  } catch (e) { }
+  }
 
   // 시안용: dev 패널 '스님 수'로 예시 스님을 잠시 합쳐 봄 (실제 입점은 EXAMPLE_MONKS → MONKS로 옮기기)
-  try {
-    const n = Number(JSON.parse(localStorage.getItem('yw-dev-opts') || '{}').monkCount || 1);
+  {
+    const n = Number(devOpts.monkCount || 2);
     if (n > MONKS.length) MONKS.push(...EXAMPLE_MONKS.splice(0, n - MONKS.length));
-  } catch (e) { }
+  }
 
   // 파생 정보
   const minPrice = arr => arr.length ? Math.min(...arr.map(x => x.price)) : null;
