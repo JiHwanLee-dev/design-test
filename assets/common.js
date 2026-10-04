@@ -179,16 +179,18 @@ window.YW = (() => {
 
   // 제례 · 기도 큰 카드 (스님 페이지 진열, dev 옵션 riteCard=feature)
   // 큰 사진 + 한자 표지, 이 스님만의 모시는 방식 한 줄, 소요 시간 · 가장 빠른 날 칩
-  function riteFeatureCard(p) {
+  function riteFeatureCard(p, { tag = false, wide = false } = {}) {
     const t = D.SERVICE_TYPES[p.id];
+    const cat = tag && D.SHOP_CATS.find(c => c.key === p.group);
     const early = earliestDate(p.monk.id, p.id);
     const way = ((p.monk.services.find(s => s.id === p.id) || {}).way || [])[0] || t.desc;
     const chip = (icon, html) => `<span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs bg-edge/[0.04] ring-1 ring-edge/10 text-fg2"><iconify-icon icon="${icon}" width="14" class="text-cinnabar"></iconify-icon>${html}</span>`;
     return `
     <a href="${p.url}" class="group flex flex-col rounded-[1.5rem] bg-surface ring-1 ring-edge/10 overflow-hidden ease-spring hover:ring-cinnabar/50 hover:-translate-y-0.5 shadow-[0_20px_40px_-28px_var(--drop)]">
-      <div class="relative aspect-[4/3] overflow-hidden bg-deep">
+      <div class="relative ${wide ? 'aspect-[16/9]' : 'aspect-[4/3]'} overflow-hidden bg-deep">
         ${photo(ritualImg(p.id), t.name, 'absolute inset-0 w-full h-full object-cover ease-spring group-hover:scale-105')}
         <span class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent"></span>
+        ${cat ? `<span class="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold bg-black/35 backdrop-blur-md text-white ring-1 ring-white/20"><span class="font-serif font-extrabold">${cat.hanja}</span>${cat.name}</span>` : ''}
         <span class="absolute right-4 top-3 font-serif font-extrabold text-5xl md:text-6xl leading-none text-white/85 [writing-mode:vertical-rl] tracking-[0.1em]">${t.hanja}</span>
         <div class="absolute left-5 right-5 bottom-4 text-white">
           <h3 class="text-xl md:text-2xl font-bold tracking-tight">${t.name}</h3>
@@ -217,7 +219,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page', riteCard: 'feature' };
+  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page', riteCard: 'aligned' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -831,7 +833,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     { key: 'mainLayout', label: '메인 구성 (헤더 포함)', choices: [['brand', '랜딩형'], ['shop', '쇼핑몰형']] },
     { key: 'monkLayout', label: '스님 페이지 구성', choices: [['mix', '혼합형'], ['store', '스토어형'], ['intro', '소개형']] },
     { key: 'storeTabs', label: '스님 페이지 분류 탭', choices: [['underline', '큰 밑줄 탭'], ['tiles', '분류 타일'], ['pill', '막대 (크게)']] },
-    { key: 'riteCard', label: '스님 페이지 제례 · 기도 카드', choices: [['feature', '큰 사진 + 분류'], ['compact', '작은 카드 (이전)']] },
+    { key: 'riteCard', label: '스님 페이지 제례 · 기도 카드', choices: [['aligned', '2단 맞춤'], ['feature', '큰 사진 + 분류'], ['compact', '작은 카드']] },
     { key: 'profileView', label: '스님 소개 보기', choices: [['page', '별도 페이지'], ['panel', '옆 패널']] },
     { key: 'ritualLayout', label: '의식 안내 페이지 구성', choices: [['guide', '안내서형'], ['landing', '랜딩형']] },
     { key: 'guideDeco', label: '(안내서형) 꾸밈', choices: [['rich', '표지 · 해부도 · 말씀'], ['plain', '글만']] },

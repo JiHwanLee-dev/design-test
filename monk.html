@@ -423,7 +423,7 @@
         const best = products.filter(p => p.kind === 'charm').sort(sorters.popular).slice(0, 3).map(p => p.id);
         // 부적이 이만큼 넘으면 분류 칩 + 분류별 묶음으로 보여 줌
         const CHARM_MANY = 13;
-        st.ccat = 'all'; st.page = 1; st.dir = 0;
+        st.ccat = 'all'; st.rcat = 'all'; st.page = 1; st.dir = 0;
         const catOf = p => D.CHARM_TYPES[p.id].cat;
         const draw = () => {
           const tabsDef = [['all', '전체', products.length], ['charm', '부적', nCharm], ['ritual', '제례 · 기도', nRite]].filter(t => t[2]);
@@ -520,7 +520,41 @@
           }
           // 제례 · 기도: feature(큰 사진 + 祭/祈 분류 묶음) | compact(작은 카드 한 줄, 이전)
           const riteHtml = rs => {
-            if (YW.devOpt('riteCard') === 'compact') return head('제례 · 기도', rs.length, 'stRites') + `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${rs.map(p => YW.riteCard(p)).join('')}</div>`;
+            const rStyle = YW.devOpt('riteCard');
+            // aligned: 부적과 같은 2단(왼쪽 분류 목차 + 오른쪽 진열). 카드 2열 = 부적 카드 정확히 2장 폭이라 테두리가 위아래로 맞음
+            if (rStyle === 'aligned') {
+              const rcats = D.SHOP_CATS.filter(c => c.services).map(c => [c, rs.filter(p => p.group === c.key)]).filter(([, ps]) => ps.length);
+              if (!rcats.some(([c]) => c.key === st.rcat)) st.rcat = 'all';
+              const rList = [['all', '전체', rs.length, '全'], ...rcats.map(([c, ps]) => [c.key, c.name, ps.length, c.hanja])];
+              const shown = st.rcat === 'all' ? rs : rs.filter(p => p.group === st.rcat);
+              const sideOn = nCharm >= CHARM_MANY; // 부적에 목차가 있으면 제례도 같은 2단으로
+              const cur = rList.find(([k]) => k === st.rcat);
+              const side = sideOn ? `
+                <aside class="hidden lg:block">
+                  <nav aria-label="제례 · 기도 분류" class="sticky top-[calc(var(--head-h)+4.75rem)] yw-follow">
+                    <p class="px-4 text-xs font-semibold tracking-[0.2em] text-subtle">祭 · 의식 분류</p>
+                    <ul class="mt-4 border-l border-edge/15">
+                      ${rList.map(([k, name, n, mk]) => `<li><button type="button" data-rcat="${k}" aria-pressed="${st.rcat === k}" class="ease-spring group -ml-px w-full flex items-center gap-3 py-3 pl-4 pr-2 text-left border-l-2 ${st.rcat === k ? 'border-cinnabar text-fg' : 'border-transparent text-muted hover:text-fg hover:border-edge/40'}">
+                        <span class="w-6 text-center font-serif font-extrabold text-lg leading-none ${st.rcat === k ? 'text-cinnabar' : 'text-cinnabar-soft/70 group-hover:text-cinnabar-soft'}">${mk}</span>
+                        <span class="flex-1 text-base ${st.rcat === k ? 'font-bold' : 'font-medium'}">${name}</span>
+                        <span class="text-sm tabular-nums ${st.rcat === k ? 'text-cinnabar-soft font-semibold' : 'text-subtle'}">${n}</span>
+                      </button></li>`).join('')}
+                    </ul>
+                  </nav>
+                </aside>` : '';
+              // 모바일 · 태블릿 (목차가 없을 때): 칩 한 줄
+              const chips = rList.length > 2 ? `<div class="${sideOn ? 'lg:hidden' : ''} -mt-2 mb-6 flex items-center gap-2 overflow-x-auto no-scrollbar">${rList.map(([k, name, n, mk]) =>
+                `<button type="button" data-rcat="${k}" aria-pressed="${st.rcat === k}" class="ease-spring shrink-0 h-10 pl-3 pr-4 rounded-full flex items-center gap-1.5 text-[15px] ring-1 ${st.rcat === k ? 'bg-fg text-page ring-fg font-semibold' : 'bg-surface text-fg2 ring-edge/15 font-medium'}"><span class="font-serif font-extrabold ${st.rcat === k ? 'text-cinnabar' : 'text-cinnabar-soft'}">${mk}</span>${name}<span class="text-xs tabular-nums opacity-60">${n}</span></button>`).join('')}</div>` : '';
+              const body = `
+                <div class="mb-6">
+                  <h2 class="text-2xl md:text-3xl font-bold tracking-tight"><span class="font-serif font-extrabold text-cinnabar-soft mr-2">${st.rcat === 'all' ? '祭' : cur[3]}</span>${st.rcat === 'all' ? '제례 · 기도' : cur[1]} <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${shown.length}</span></h2>
+                  <p class="mt-1.5 text-[15px] text-subtle">${m.name} 스님이 직접 모시는 의식입니다. 날짜를 고르면 바로 예약됩니다.</p>
+                </div>
+                ${chips}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-3 md:gap-x-4 gap-y-7">${shown.map(p => YW.riteFeatureCard(p, { tag: st.rcat === 'all', wide: true })).join('')}</div>`;
+              return `<div id="stRites" class="scroll-mt-40 ${sideOn ? 'lg:grid lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:gap-12' : ''}">${side}<div class="min-w-0">${body}</div></div>`;
+            }
+            if (rStyle === 'compact') return head('제례 · 기도', rs.length, 'stRites') + `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${rs.map(p => YW.riteCard(p)).join('')}</div>`;
             const groups = D.SHOP_CATS.filter(c => c.services).map(c => [c, rs.filter(p => p.group === c.key)]).filter(([, ps]) => ps.length);
             return `<h2 id="stRites" class="mb-2 text-2xl md:text-3xl font-bold tracking-tight scroll-mt-40"><span class="font-serif font-extrabold text-cinnabar-soft mr-2">祭</span>제례 · 기도 <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${rs.length}</span></h2>
               <p class="text-[15px] text-subtle">${m.name} 스님이 직접 모시는 의식입니다. 날짜를 고르면 바로 예약됩니다.</p>`
@@ -548,6 +582,8 @@
         let lastCols = 0; addEventListener('resize', () => { const c = innerWidth >= 768 ? 4 : innerWidth >= 640 ? 3 : 2; if (c !== lastCols) { lastCols = c; draw(); } });
         // 분류 칩 · '전체 보기': 그 분류만 보여 주고 진열 맨 위로
         document.addEventListener('click', e => {
+          const r = e.target.closest('[data-rcat]');
+          if (r) { st.rcat = r.dataset.rcat; draw(); return; }
           const b = e.target.closest('[data-ccat]'); if (!b) return;
           st.ccat = b.dataset.ccat; st.page = 1; st.dir = 0; draw();
           // 진열 맨 위가 헤더 + 고정 탭 줄 바로 아래에 오게 (이미 그 위쪽이면 그대로)
