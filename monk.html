@@ -423,7 +423,7 @@
         const best = products.filter(p => p.kind === 'charm').sort(sorters.popular).slice(0, 3).map(p => p.id);
         // 부적이 이만큼 넘으면 분류 칩 + 분류별 묶음으로 보여 줌
         const CHARM_MANY = 13;
-        st.ccat = 'all'; st.rcat = 'all'; st.page = 1; st.dir = 0;
+        st.ccat = 'all'; st.rcat = 'all'; st.page = 1; st.dir = 0; st.rpage = 1; st.rdir = 0;
         const catOf = p => D.CHARM_TYPES[p.id].cat;
         const draw = () => {
           const tabsDef = [['all', '전체', products.length], ['charm', '부적', nCharm], ['ritual', '제례 · 기도', nRite]].filter(t => t[2]);
@@ -493,6 +493,19 @@
           // 분류별 묶음: 데스크탑 3개 미리보기, 모바일은 옆으로 넘겨 전부
           const small = p => YW.charmCard(p, { best: best.includes(p.id), compact: true });
           const catHead = (c, n) => `<span class="font-serif font-extrabold text-cinnabar-soft mr-2">${CAT_MARK[c] || '符'}</span>${c} <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${n}</span>`;
+          // 페이지 넘김 (부적 · 제례 같이 씀). attr: 버튼에 붙일 data 속성(쪽 번호)
+          const pagerHtml = (cur, pages, attr, label, cols) => {
+            if (pages <= 1) return '';
+            const btn = (pg, icon, extra = '') => `<button type="button" ${attr}="${pg}" ${extra} class="ease-spring w-11 h-11 rounded-full text-[15px] font-semibold tabular-nums flex items-center justify-center ${pg === cur && !icon ? 'bg-fg text-page' : 'text-fg2 hover:bg-edge/5'} disabled:opacity-30 disabled:pointer-events-none">${icon || pg}</button>`;
+            return `
+              <nav aria-label="${label}" class="mt-10 flex items-center justify-center gap-1">
+                ${btn(cur - 1, '<iconify-icon icon="solar:alt-arrow-left-linear" width="20"></iconify-icon>', `aria-label="이전 페이지" ${cur === 1 ? 'disabled' : ''}`)}
+                ${cols === 2 || pages > 7
+                  ? `<span class="min-w-[5.5rem] text-center text-[15px] tabular-nums"><b class="text-fg">${cur}</b><span class="text-subtle"> / ${pages}</span></span>`
+                  : Array.from({ length: pages }, (_, i) => btn(i + 1, '', `aria-label="${i + 1}쪽" ${i + 1 === cur ? 'aria-current="page"' : ''}`)).join('')}
+                ${btn(cur + 1, '<iconify-icon icon="solar:alt-arrow-right-linear" width="20"></iconify-icon>', `aria-label="다음 페이지" ${cur === pages ? 'disabled' : ''}`)}
+              </nav>`;
+          };
           let charmHtml = '';
           if (charms.length && !many) charmHtml = head('부적', charms.length, 'stCharms') + grid(charms);
           else if (many) {
@@ -503,15 +516,7 @@
             const pages = Math.max(1, Math.ceil(ps.length / per));
             st.page = Math.min(Math.max(1, st.page || 1), pages);
             const from = (st.page - 1) * per, shown = ps.slice(from, from + per);
-            const pgBtn = (pg, label, extra = '') => `<button type="button" data-page="${pg}" ${extra} class="ease-spring w-11 h-11 rounded-full text-[15px] font-semibold tabular-nums flex items-center justify-center ${pg === st.page && !label ? 'bg-fg text-page' : 'text-fg2 hover:bg-edge/5'} disabled:opacity-30 disabled:pointer-events-none">${label || pg}</button>`;
-            const pager = pages > 1 ? `
-              <nav aria-label="부적 페이지" class="mt-10 flex items-center justify-center gap-1">
-                ${pgBtn(st.page - 1, '<iconify-icon icon="solar:alt-arrow-left-linear" width="20"></iconify-icon>', `aria-label="이전 페이지" ${st.page === 1 ? 'disabled' : ''}`)}
-                ${cols === 2 || pages > 7
-                  ? `<span class="min-w-[5.5rem] text-center text-[15px] tabular-nums"><b class="text-fg">${st.page}</b><span class="text-subtle"> / ${pages}</span></span>`
-                  : Array.from({ length: pages }, (_, i) => pgBtn(i + 1, '', `aria-label="${i + 1}쪽" ${i + 1 === st.page ? 'aria-current="page"' : ''}`)).join('')}
-                ${pgBtn(st.page + 1, '<iconify-icon icon="solar:alt-arrow-right-linear" width="20"></iconify-icon>', `aria-label="다음 페이지" ${st.page === pages ? 'disabled' : ''}`)}
-              </nav>` : '';
+            const pager = pagerHtml(st.page, pages, 'data-page', '부적 페이지', cols);
             const title = st.ccat === 'all' ? `<span class="font-serif font-extrabold text-cinnabar-soft mr-2">全</span>전체 부적 <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${ps.length}</span>` : catHead(st.ccat, ps.length);
             const body = `
               <div class="mb-6 flex items-end justify-between gap-4">
@@ -532,7 +537,14 @@
               const rcats = D.SHOP_CATS.filter(c => c.services).map(c => [c, rs.filter(p => p.group === c.key)]).filter(([, ps]) => ps.length);
               if (!rcats.some(([c]) => c.key === st.rcat)) st.rcat = 'all';
               const rList = [['all', '전체', rs.length, '全'], ...rcats.map(([c, ps]) => [c.key, c.name, ps.length, c.hanja])];
-              const shown = st.rcat === 'all' ? rs : rs.filter(p => p.group === st.rcat);
+              const all = st.rcat === 'all' ? rs : rs.filter(p => p.group === st.rcat);
+              // 부적처럼 한 쪽에 정해진 개수만 + 페이지 넘김 (화첩: 2줄 = 4열 8개 / 3열 6개 / 2열 4개, 2열 카드: 4개, 목록: 5개)
+              const look = YW.devOpt('riteLook');
+              const rcols = innerWidth >= 768 ? 4 : innerWidth >= 640 ? 3 : 2;
+              const rper = look === 'gallery' ? rcols * 2 : look === 'index' ? 5 : 4;
+              const rpages = Math.max(1, Math.ceil(all.length / rper));
+              st.rpage = Math.min(Math.max(1, st.rpage || 1), rpages);
+              const rfrom = (st.rpage - 1) * rper, shown = all.slice(rfrom, rfrom + rper);
               const sideOn = nCharm >= CHARM_MANY; // 부적에 목차가 있으면 제례도 같은 2단으로
               const cur = rList.find(([k]) => k === st.rcat);
               riteNav = rList; // 합친 목차에서 씀
@@ -541,13 +553,16 @@
               const chips = rList.length > 2 ? `<div class="${sideOn ? 'lg:hidden' : ''} -mt-2 mb-6 flex items-center gap-2 overflow-x-auto no-scrollbar">${rList.map(([k, name, n, mk]) =>
                 `<button type="button" data-rcat="${k}" aria-pressed="${st.rcat === k}" class="ease-spring shrink-0 h-10 pl-3 pr-4 rounded-full flex items-center gap-1.5 text-[15px] ring-1 ${st.rcat === k ? 'bg-fg text-page ring-fg font-semibold' : 'bg-surface text-fg2 ring-edge/15 font-medium'}"><span class="font-serif font-extrabold ${st.rcat === k ? 'text-cinnabar' : 'text-cinnabar-soft'}">${mk}</span>${name}<span class="text-xs tabular-nums opacity-60">${n}</span></button>`).join('')}</div>` : '';
               const body = `
-                <div class="mb-6">
-                  <h2 class="text-2xl md:text-3xl font-bold tracking-tight"><span class="font-serif font-extrabold text-cinnabar-soft mr-2">${st.rcat === 'all' ? '祭' : cur[3]}</span>${st.rcat === 'all' ? '제례 · 기도' : cur[1]} <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${shown.length}</span></h2>
+                <div class="mb-6 flex items-end justify-between gap-4"><div>
+                  <h2 class="text-2xl md:text-3xl font-bold tracking-tight"><span class="font-serif font-extrabold text-cinnabar-soft mr-2">${st.rcat === 'all' ? '祭' : cur[3]}</span>${st.rcat === 'all' ? '제례 · 기도' : cur[1]} <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${all.length}</span></h2>
                   <p class="mt-1.5 text-[15px] text-subtle">${m.name} 스님이 직접 모시는 의식입니다. 날짜를 고르면 바로 예약됩니다.</p>
-                </div>
+                </div>${rpages > 1 ? `<p class="shrink-0 text-sm text-subtle tabular-nums">${rfrom + 1}–${rfrom + shown.length} / ${all.length}</p>` : ''}</div>
                 ${chips}
+                <div class="yw-page-in" style="--dir:${st.rdir || 0}">
                 ${YW.devOpt('riteLook') === 'gallery' ? `<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-3 md:gap-x-4 gap-y-9">${shown.map(p => YW.riteGalleryCard(p, { tag: st.rcat === 'all' })).join('')}</div>`
-                  : YW.devOpt('riteLook') === 'index' ? `<ol class="border-t border-fg/70">${shown.map((p, i) => YW.riteIndexRow(p, i, { tag: st.rcat === 'all' })).join('')}</ol>` : `<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-3 md:gap-x-4 gap-y-7">${shown.map(p => YW.devOpt('riteLook') === 'cover' ? YW.riteFeatureCard(p, { tag: st.rcat === 'all', wide: true }) : YW.riteRowCard(p, { tag: st.rcat === 'all' })).join('')}</div>`}`;
+                  : YW.devOpt('riteLook') === 'index' ? `<ol class="border-t border-fg/70">${shown.map((p, i) => YW.riteIndexRow(p, rfrom + i, { tag: st.rcat === 'all' })).join('')}</ol>` : `<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-3 md:gap-x-4 gap-y-7">${shown.map(p => YW.devOpt('riteLook') === 'cover' ? YW.riteFeatureCard(p, { tag: st.rcat === 'all', wide: true }) : YW.riteRowCard(p, { tag: st.rcat === 'all' })).join('')}</div>`}
+                </div>
+                ${pagerHtml(st.rpage, rpages, 'data-rpage', '제례 · 기도 페이지', look === 'gallery' ? rcols : 4)}`;
               if (merged) return `<div id="stRites" class="scroll-mt-40">${body}</div>`;
               return `<div id="stRites" class="scroll-mt-40 ${sideOn ? 'lg:grid lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:gap-12' : ''}">${side}<div class="min-w-0">${body}</div></div>`;
             }
@@ -582,13 +597,19 @@
         addEventListener('scroll', spyNav, { passive: true });
         // 밑줄 탭이 위에 붙었는지 (헤더 뒤 틈 막기)
         addEventListener('scroll', () => { const t = $('#stTools'); t.classList.toggle('is-stuck', t.classList.contains('g-tabs') && t.getBoundingClientRect().top <= parseFloat(getComputedStyle(t).top) + 1); }, { passive: true });
-        $('#stTabs').addEventListener('click', e => { const b = e.target.closest('[data-stcat]'); if (!b) return; st.cat = b.dataset.stcat; st.page = 1; st.dir = 0; draw(); });
+        $('#stTabs').addEventListener('click', e => { const b = e.target.closest('[data-stcat]'); if (!b) return; st.cat = b.dataset.stcat; st.page = 1; st.dir = 0; st.rpage = 1; st.rdir = 0; draw(); });
         // 페이지 넘김: 넘긴 방향으로 카드가 살짝 밀려 들어옴, 진열 맨 위가 화면 밖이면 올려 줌
         document.addEventListener('click', e => {
           const b = e.target.closest('[data-page]'); if (!b || b.disabled) return;
-          const pg = +b.dataset.page; st.dir = pg > (st.page || 1) ? 1 : -1; st.page = pg; draw();
+          const pg = +b.dataset.page; st.dir = pg > (st.page || 1) ? 1 : -1; st.page = pg; st.rdir = 0; draw();
           const grid = $('#stCharms'), offset = $('#stTools').offsetHeight + ($('#ywHead')?.offsetHeight || 72) + 24;
           if (grid.getBoundingClientRect().top < offset) { grid.style.scrollMarginTop = offset + 'px'; grid.scrollIntoView({ behavior: 'smooth' }); }
+        });
+        document.addEventListener('click', e => {
+          const b = e.target.closest('[data-rpage]'); if (!b || b.disabled) return;
+          const pg = +b.dataset.rpage; st.rdir = pg > (st.rpage || 1) ? 1 : -1; st.rpage = pg; st.dir = 0; draw();
+          const sec = $('#stRites'), off = ($('#ywHead')?.offsetHeight || 72) + 24;
+          if (sec && sec.getBoundingClientRect().top < off) { sec.style.scrollMarginTop = off + 'px'; sec.scrollIntoView({ behavior: 'smooth' }); }
         });
         // 화면 폭이 바뀌어 한 쪽 개수가 달라지면 다시 그림
         let lastCols = 0; addEventListener('resize', () => { const c = innerWidth >= 768 ? 4 : innerWidth >= 640 ? 3 : 2; if (c !== lastCols) { lastCols = c; draw(); } });
@@ -596,7 +617,7 @@
         document.addEventListener('click', e => {
           const r = e.target.closest('[data-rcat]');
           if (r) {
-            st.rcat = r.dataset.rcat; draw();
+            st.rcat = r.dataset.rcat; st.rpage = 1; st.rdir = 0; draw();
             // 의식 구역 맨 위가 헤더 아래에 오게 (이미 보이면 그대로)
             const sec = $('#stRites'), off = ($('#ywHead')?.offsetHeight || 72) + 24;
             if (sec && (sec.getBoundingClientRect().top < off || sec.getBoundingClientRect().top > innerHeight * 0.6)) { sec.style.scrollMarginTop = off + 'px'; sec.scrollIntoView({ behavior: 'smooth' }); }
@@ -620,7 +641,7 @@
         sortBtn.addEventListener('click', () => openSort(sortMenu.classList.contains('hidden')));
         sortMenu.addEventListener('click', e => {
           const b = e.target.closest('[data-sort]'); if (!b) return;
-          st.sort = b.dataset.sort; st.page = 1; st.dir = 0; openSort(false); drawSort(); draw();
+          st.sort = b.dataset.sort; st.page = 1; st.dir = 0; st.rpage = 1; st.rdir = 0; openSort(false); drawSort(); draw();
         });
         document.addEventListener('click', e => { if (!e.target.closest('#stSortWrap')) openSort(false); });
         document.addEventListener('keydown', e => { if (e.key === 'Escape') openSort(false); });
