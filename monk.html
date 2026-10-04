@@ -515,9 +515,21 @@
               ${pager}`;
             charmHtml = `<div id="stCharms" class="scroll-mt-40 lg:grid lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:gap-12">${sideNav}<div class="min-w-0">${body}</div></div>`;
           }
+          // 제례 · 기도: feature(큰 사진 + 祭/祈 분류 묶음) | compact(작은 카드 한 줄, 이전)
+          const riteHtml = rs => {
+            if (YW.devOpt('riteCard') === 'compact') return head('제례 · 기도', rs.length, 'stRites') + `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${rs.map(p => YW.riteCard(p)).join('')}</div>`;
+            const groups = D.SHOP_CATS.filter(c => c.services).map(c => [c, rs.filter(p => p.group === c.key)]).filter(([, ps]) => ps.length);
+            return `<h2 id="stRites" class="mb-2 text-2xl md:text-3xl font-bold tracking-tight scroll-mt-40"><span class="font-serif font-extrabold text-cinnabar-soft mr-2">祭</span>제례 · 기도 <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${rs.length}</span></h2>
+              <p class="text-[15px] text-subtle">${m.name} 스님이 직접 모시는 의식입니다. 날짜를 고르면 바로 예약됩니다.</p>`
+              + groups.map(([c, ps]) => `
+              <section class="mt-8">
+                <h3 class="mb-4 flex items-center gap-2 text-lg md:text-xl font-bold tracking-tight"><span class="font-serif font-extrabold text-cinnabar-soft">${c.hanja}</span>${c.name}<span class="text-sm font-medium text-subtle tabular-nums">${ps.length}</span></h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">${ps.map(p => YW.riteFeatureCard(p)).join('')}</div>
+              </section>`).join('');
+          };
           $('#stGrid').innerHTML =
             charmHtml
-            + (rites.length ? `<div class="${charms.length ? 'mt-16' : ''}">${head('제례 · 기도', rites.length, 'stRites')}<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${rites.map(p => YW.riteCard(p)).join('')}</div></div>` : '');
+            + (rites.length ? `<div class="${charms.length ? 'mt-16' : ''}">${riteHtml(rites)}</div>` : '');
         };
         // 밑줄 탭이 위에 붙었는지 (헤더 뒤 틈 막기)
         addEventListener('scroll', () => { const t = $('#stTools'); t.classList.toggle('is-stuck', t.classList.contains('g-tabs') && t.getBoundingClientRect().top <= parseFloat(getComputedStyle(t).top) + 1); }, { passive: true });
