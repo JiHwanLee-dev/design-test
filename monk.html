@@ -485,7 +485,8 @@
                 </button></li>`).join('')}
               </ul>
             </div>`;
-          const sideWrap = (label, inner) => `<aside class="hidden lg:block"><nav aria-label="${label}" class="sticky top-[calc(var(--head-h)+4.75rem)] yw-follow">${inner}</nav></aside>`;
+          // dev 옵션 navSticky: on(스크롤해도 따라옴) | off(제자리에 두고 같이 올라감)
+          const sideWrap = (label, inner) => `<aside class="hidden lg:block"><nav aria-label="${label}" class="${YW.devOpt('navSticky') === 'off' ? '' : 'sticky top-[calc(var(--head-h)+4.75rem)] yw-follow'}">${inner}</nav></aside>`;
           const sideNav = sideWrap('부적 분류', navGroup('부적 분류', '符', catList, st.ccat, 'data-ccat'));
           // dev 옵션 navMerge: merged(부적 · 의식 목차를 하나로, 처음부터 끝까지 고정) | split(구역마다 따로)
           const merged = YW.devOpt('navMerge') === 'merged' && many && rites.length > 0 && YW.devOpt('riteCard') === 'aligned';
