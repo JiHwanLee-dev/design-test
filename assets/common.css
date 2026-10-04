@@ -264,3 +264,6 @@ html.yw-scrolled .yw-head[data-style="wide"] .yw-head-bar {
 @keyframes ywPageIn { from { opacity: 0; transform: translateX(calc(var(--dir, 0) * 2.5rem)); } to { opacity: 1; transform: none; } }
 .yw-page-in { animation: ywPageIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
 @media (prefers-reduced-motion: reduce) { .yw-page-in { animation: none; } }
+
+/* 부적 상세: 자동 넘김 진행 막대 */
+@keyframes ywProg { from { width: 0; } to { width: 100%; } }

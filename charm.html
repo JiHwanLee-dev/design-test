@@ -384,19 +384,55 @@
       $('#spCrumbCharms').href = `${monkUrl(m.id)}#charms`;
       $('#spCrumbName').textContent = c.name;
 
-      // 사진 (상품 사진이 없으면 SVG 그림)
+      // 사진: 큰 사진 1 + 작은 사진 목록. 상품 사진이 없으면 [부적 그림, 쓰는 모습, 봉투] 3장 (예시 사진)
+      // dev 옵션 charmRotate: on이면 4.5초마다 다음 장 (마우스를 올리면 멈춤, 작은 사진을 직접 누르면 그 뒤로 멈춤)
       const photos = YW.charmPhotos(m, ci.id);
-      const showMain = i => {
-        $('#spMain').innerHTML = photos.length
-          ? `<img src="${photos[i]}" alt="${c.name} 사진 ${i + 1}" class="absolute inset-0 w-full h-full object-cover" decoding="async">`
-          : `<div class="w-[42%] shadow-[0_30px_60px_-25px_var(--drop)] rounded-[1rem]">${charmSVG(c, YW.charmSeed(m.id, ci.id), m.hanja)}</div>`;
-        $$('#spThumbs [data-ph]').forEach(b => b.classList.toggle('ring-cinnabar', +b.dataset.ph === i));
-      };
-      if (photos.length > 1) {
-        $('#spThumbs').innerHTML = photos.map((src, i) => `<button type="button" data-ph="${i}" aria-label="사진 ${i + 1}" class="w-16 h-16 rounded-lg overflow-hidden ring-2 ring-transparent hover:ring-edge/30"><img src="${src}" alt="" class="w-full h-full object-cover" loading="lazy"></button>`).join('');
-        $('#spThumbs').addEventListener('click', e => { const b = e.target.closest('[data-ph]'); if (b) showMain(+b.dataset.ph); });
+      const slides = photos.length ? photos.map((src, i) => ({ src, alt: `${c.name} 사진 ${i + 1}` })) : [
+        { svg: true, alt: c.name },
+        { src: 'assets/images/svc-talisman.jpg', alt: '경면주사로 부적을 쓰는 모습' },
+        { src: 'assets/images/join-envelope.jpg', alt: '축원 후 한지 봉투에 밀봉' },
+      ];
+      const art = () => `<div class="w-[42%] shadow-[0_30px_60px_-25px_var(--drop)] rounded-[1rem]">${charmSVG(c, YW.charmSeed(m.id, ci.id), m.hanja)}</div>`;
+      $('#spMain').classList.add('cursor-zoom-in');
+      $('#spMain').innerHTML = slides.map((x, i) => `
+        <div data-slide="${i}" class="absolute inset-0 flex items-center justify-center transition-opacity duration-700 ${i ? 'opacity-0' : ''}">
+          <div data-zoom class="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-out">${x.svg ? art() : `<img src="${x.src}" alt="${x.alt}" class="absolute inset-0 w-full h-full object-cover" decoding="async">`}</div>
+        </div>`).join('');
+      const ROT_MS = 4500, rot = YW.devOpt('charmRotate') === 'on' && slides.length > 1;
+      if (slides.length > 1) {
+        $('#spThumbs').className = 'mt-3 flex gap-2.5';
+        $('#spThumbs').innerHTML = slides.map((x, i) => `<button type="button" data-ph="${i}" aria-label="${x.alt}" class="ease-spring relative w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden ring-2 ring-transparent bg-deep/60 flex items-center justify-center hover:ring-edge/30">
+          ${x.svg ? `<span class="w-[38%]">${charmSVG(c, YW.charmSeed(m.id, ci.id), m.hanja)}</span>` : `<img src="${x.src}" alt="" class="absolute inset-0 w-full h-full object-cover" loading="lazy">`}
+          <span data-prog class="absolute left-0 bottom-0 h-[3px] w-0 bg-cinnabar"></span>
+        </button>`).join('');
       }
-      showMain(0);
+      let cur = 0, timer = null, stopped = !rot, hover = false;
+      const showMain = i => {
+        cur = i;
+        $$('#spMain [data-slide]').forEach(el => el.classList.toggle('opacity-0', +el.dataset.slide !== i));
+        $$('#spThumbs [data-ph]').forEach(b => {
+          const on = +b.dataset.ph === i;
+          b.classList.toggle('ring-cinnabar', on); b.classList.toggle('ring-transparent', !on); b.classList.toggle('opacity-60', !on);
+          // 자동 넘김 중이면 지금 장의 작은 사진 아래 진행 막대가 차오름
+          const bar = b.querySelector('[data-prog]');
+          bar.style.animation = 'none'; bar.offsetWidth;
+          bar.style.animation = on && !stopped && !hover ? `ywProg ${ROT_MS}ms linear forwards` : 'none';
+        });
+      };
+      const schedule = () => { clearTimeout(timer); if (!stopped && !hover) timer = setTimeout(() => { showMain((cur + 1) % slides.length); schedule(); }, ROT_MS); };
+      $('#spThumbs').addEventListener('click', e => { const b = e.target.closest('[data-ph]'); if (!b) return; stopped = true; clearTimeout(timer); showMain(+b.dataset.ph); });
+      // 마우스를 올리면: 넘김 멈춤 + 커서 위치를 중심으로 2배 확대
+      const zoomEl = () => $(`#spMain [data-slide="${cur}"] [data-zoom]`);
+      const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+      $('#spMain').addEventListener('mouseenter', () => { hover = true; clearTimeout(timer); showMain(cur); });
+      $('#spMain').addEventListener('mousemove', e => {
+        if (!fine) return;
+        const r = $('#spMain').getBoundingClientRect(), z = zoomEl();
+        z.style.transformOrigin = `${((e.clientX - r.left) / r.width) * 100}% ${((e.clientY - r.top) / r.height) * 100}%`;
+        z.style.transform = 'scale(2)';
+      });
+      $('#spMain').addEventListener('mouseleave', () => { hover = false; const z = zoomEl(); z.style.transform = ''; showMain(cur); schedule(); });
+      showMain(0); schedule();
 
       // 구매 정보
       $('#spSeller').href = monkUrl(m.id);
