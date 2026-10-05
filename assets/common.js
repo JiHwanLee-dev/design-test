@@ -941,10 +941,10 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     { key: 'charmLayout', label: '부적 상세 구성', choices: [['shop', '쇼핑몰형'], ['intro', '소개형']] },
     { key: 'gate', label: '스님 페이지 들어갈 때 산문', choices: [['once', '처음 한 번'], ['always', '매번'], ['walk', '걸어 들어가기'], ['none', '없음']] },
     { key: 'ritualGroup', label: '메인 의식 구성', choices: [['group', '3개 묶음'], ['list', '목록형'], ['cards', '카드형']] },
-    { key: 'cardStyle', label: '메인 의식 카드 글씨', choices: [['overlay', '사진 위'], ['below', '사진 아래']] },
-    { key: 'cardLink', label: '메인 의식 카드 클릭', choices: [['detail', '상세 페이지만'], ['both', '상세 + 바로 예약']] },
+    { key: 'cardStyle', label: '메인 의식 카드 글씨', when: () => devOpt('mainLayout') === 'brand' && devOpt('ritualGroup') === 'cards', off: '메인 구성 랜딩형 + 메인 의식 구성 카드형일 때만', choices: [['overlay', '사진 위'], ['below', '사진 아래']] },
+    { key: 'cardLink', label: '메인 의식 카드 클릭', when: () => devOpt('mainLayout') === 'brand' && devOpt('ritualGroup') === 'cards', off: '메인 구성 랜딩형 + 메인 의식 구성 카드형일 때만', choices: [['detail', '상세 페이지만'], ['both', '상세 + 바로 예약']] },
     { key: 'emptyRitual', label: '모시는 스님이 없는 의식', choices: [['hide', '숨김'], ['soon', '준비 중 표시']] },
-    { key: 'cardPrice', label: '의식 카드 가격', choices: [['hide', '숨김'], ['show', '표시']] },
+    { key: 'cardPrice', label: '의식 카드 가격', when: () => devOpt('mainLayout') === 'brand' && devOpt('ritualGroup') === 'cards', off: '메인 구성 랜딩형 + 메인 의식 구성 카드형일 때만', choices: [['hide', '숨김'], ['show', '표시']] },
   ];
   function setDevOpt(key, val) {
     const o = store.get('yw-dev-opts', {}); o[key] = val; store.set('yw-dev-opts', o);
