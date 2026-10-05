@@ -31,9 +31,8 @@ window.YW = (() => {
   const offeredBy = key => D.MONKS.filter(m => key === 'charm' ? m.charms.length > 0 : m.services.some(s => s.id === key));
   // 스님별 의식 예약 페이지
   const riteUrl = (monkId, key) => `rite.html?monk=${encodeURIComponent(monkId)}&id=${encodeURIComponent(key)}`;
-  // 예약하러 가는 곳: dev 옵션 riteClick이 page면 의식 예약 페이지, inline이면 스님 페이지 안 위젯
-  const bookUrl = (m, key) => key === 'charm' ? `${monkUrl(m.id)}#charms`
-    : devOpt('riteClick') === 'page' ? `${riteUrl(m.id, key)}#book` : `${monkUrl(m.id)}&svc=${key}#rituals`;
+  // 예약하러 가는 곳: 부적은 스님 페이지 진열, 의식은 의식 예약 페이지
+  const bookUrl = (m, key) => key === 'charm' ? `${monkUrl(m.id)}#charms` : `${riteUrl(m.id, key)}#book`;
   const serviceReviews = (monkId, key) => D.REVIEWS.filter(r => r.monk === monkId && r.service.startsWith(D.SERVICE_TYPES[key].name));
   const priceAt = (m, key) => key === 'charm' ? m.minCharm : m.services.find(s => s.id === key).price;
   function ritualInfo(key) {
@@ -312,7 +311,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', tabCount: 'big', headCount: 'serif', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page', riteCard: 'aligned', navMerge: 'merged', navSticky: 'on', riteLook: 'gallery', riteCount: 'many', riteLayout: 'shop', charmRotate: 'on' };
+  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', tabCount: 'big', headCount: 'serif', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', riteCard: 'aligned', navMerge: 'merged', navSticky: 'on', riteLook: 'gallery', riteCount: 'many', riteLayout: 'shop', charmRotate: 'on' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -945,8 +944,6 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     { key: 'cardLink', label: '메인 의식 카드 클릭', choices: [['detail', '상세 페이지만'], ['both', '상세 + 바로 예약']] },
     { key: 'emptyRitual', label: '모시는 스님이 없는 의식', choices: [['hide', '숨김'], ['soon', '준비 중 표시']] },
     { key: 'cardPrice', label: '의식 카드 가격', choices: [['hide', '숨김'], ['show', '표시']] },
-    { key: 'charmClick', label: '(소개형) 부적 클릭', when: () => devOpt('monkLayout') === 'intro', off: '스님 페이지 구성이 소개형일 때만', choices: [['page', '상세 페이지'], ['modal', '팝업']] },
-    { key: 'riteClick', label: '의식 클릭 · 예약 링크', choices: [['page', '상세 페이지'], ['inline', '페이지 안 예약']] },
   ];
   function setDevOpt(key, val) {
     const o = store.get('yw-dev-opts', {}); o[key] = val; store.set('yw-dev-opts', o);

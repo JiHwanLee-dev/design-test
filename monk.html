@@ -270,75 +270,8 @@
     </aside>
   </div>
 
-  <!-- 부적 상세 모달 -->
-  <div id="productModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
-    <div class="absolute inset-0 bg-scrim/50 backdrop-blur-md" data-close></div>
-    <div class="relative h-full overflow-y-auto flex items-end md:items-center justify-center md:p-6">
-      <div id="pmPanel" class="ease-spring relative w-full max-w-4xl rounded-t-[2rem] md:rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 translate-y-8 opacity-0">
-        <div class="rounded-t-[calc(2rem-0.375rem)] md:rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] grid grid-cols-1 md:grid-cols-2">
-          <div class="p-6 md:p-10 flex items-center justify-center bg-edge/[0.02] md:rounded-l-[calc(2rem-0.375rem)]">
-            <div id="pmArt" class="w-40 md:w-64"></div>
-          </div>
-          <div class="p-6 md:p-10 flex flex-col">
-            <div class="flex items-start justify-between gap-4">
-              <div>
-                <p id="pmCat" class="text-xs text-cinnabar-soft font-medium"></p>
-                <h3 id="pmTitle" class="mt-2 text-2xl md:text-3xl font-bold tracking-tight"></h3>
-              </div>
-              <button data-close aria-label="닫기" class="ease-spring w-10 h-10 shrink-0 rounded-full bg-edge/5 flex items-center justify-center hover:bg-edge/10"><iconify-icon icon="solar:close-circle-linear" width="22"></iconify-icon></button>
-            </div>
-            <p id="pmDesc" class="mt-4 text-sm text-muted leading-relaxed"></p>
-
-            <p class="mt-8 text-xs font-semibold text-fg2">제작 방식</p>
-            <div id="pmMaterial" class="mt-2 grid grid-cols-1 gap-2"></div>
-
-            <label class="mt-5 flex items-center gap-3 rounded-xl bg-edge/[0.03] border border-edge/10 px-4 py-3 cursor-pointer ease-spring hover:bg-edge/[0.06]">
-              <input id="pmBless" type="checkbox" class="w-4 h-4 accent-[#c8553d]">
-              <span class="flex-1 text-sm">이름 축원 봉인 <span class="text-subtle">· 성함으로 축원 후 밀봉</span></span>
-              <span class="text-sm tabular-nums text-fg2" id="pmBlessPrice"></span>
-            </label>
-
-            <label class="mt-5 block">
-              <span class="text-xs font-semibold text-fg2">축원 받으실 분 성함 <span class="text-faint font-normal">(선택)</span></span>
-              <input id="pmName" maxlength="20" class="ease-spring mt-2 w-full h-12 rounded-xl bg-edge/[0.04] border border-edge/10 px-4 text-sm placeholder:text-faint focus:outline-none focus:border-cinnabar/60" placeholder="예) 한지원">
-            </label>
-
-            <div class="mt-8 pt-6 border-t border-edge/10 flex items-center justify-between gap-4">
-              <div class="flex items-center gap-2 rounded-full bg-edge/[0.04] border border-edge/10 p-1">
-                <button id="pmMinus" aria-label="수량 줄이기" class="ease-spring w-10 h-10 rounded-full flex items-center justify-center hover:bg-edge/10"><iconify-icon icon="solar:minus-circle-linear" width="20"></iconify-icon></button>
-                <span id="pmQty" class="w-6 text-center tabular-nums font-semibold">1</span>
-                <button id="pmPlus" aria-label="수량 늘리기" class="ease-spring w-10 h-10 rounded-full flex items-center justify-center hover:bg-edge/10"><iconify-icon icon="solar:add-circle-linear" width="20"></iconify-icon></button>
-              </div>
-              <p id="pmTotal" class="text-2xl font-bold tracking-tight tabular-nums"></p>
-            </div>
-            <button id="pmAdd" class="group ease-spring mt-5 inline-flex items-center justify-between gap-4 rounded-full bg-cinnabar text-white pl-8 pr-2 py-2 min-h-[56px] text-base font-semibold hover:scale-[1.02] active:scale-[0.98] hover:shadow-[0_0_30px_rgba(200,85,61,0.25)]">
-              장바구니에 담기
-              <span class="ease-spring w-10 h-10 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:cart-large-2-linear" width="20"></iconify-icon></span>
-            </button>
-          </div>
-          <!-- 받아 보시기까지 · 배송 · 환불 요약 -->
-          <div class="md:col-span-2 border-t border-edge/10 px-6 py-6 md:px-10 md:py-7">
-            <p class="text-xs font-semibold text-fg2">받아 보시기까지</p>
-            <ol id="pmSteps" class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2"></ol>
-            <div class="mt-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-subtle">
-              <p class="flex flex-wrap gap-x-4 gap-y-1">
-                <span class="flex items-center gap-1.5"><iconify-icon icon="solar:delivery-linear" width="15"></iconify-icon>결제 후 1–2일 등기 발송 · 5만 원 이상 무료</span>
-                <span class="flex items-center gap-1.5"><iconify-icon icon="solar:wallet-linear" width="15"></iconify-icon>발송 전 전액 환불</span>
-              </p>
-              <p class="flex gap-4 shrink-0">
-                <a id="pmDetailLink" href="#" class="ease-spring inline-flex items-center gap-1 text-cinnabar-soft hover:gap-2">이 부적 자세히 보기 <iconify-icon icon="solar:arrow-right-linear" width="13"></iconify-icon></a>
-                <a href="ritual.html?id=charm" class="ease-spring inline-flex items-center gap-1 hover:text-fg">부적 안내</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script src="assets/data.js"></script>
   <script src="assets/common.js"></script>
-  <script src="assets/booking.js"></script>
   <script src="assets/profile.js"></script>
   <script>
     const { D, $, $$, won, manwon, esc, hash, monkUrl, monkAvatar, landscapeSVG, charmSVG, stars } = YW;
@@ -693,15 +626,11 @@
         const useFeatured = n >= 5 && (n - 1) % 4 === 0;
         const colCls = { 1: 'lg:grid-cols-2', 2: 'lg:grid-cols-2', 3: 'lg:grid-cols-3' }[n] || 'lg:grid-cols-4';
         $('#charmGrid').classList.add('grid-cols-2', colCls);
-        // dev 옵션 charmClick: page(상세 페이지로 이동) | modal(팝업)
-        const toPage = YW.devOpt('charmClick') === 'page';
         $('#charmGrid').innerHTML = m.charms.map((ci, i) => {
           const c = D.CHARM_TYPES[ci.id];
           const big = useFeatured && i === 0;
-          const open = (cls, label = '') => toPage
-            ? `<a href="${YW.charmUrl(m.id, ci.id)}" ${label} class="${cls}">`
-            : `<button type="button" data-open="${ci.id}" ${label} class="${cls}">`;
-          const close = toPage ? '</a>' : '</button>';
+          const open = (cls, label = '') => `<a href="${YW.charmUrl(m.id, ci.id)}" ${label} class="${cls}">`;
+          const close = '</a>';
           return `
           <article class="reveal group ${big ? 'col-span-2 lg:row-span-2' : ''} rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-edge/20" style="--index:${i % 4}">
             <div class="h-full rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] flex flex-col overflow-hidden">
@@ -716,117 +645,36 @@
                 <div class="mt-4 flex ${big ? 'flex-row items-center' : 'flex-col items-stretch sm:flex-row sm:items-center'} justify-between gap-3">
                   <p class="font-semibold tabular-nums">${won(ci.price)}<span class="text-subtle text-xs font-normal">부터</span></p>
                   ${open('ease-spring h-11 px-4 justify-center rounded-full bg-edge/5 border border-edge/10 text-sm font-semibold flex items-center gap-1.5 hover:bg-cinnabar hover:border-cinnabar hover:text-white active:scale-[0.97]')}
-                    <iconify-icon icon="solar:${toPage ? 'arrow-right-linear' : 'cart-large-2-linear'}" width="16"></iconify-icon>${toPage ? '자세히' : '담기'}
+                    <iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon>자세히
                   ${close}
                 </div>
               </div>
             </div>
           </article>`;
         }).join('');
-        $('#charmGrid').addEventListener('click', e => { const b = e.target.closest('[data-open]'); if (b) openProduct(b.dataset.open); });
       }
-
-      // ---------- 부적 모달 ----------
-      const pm = { id: null, price: 0, material: 'print', bless: false, qty: 1 };
-      const PM_HIDE = ['translate-y-8', 'opacity-0'];
-      $('#pmBlessPrice').textContent = '+' + won(D.BLESS_PRICE);
-      $('#pmSteps').innerHTML = D.RITUAL_DETAILS.charm.steps.map((s, i) => `
-        <li class="rounded-xl bg-edge/[0.03] border border-edge/10 px-3 py-2.5">
-          <span class="font-serif font-extrabold text-cinnabar mr-1">${i + 1}</span><b class="text-sm">${s.t}</b>
-        </li>`).join('');
-      function openProduct(id) {
-        const ci = m.charms.find(x => x.id === id), c = D.CHARM_TYPES[id];
-        Object.assign(pm, { id, price: ci.price, material: 'print', bless: false, qty: 1 });
-        $('#pmArt').innerHTML = YW.charmArt(m, id);
-        $('#pmCat').textContent = `${c.cat} · ${m.name} 스님`;
-        $('#pmTitle').textContent = c.name;
-        $('#pmDesc').textContent = c.desc;
-        $('#pmBless').checked = false;
-        $('#pmName').value = '';
-        $('#pmDetailLink').href = YW.charmUrl(m.id, id);
-        renderPm();
-        YW.openLayer($('#productModal'), $('#pmPanel'), PM_HIDE);
-      }
-      const pmUnit = () => YW.charmUnit(pm.price, pm.material, pm.bless);
-      function renderPm() {
-        $('#pmMaterial').innerHTML = D.MATERIALS.map(x => `
-          <button data-mat="${x.id}" class="ease-spring flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-left border ${pm.material === x.id ? 'border-cinnabar/70 bg-cinnabar/10' : 'border-edge/10 bg-edge/[0.03] hover:bg-edge/[0.06]'}">
-            <span><span class="block text-sm font-semibold">${x.name}</span><span class="block text-xs text-subtle mt-0.5">${x.note}</span></span>
-            <span class="text-sm tabular-nums ${pm.material === x.id ? 'text-cinnabar-soft' : 'text-muted'}">${x.add ? '+' + won(x.add) : '기본'}</span>
-          </button>`).join('');
-        $('#pmQty').textContent = pm.qty;
-        $('#pmTotal').textContent = won(pmUnit() * pm.qty);
-      }
-      $('#pmMaterial').addEventListener('click', e => { const b = e.target.closest('[data-mat]'); if (b) { pm.material = b.dataset.mat; renderPm(); } });
-      $('#pmBless').addEventListener('change', e => { pm.bless = e.target.checked; renderPm(); });
-      $('#pmMinus').addEventListener('click', () => { pm.qty = Math.max(1, pm.qty - 1); renderPm(); });
-      $('#pmPlus').addEventListener('click', () => { pm.qty = Math.min(9, pm.qty + 1); renderPm(); });
-      $('#pmAdd').addEventListener('click', async () => {
-        const c = D.CHARM_TYPES[pm.id];
-        const ok = await YW.addToCart(m.id, YW.charmCartItem(m, pm.id, { material: pm.material, bless: pm.bless, who: $('#pmName').value.trim(), qty: pm.qty }));
-        if (!ok) return;
-        YW.closeLayer($('#productModal'));
-        YW.toast(`${c.name}을 담았습니다`);
-      });
-      $('#productModal').addEventListener('click', e => { if (e.target.closest('[data-close]')) YW.closeLayer($('#productModal')); });
 
       // ---------- 제례 · 기도 ----------
-      // dev 옵션 riteClick: page(카드 → 의식 예약 페이지) | inline(이 페이지 안에서 바로 예약)
       $('#ritualTitle').innerHTML = `${m.name} 스님이<br>모시는 의식`;
       const services = m.services.map(s => ({ ...D.SERVICE_TYPES[s.id], ...s }));
-      if (YW.devOpt('riteClick') === 'page') {
-        $('#ritualBody').innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">${services.map((s, i) => `
-          <a href="${YW.riteUrl(m.id, s.id)}" class="reveal group block rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-cinnabar/50" style="--index:${i % 2}">
-            <article class="h-full rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-7 md:p-8 flex flex-col">
-              <div class="flex items-start justify-between gap-4">
-                <div>
-                  <p class="text-xs text-cinnabar-soft font-medium">${s.dur}</p>
-                  <h3 class="mt-1 text-2xl font-bold tracking-tight">${s.name}</h3>
-                </div>
-                <span class="font-serif font-extrabold text-4xl text-edge/15 ease-spring group-hover:text-cinnabar">${s.hanja}</span>
+      $('#ritualBody').innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-5">${services.map((s, i) => `
+        <a href="${YW.riteUrl(m.id, s.id)}" class="reveal group block rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-cinnabar/50" style="--index:${i % 2}">
+          <article class="h-full rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-7 md:p-8 flex flex-col">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-xs text-cinnabar-soft font-medium">${s.dur}</p>
+                <h3 class="mt-1 text-2xl font-bold tracking-tight">${s.name}</h3>
               </div>
-              <p class="mt-3 text-sm text-muted leading-relaxed">${s.desc}</p>
-              ${s.way ? `<p class="mt-4 text-sm text-fg2 flex gap-2 leading-relaxed"><iconify-icon icon="solar:hand-heart-linear" width="18" class="text-cinnabar shrink-0 mt-0.5"></iconify-icon>${s.way[0]}</p>` : ''}
-              <div class="mt-auto pt-6 flex items-center justify-between gap-3">
-                <p class="font-semibold tabular-nums">${won(s.price)}<span class="text-subtle text-xs font-normal">부터</span></p>
-                <span class="ease-spring inline-flex items-center gap-2 rounded-full bg-edge/5 border border-edge/10 pl-4 pr-1.5 py-1.5 text-sm font-semibold group-hover:bg-cinnabar group-hover:border-cinnabar group-hover:text-white">자세히 보기 · 예약<span class="w-8 h-8 rounded-full bg-edge/5 flex items-center justify-center ease-spring group-hover:translate-x-0.5"><iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon></span></span>
-              </div>
-            </article>
-          </a>`).join('')}</div>`;
-      } else {
-        $('#ritualBody').innerHTML = `
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10">
-            <div class="lg:col-span-5"><div id="serviceList" class="lg:sticky lg:top-40 flex flex-col gap-2" role="radiogroup" aria-label="의식 종류"></div></div>
-            <div class="lg:col-span-7">
-              <div class="reveal rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10">
-                <div id="bookingRoot" class="rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] p-5 sm:p-8"></div>
-              </div>
+              <span class="font-serif font-extrabold text-4xl text-edge/15 ease-spring group-hover:text-cinnabar">${s.hanja}</span>
             </div>
-          </div>`;
-        // 메인 등에서 특정 의식을 눌러 들어오면 그 의식을 먼저 선택 (?svc=sasipgu)
-        const booking = YW.mountBooking($('#bookingRoot'), { monk: m, serviceId: new URLSearchParams(location.search).get('svc') });
-        const renderServices = () => {
-          $('#serviceList').innerHTML = services.map((s, i) => {
-            const on = booking.service.id === s.id;
-            return `
-            <button type="button" role="radio" aria-checked="${on}" data-svc="${s.id}" class="reveal ease-spring group flex items-center gap-4 rounded-2xl px-4 py-4 text-left border ${on ? 'bg-edge/[0.06] border-edge/15' : 'border-transparent hover:bg-edge/[0.03]'}" style="--index:${i}">
-              <span class="font-serif font-extrabold text-lg w-12 shrink-0 ${on ? 'text-cinnabar' : 'text-faint group-hover:text-muted'} ease-spring">${s.hanja}</span>
-              <span class="flex-1">
-                <span class="block font-semibold ${on ? 'text-fg' : 'text-fg2'}">${s.name}</span>
-                <span class="block text-xs text-subtle mt-0.5">${s.dur} · ${manwon(s.price)}부터</span>
-              </span>
-              <iconify-icon icon="solar:alt-arrow-right-linear" width="18" class="ease-spring ${on ? 'text-cinnabar' : 'text-faint -translate-x-1 opacity-0 group-hover:opacity-100 group-hover:translate-x-0'}"></iconify-icon>
-            </button>`;
-          }).join('');
-          YW.observeReveals();
-        };
-        $('#serviceList').addEventListener('click', e => {
-          const b = e.target.closest('[data-svc]'); if (!b) return;
-          booking.setService(b.dataset.svc); renderServices();
-          if (window.innerWidth < 1024) $('#serviceDetail').scrollIntoView({ behavior: 'smooth', block: 'center' });
-        });
-        renderServices();
-      }
+            <p class="mt-3 text-sm text-muted leading-relaxed">${s.desc}</p>
+            ${s.way ? `<p class="mt-4 text-sm text-fg2 flex gap-2 leading-relaxed"><iconify-icon icon="solar:hand-heart-linear" width="18" class="text-cinnabar shrink-0 mt-0.5"></iconify-icon>${s.way[0]}</p>` : ''}
+            <div class="mt-auto pt-6 flex items-center justify-between gap-3">
+              <p class="font-semibold tabular-nums">${won(s.price)}<span class="text-subtle text-xs font-normal">부터</span></p>
+              <span class="ease-spring inline-flex items-center gap-2 rounded-full bg-edge/5 border border-edge/10 pl-4 pr-1.5 py-1.5 text-sm font-semibold group-hover:bg-cinnabar group-hover:border-cinnabar group-hover:text-white">자세히 보기 · 예약<span class="w-8 h-8 rounded-full bg-edge/5 flex items-center justify-center ease-spring group-hover:translate-x-0.5"><iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon></span></span>
+            </div>
+          </article>
+        </a>`).join('')}</div>`;
 
       // ---------- 후기 ----------
       $('#reviewTitle').innerHTML = `${m.name} 스님께<br>맡기신 분들의 이야기`;
