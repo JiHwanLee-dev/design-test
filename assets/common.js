@@ -311,7 +311,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', tabCount: 'big', headCount: 'serif', charmKinds: 'group', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', riteCard: 'aligned', navMerge: 'merged', navSticky: 'on', riteLook: 'gallery', riteCount: 'many', riteLayout: 'shop', charmRotate: 'on' };
+  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', tabCount: 'big', headCount: 'serif', charmKinds: 'group', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', emptyRitual: 'hide', riteCard: 'aligned', navMerge: 'merged', navSticky: 'on', riteLook: 'gallery', riteCount: 'many', riteLayout: 'shop', charmRotate: 'on' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -940,11 +940,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     { key: 'riteLayout', label: '제례 · 기도 상세 구성', choices: [['shop', '쇼핑몰형 (부적과 같음)'], ['landing', '랜딩형']] },
     { key: 'charmLayout', label: '부적 상세 구성', choices: [['shop', '쇼핑몰형'], ['intro', '소개형']] },
     { key: 'gate', label: '스님 페이지 들어갈 때 산문', choices: [['once', '처음 한 번'], ['always', '매번'], ['walk', '걸어 들어가기'], ['none', '없음']] },
-    { key: 'ritualGroup', label: '메인 의식 구성', choices: [['group', '3개 묶음'], ['list', '목록형'], ['cards', '카드형']] },
-    { key: 'cardStyle', label: '메인 의식 카드 글씨', when: () => devOpt('mainLayout') === 'brand' && devOpt('ritualGroup') === 'cards', off: '메인 구성 랜딩형 + 메인 의식 구성 카드형일 때만', choices: [['overlay', '사진 위'], ['below', '사진 아래']] },
-    { key: 'cardLink', label: '메인 의식 카드 클릭', when: () => devOpt('mainLayout') === 'brand' && devOpt('ritualGroup') === 'cards', off: '메인 구성 랜딩형 + 메인 의식 구성 카드형일 때만', choices: [['detail', '상세 페이지만'], ['both', '상세 + 바로 예약']] },
     { key: 'emptyRitual', label: '모시는 스님이 없는 의식', choices: [['hide', '숨김'], ['soon', '준비 중 표시']] },
-    { key: 'cardPrice', label: '의식 카드 가격', when: () => devOpt('mainLayout') === 'brand' && devOpt('ritualGroup') === 'cards', off: '메인 구성 랜딩형 + 메인 의식 구성 카드형일 때만', choices: [['hide', '숨김'], ['show', '표시']] },
   ];
   function setDevOpt(key, val) {
     const o = store.get('yw-dev-opts', {}); o[key] = val; store.set('yw-dev-opts', o);

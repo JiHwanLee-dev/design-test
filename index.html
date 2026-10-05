@@ -342,7 +342,7 @@
   <script src="assets/data.js"></script>
   <script src="assets/common.js"></script>
   <script>
-    const { D, $, $$, manwon, monkUrl, monkAvatar, landscapeSVG, charmSVG, stars } = YW;
+    const { D, $, $$, monkUrl, monkAvatar, landscapeSVG, charmSVG, stars } = YW;
     const MONKS = D.MONKS;
     const single = MONKS.length === 1;
 
@@ -366,7 +366,7 @@
 
 
     // ---------- 모실 수 있는 의식 ----------
-    // dev 옵션: cardLink = detail(상세만) | both(상세 + 바로 예약), emptyRitual = hide | soon
+    // dev 옵션: emptyRitual = hide | soon
     // 의식 묶음: 부적 / 제례 · 재 / 기도 · 축원 (스님 수가 바뀌어도 늘 같은 틀)
     const RITUAL_GROUPS = [
       { key: 'charm', name: '부적', hanja: '符', img: 'charm', line: '바라는 일을 담아 스님이 한 장씩 직접 씁니다.', keys: ['charm'] },
@@ -383,7 +383,7 @@
       return MONKS.length > 1 && ms.length ? `<span class="flex items-center gap-2 text-sm text-muted"><span class="flex -space-x-2">${ms.slice(0, 4).map(m => monkAvatar(m, `w-6 h-6 text-[8px] ring-2 ${ring}`)).join('')}</span>스님 ${ms.length}분</span>` : '';
     };
 
-    // A. 3개 묶음 카드
+    // 3개 묶음 카드 (부적 / 제례 · 재 / 기도 · 축원)
     function renderGroups() {
       const gs = groupsWithItems();
       $('#serviceGrid').className = `mt-12 grid grid-cols-1 ${gs.length >= 2 ? 'md:grid-cols-2' : ''} ${gs.length >= 3 ? 'lg:grid-cols-3' : ''} gap-4 lg:gap-5`;
@@ -414,112 +414,12 @@
         </article>`).join('');
       YW.observeReveals();
     }
-
-    // B. 목록형: 묶음 제목 아래 의식을 한 줄씩 (작은 사진 곁들임)
-    function renderList() {
-      $('#serviceGrid').className = 'mt-12 space-y-12';
-      $('#serviceGrid').innerHTML = groupsWithItems().map((g, gi) => `
-        <div class="reveal grid grid-cols-1 lg:grid-cols-[14rem_1fr] gap-4 lg:gap-10" style="--index:${gi}">
-          <div class="flex lg:block items-baseline gap-3 pt-2">
-            <span class="font-serif font-extrabold text-3xl lg:text-4xl text-cinnabar-soft">${g.hanja}</span>
-            <div class="lg:mt-3"><h3 class="text-xl font-bold tracking-tight">${g.name}</h3><p class="hidden lg:block mt-2 text-sm text-muted leading-relaxed">${g.line}</p></div>
-          </div>
-          <ul class="divide-y divide-edge/10 border-y border-edge/10">
-            ${g.items.map(r => `<li><a href="${YW.ritualUrl(r.key)}" class="group flex items-center gap-5 py-5 ease-spring ${r.active ? '' : 'opacity-60'}">
-              <span class="relative w-20 h-20 md:w-28 md:h-20 shrink-0 rounded-2xl overflow-hidden bg-deep">${YW.photo(YW.ritualImg(r.key), r.name, 'absolute inset-0 w-full h-full object-cover ease-spring group-hover:scale-110')}</span>
-              <span class="flex-1 min-w-0">
-                <span class="flex flex-wrap items-baseline gap-x-3"><b class="text-lg font-bold tracking-tight ease-spring group-hover:text-cinnabar-soft">${r.key === 'charm' ? '부적 안내' : r.name}</b><span class="text-sm text-subtle">${r.active ? r.dur : '준비 중'}</span></span>
-                <span class="block mt-1 text-[15px] text-muted leading-relaxed line-clamp-2">${r.summary}</span>
-                ${monkStack([r]) ? `<span class="block mt-2">${monkStack([r], 'ring-page')}</span>` : ''}
-              </span>
-              <span class="ease-spring w-10 h-10 shrink-0 rounded-full bg-edge/5 border border-edge/10 flex items-center justify-center group-hover:bg-cinnabar group-hover:border-cinnabar group-hover:text-white group-hover:translate-x-1" aria-hidden="true"><iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></span>
-            </a></li>`).join('')}
-          </ul>
-        </div>`).join('');
-      YW.observeReveals();
-    }
-
-    function renderServices() {
-      const layout = YW.devOpt('ritualGroup');
-      if (layout === 'group') return renderGroups();
-      if (layout === 'list') return renderList();
-      $('#serviceGrid').className = 'mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5';
-      const both = YW.devOpt('cardLink') === 'both';
-      const showPrice = YW.devOpt('cardPrice') === 'show'; // 숨기면 소요 시간만 표시
-      const overlay = YW.devOpt('cardStyle') === 'overlay'; // 사진 위에 글씨 / 사진 아래에 글씨
-      const items = YW.visibleRituals();
-      $('#serviceGrid').innerHTML = items.map((r, i) => {
-        const big = i === 0 && r.key === 'charm';
-        // 마지막 줄이 비지 않게 마지막 카드를 늘림 (첫 부적 카드는 2칸 차지)
-        const rem = (items.length + (items[0]?.key === 'charm' ? 1 : 0)) % 3;
-        const fill = i === items.length - 1 && rem ? (rem === 2 ? 'lg:col-span-2' : 'lg:col-span-3') : '';
-        const quick = r.by.length === 1 ? YW.bookUrl(r.by[0], r.key) : `${YW.ritualUrl(r.key)}#monks`;
-        // 스님이 여러 분이면 이 의식을 모시는 스님 얼굴을 겹쳐 보여 줌
-        const stack = MONKS.length > 1 && r.active ? `<span class="flex items-center gap-2"><span class="flex -space-x-2">${r.by.slice(0, 3).map(m => monkAvatar(m, 'w-6 h-6 text-[8px] ring-2 ring-black/40')).join('')}</span>스님 ${r.by.length}분</span>` : '';
-        const meta = `${stack}${!r.active ? '<b>모실 스님을 찾고 있습니다</b>' : showPrice ? `<b class="tabular-nums">${manwon(r.min)}부터</b>` : ''}<span class="flex items-center gap-1.5">${showPrice || !r.active ? '' : '<iconify-icon icon="solar:clock-circle-linear" width="16"></iconify-icon>'}${r.dur}</span>`;
-        const quickBtn = both && r.active ? `<a href="${quick}" class="relative z-10 ease-spring h-10 px-4 rounded-full bg-cinnabar text-white text-sm font-semibold flex items-center gap-1.5 hover:scale-[1.03] active:scale-[0.97]"><iconify-icon icon="solar:calendar-linear" width="16"></iconify-icon>${r.key === 'charm' ? '바로 주문' : '바로 예약'}</a>` : '';
-        if (overlay) return `
-        <article class="reveal group relative ${big ? 'sm:col-span-2' : ''} ${fill} rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-cinnabar/50" style="--index:${i % 3}">
-          <div class="${r.active ? '' : 'opacity-70'} relative h-full min-h-[22rem] md:min-h-[24rem] overflow-hidden rounded-[calc(2rem-0.375rem)] bg-deep">
-            ${YW.photo(YW.ritualImg(r.key), r.name, 'absolute inset-0 w-full h-full object-cover ease-spring group-hover:scale-105')}
-            <span class="absolute inset-0" style="background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.72) 38%, rgba(0,0,0,0.2) 66%, rgba(0,0,0,0) 85%);"></span>
-            ${big ? '<span class="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></span>' : ''}
-            ${r.active ? '' : '<span class="absolute right-5 top-5 rounded-full px-2.5 py-1 text-[11px] bg-black/50 text-white">준비 중</span>'}
-            ${big ? `<div class="hidden sm:flex absolute right-8 top-8 gap-3">
-              ${r.by[0].charms.slice(0, 2).map((ci, k) => `<div class="w-20 md:w-24 ease-spring ${k ? 'translate-y-4 rotate-[5deg] group-hover:rotate-[2deg]' : '-rotate-[4deg] group-hover:-rotate-[1deg]'} shadow-[0_25px_50px_-15px_rgba(0,0,0,0.7)] rounded-[0.75rem]">${YW.charmArt(r.by[0], ci.id)}</div>`).join('')}
-            </div>` : ''}
-            <div class="absolute inset-x-0 bottom-0 p-6 md:p-8 text-white">
-              <span class="font-serif font-extrabold text-3xl text-white/80">${r.mark}</span>
-              <h3 class="mt-2 ${big ? 'text-3xl' : 'text-2xl'} font-bold tracking-tight drop-shadow-sm">
-                <a href="${YW.ritualUrl(r.key)}" class="after:absolute after:inset-0 after:content-[''] focus:outline-none">${r.name}</a>
-              </h3>
-              <p class="mt-2 text-sm text-white/85 leading-relaxed line-clamp-2 max-w-[42ch]">${r.summary}</p>
-              <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
-                <p class="text-sm text-white/85 flex flex-wrap items-center gap-x-3 gap-y-1">${meta}</p>
-                <div class="flex items-center gap-2">
-                  ${quickBtn}
-                  <span class="ease-spring w-10 h-10 shrink-0 rounded-full bg-white/15 ring-1 ring-white/30 flex items-center justify-center group-hover:bg-cinnabar group-hover:ring-cinnabar group-hover:translate-x-1" aria-hidden="true"><iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </article>`;
-        return `
-        <article class="reveal group relative ${big ? 'sm:col-span-2' : ''} ${fill} rounded-[2rem] p-1.5 bg-edge/5 ring-1 ring-edge/10 ease-spring hover:ring-cinnabar/50" style="--index:${i % 3}">
-          <div class="${r.active ? '' : 'opacity-70'} relative h-full overflow-hidden rounded-[calc(2rem-0.375rem)] bg-surface shadow-[inset_0_1px_1px_rgba(255,255,255,0.08)] flex ${big ? 'flex-col sm:flex-row' : 'flex-col'}">
-            <div class="relative overflow-hidden shrink-0 ${big ? 'h-56 sm:h-auto sm:w-[46%] sm:order-2' : 'h-48'}">
-              ${YW.photo(YW.ritualImg(r.key), r.name, 'absolute inset-0 w-full h-full object-cover ease-spring group-hover:scale-105')}
-              <span class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-transparent"></span>
-              <span class="absolute left-5 bottom-3 font-serif font-extrabold text-3xl text-white/90 drop-shadow">${r.mark}</span>
-              ${r.active ? '' : '<span class="absolute right-4 top-4 rounded-full px-2.5 py-1 text-[11px] bg-black/50 text-white backdrop-blur-sm">준비 중</span>'}
-              ${big ? `<div class="hidden sm:flex absolute right-5 bottom-5 gap-2">
-                ${r.by[0].charms.slice(0, 2).map((ci, k) => `<div class="w-16 md:w-20 ease-spring ${k ? 'translate-y-3 rotate-[5deg] group-hover:rotate-[2deg]' : '-rotate-[4deg] group-hover:-rotate-[1deg]'} shadow-[0_20px_40px_-15px_rgba(0,0,0,0.6)] rounded-[0.75rem]">${YW.charmArt(r.by[0], ci.id)}</div>`).join('')}
-              </div>` : ''}
-            </div>
-            <div class="flex-1 flex flex-col p-6 md:p-7 ${big ? 'sm:justify-center sm:p-10' : ''}">
-              <h3 class="${big ? 'text-2xl' : 'text-xl'} font-bold tracking-tight">
-                <a href="${YW.ritualUrl(r.key)}" class="after:absolute after:inset-0 after:content-[''] focus:outline-none">${r.name}</a>
-              </h3>
-              <p class="mt-2 text-sm text-muted leading-relaxed max-w-[46ch]">${r.desc || r.summary}</p>
-              <div class="mt-auto pt-6 flex flex-wrap items-center justify-between gap-3">
-                <p class="text-sm flex flex-wrap items-center gap-x-3 gap-y-1">${stack}${!r.active ? '<b class="text-subtle">모실 스님을 찾고 있습니다</b>' : showPrice ? `<b class="tabular-nums">${manwon(r.min)}부터</b>` : ''}<span class="${showPrice || !r.active ? 'text-subtle' : 'text-muted'} flex items-center gap-1.5">${showPrice || !r.active ? '' : '<iconify-icon icon="solar:clock-circle-linear" width="16"></iconify-icon>'}${r.dur}</span></p>
-                <div class="flex items-center gap-2">
-                  ${both && r.active ? `<a href="${quick}" class="relative z-10 ease-spring h-10 px-4 rounded-full bg-cinnabar text-white text-sm font-semibold flex items-center gap-1.5 hover:scale-[1.03] active:scale-[0.97]"><iconify-icon icon="solar:calendar-linear" width="16"></iconify-icon>${r.key === 'charm' ? '바로 주문' : '바로 예약'}</a>` : ''}
-                  <span class="ease-spring w-10 h-10 shrink-0 rounded-full bg-edge/5 border border-edge/10 flex items-center justify-center group-hover:bg-cinnabar group-hover:border-cinnabar group-hover:text-white group-hover:translate-x-1" aria-hidden="true"><iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </article>`;
-      }).join('');
-      YW.observeReveals();
-    }
     // 안심 카드 사진 배치 (dev 옵션)
     const applyTrust = () => { $('#trustCard').dataset.style = YW.devOpt('trustStyle'); };
     applyTrust(); YW.onDevChange(k => { if (k === 'trustStyle') applyTrust(); });
-    renderServices();
+    renderGroups();
     // 메인 구성을 바꾸면 헤더까지 달라지므로 새로고침, 나머지는 바로 다시 그림
-    YW.onDevChange(key => { if (key === 'mainLayout') location.reload(); else { renderServices(); if (shopMode) renderShop(); } });
+    YW.onDevChange(key => { if (key === 'mainLayout') location.reload(); else { renderGroups(); if (shopMode) renderShop(); } });
 
     // ---------- 모시는 스님 (인원수에 따라 배치가 바뀜) ----------
     $('#monkTitle').innerHTML = single ? '정성을 올릴 스님을<br>소개합니다' : `스님 ${MONKS.length}분을 모시고 있습니다`;

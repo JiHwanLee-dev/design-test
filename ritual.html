@@ -622,7 +622,7 @@
             <div class="p-5">
             <p class="font-bold">${x.name}</p>
             <p class="mt-1 text-sm text-muted line-clamp-2">${x.summary}</p>
-            <p class="mt-4 text-sm">${!x.active ? '<b>준비 중</b>' : YW.devOpt('cardPrice') === 'show' ? `<b class="tabular-nums">${manwon(x.min)}부터</b>` : `<span class="text-muted">${x.dur}</span>`}</p>
+            <p class="mt-4 text-sm">${!x.active ? '<b>준비 중</b>' : `<span class="text-muted">${x.dur}</span>`}</p>
             </div>
           </div>
         </a>`).join('');
