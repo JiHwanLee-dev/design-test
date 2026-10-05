@@ -405,7 +405,7 @@
           const cats = D.CHARM_CATS.map(c => [c, charms.filter(p => catOf(p) === c)]).filter(([, ps]) => ps.length);
           if (many && !cats.some(([c]) => c === st.ccat)) st.ccat = 'all';
           // 분류 표지 한자 (목차 · 칩 · 묶음 제목에 같이 씀)
-          const CAT_MARK = D.CHARM_CAT_MARK;
+          const CAT_MARK = D.CHARM_CAT_MARK || {}; // 예전 data.js가 캐시돼 있어도 안 깨지게
           const catList = [['all', '전체', charms.length, '全'], ...cats.map(([c, ps]) => [c, c, ps.length, CAT_MARK[c] || '符'])];
 
           // 모바일 · 태블릿: 고정 줄 아래 큰 칩 한 줄 (데스크탑은 왼쪽 목차라 숨김)

@@ -247,7 +247,7 @@
         // dev charmKinds: group(분류별 2열, 설명 한 줄) / names(분류별 이름만) / list(한 줄씩, 예전)
         const kindsStyle = YW.devOpt('charmKinds');
         const groups = D.CHARM_CATS.map(cat => [cat, ids.filter(id => D.CHARM_TYPES[id].cat === cat)]).filter(([, g]) => g.length);
-        const groupHead = (cat, n) => `<h3 class="flex items-center gap-2 text-base font-bold tracking-tight"><span class="font-serif font-extrabold text-lg leading-none text-cinnabar-soft">${D.CHARM_CAT_MARK[cat] || '符'}</span>${cat}<span class="font-serif font-extrabold text-cinnabar-soft tabular-nums">${n}</span></h3>`;
+        const groupHead = (cat, n) => `<h3 class="flex items-center gap-2 text-base font-bold tracking-tight"><span class="font-serif font-extrabold text-lg leading-none text-cinnabar-soft">${(D.CHARM_CAT_MARK || {})[cat] || '符'}</span>${cat}<span class="font-serif font-extrabold text-cinnabar-soft tabular-nums">${n}</span></h3>`;
         if (kindsStyle === 'list') waysBody = `<div class="rounded-2xl ring-1 ring-edge/10 divide-y divide-edge/10">${ids.map(id => {
             const c = D.CHARM_TYPES[id];
             return `<a href="${hrefOf(id)}" class="group flex items-start gap-4 px-5 py-4 ease-spring hover:bg-edge/[0.03]">
