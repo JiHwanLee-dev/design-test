@@ -421,6 +421,14 @@
         const CHARM_MANY = 13;
         st.ccat = 'all'; st.rcat = 'all'; st.page = 1; st.dir = 0; st.rpage = 1; st.rdir = 0;
         const catOf = p => D.CHARM_TYPES[p.id].cat;
+        // 목록 제목 옆 숫자 (dev headCount): serif(제목 크기 명조, 주홍) / badge / unit(37가지) / plain(예전, 작은 회색)
+        const hc = (n, sm = false) => {
+          const v = YW.devOpt('headCount');
+          if (v === 'plain') return `<span class="${sm ? 'text-sm' : 'text-base md:text-lg'} font-medium text-subtle tabular-nums">${n}</span>`;
+          if (v === 'badge') return `<span class="inline-flex items-center justify-center align-middle -translate-y-0.5 min-w-[2rem] ${sm ? 'h-6 text-xs' : 'h-7 md:h-8 text-sm md:text-base'} px-2.5 rounded-full bg-cinnabar/10 text-cinnabar-soft font-bold tabular-nums">${n}</span>`;
+          if (v === 'unit') return `<span class="${sm ? 'text-sm' : 'text-base md:text-lg'} font-medium text-muted"><b class="font-bold text-cinnabar-soft tabular-nums">${n}</b>가지</span>`;
+          return `<span class="ml-0.5 font-serif font-extrabold text-cinnabar-soft tabular-nums">${n}</span>`;
+        };
         const draw = () => {
           const tabsDef = [['all', '전체', products.length], ['charm', '부적', nCharm], ['ritual', '제례 · 기도', nRite]].filter(t => t[2]);
           // 분류 탭 모양: underline(큰 밑줄 탭) / tiles(분류 타일) / pill(막대, 크게)
@@ -455,7 +463,7 @@
           $('#stSortWrap').classList.toggle('mb-2', tabStyle === 'underline'); // 밑줄 탭 높이에 맞춰 살짝 띄움
           const list = products.filter(p => st.cat === 'all' || (st.cat === 'charm' ? p.kind === 'charm' : p.kind === 'rite')).sort(sorters[st.sort]);
           const charms = list.filter(p => p.kind === 'charm'), rites = list.filter(p => p.kind === 'rite');
-          const head = (t, n, id) => `<h2 id="${id}" class="mb-6 text-2xl md:text-3xl font-bold tracking-tight scroll-mt-40">${t} <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${n}</span></h2>`;
+          const head = (t, n, id) => `<h2 id="${id}" class="mb-6 text-2xl md:text-3xl font-bold tracking-tight scroll-mt-40">${t} ${hc(n)}</h2>`;
           const card = p => YW.charmCard(p, { best: best.includes(p.id), label: catOf(p) }); // 스님 페이지에선 스님 이름 대신 분류
           const grid = ps => `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-9">${ps.map(card).join('')}</div>`;
 
@@ -493,7 +501,7 @@
           const merged = YW.devOpt('navMerge') === 'merged' && many && rites.length > 0 && YW.devOpt('riteCard') === 'aligned';
           // 분류별 묶음: 데스크탑 3개 미리보기, 모바일은 옆으로 넘겨 전부
           const small = p => YW.charmCard(p, { best: best.includes(p.id), compact: true });
-          const catHead = (c, n) => `<span class="font-serif font-extrabold text-cinnabar-soft mr-2">${CAT_MARK[c] || '符'}</span>${c} <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${n}</span>`;
+          const catHead = (c, n) => `<span class="font-serif font-extrabold text-cinnabar-soft mr-2">${CAT_MARK[c] || '符'}</span>${c} ${hc(n)}`;
           // 페이지 넘김 (부적 · 제례 같이 씀). attr: 버튼에 붙일 data 속성(쪽 번호)
           const pagerHtml = (cur, pages, attr, label, cols) => {
             if (pages <= 1) return '';
@@ -518,7 +526,7 @@
             st.page = Math.min(Math.max(1, st.page || 1), pages);
             const from = (st.page - 1) * per, shown = ps.slice(from, from + per);
             const pager = pagerHtml(st.page, pages, 'data-page', '부적 페이지', cols);
-            const title = st.ccat === 'all' ? `<span class="font-serif font-extrabold text-cinnabar-soft mr-2">全</span>전체 부적 <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${ps.length}</span>` : catHead(st.ccat, ps.length);
+            const title = st.ccat === 'all' ? `<span class="font-serif font-extrabold text-cinnabar-soft mr-2">全</span>전체 부적 ${hc(ps.length)}` : catHead(st.ccat, ps.length);
             const body = `
               <div class="mb-6 flex items-end justify-between gap-4">
                 <h2 class="text-2xl md:text-3xl font-bold tracking-tight">${title}</h2>
@@ -555,7 +563,7 @@
                 `<button type="button" data-rcat="${k}" aria-pressed="${st.rcat === k}" class="ease-spring shrink-0 h-10 pl-3 pr-4 rounded-full flex items-center gap-1.5 text-[15px] ring-1 ${st.rcat === k ? 'bg-fg text-page ring-fg font-semibold' : 'bg-surface text-fg2 ring-edge/15 font-medium'}"><span class="font-serif font-extrabold ${st.rcat === k ? 'text-cinnabar' : 'text-cinnabar-soft'}">${mk}</span>${name}<span class="text-xs tabular-nums opacity-60">${n}</span></button>`).join('')}</div>` : '';
               const body = `
                 <div class="mb-6 flex items-end justify-between gap-4"><div>
-                  <h2 class="text-2xl md:text-3xl font-bold tracking-tight"><span class="font-serif font-extrabold text-cinnabar-soft mr-2">${st.rcat === 'all' ? '祭' : cur[3]}</span>${st.rcat === 'all' ? '제례 · 기도' : cur[1]} <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${all.length}</span></h2>
+                  <h2 class="text-2xl md:text-3xl font-bold tracking-tight"><span class="font-serif font-extrabold text-cinnabar-soft mr-2">${st.rcat === 'all' ? '祭' : cur[3]}</span>${st.rcat === 'all' ? '제례 · 기도' : cur[1]} ${hc(all.length)}</h2>
                   <p class="mt-1.5 text-[15px] text-subtle">${m.name} 스님이 직접 모시는 의식입니다. 날짜를 고르면 바로 예약됩니다.</p>
                 </div>${rpages > 1 ? `<p class="shrink-0 text-sm text-subtle tabular-nums">${rfrom + 1}–${rfrom + shown.length} / ${all.length}</p>` : ''}</div>
                 ${chips}
@@ -569,11 +577,11 @@
             }
             if (rStyle === 'compact') return head('제례 · 기도', rs.length, 'stRites') + `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">${rs.map(p => YW.riteCard(p)).join('')}</div>`;
             const groups = D.SHOP_CATS.filter(c => c.services).map(c => [c, rs.filter(p => p.group === c.key)]).filter(([, ps]) => ps.length);
-            return `<h2 id="stRites" class="mb-2 text-2xl md:text-3xl font-bold tracking-tight scroll-mt-40"><span class="font-serif font-extrabold text-cinnabar-soft mr-2">祭</span>제례 · 기도 <span class="text-base md:text-lg font-medium text-subtle tabular-nums">${rs.length}</span></h2>
+            return `<h2 id="stRites" class="mb-2 text-2xl md:text-3xl font-bold tracking-tight scroll-mt-40"><span class="font-serif font-extrabold text-cinnabar-soft mr-2">祭</span>제례 · 기도 ${hc(rs.length)}</h2>
               <p class="text-[15px] text-subtle">${m.name} 스님이 직접 모시는 의식입니다. 날짜를 고르면 바로 예약됩니다.</p>`
               + groups.map(([c, ps]) => `
               <section class="mt-8">
-                <h3 class="mb-4 flex items-center gap-2 text-lg md:text-xl font-bold tracking-tight"><span class="font-serif font-extrabold text-cinnabar-soft">${c.hanja}</span>${c.name}<span class="text-sm font-medium text-subtle tabular-nums">${ps.length}</span></h3>
+                <h3 class="mb-4 flex items-center gap-2 text-lg md:text-xl font-bold tracking-tight"><span class="font-serif font-extrabold text-cinnabar-soft">${c.hanja}</span>${c.name}${hc(ps.length, true)}</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">${ps.map(p => YW.riteFeatureCard(p)).join('')}</div>
               </section>`).join('');
           };

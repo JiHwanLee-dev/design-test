@@ -312,7 +312,7 @@ window.YW = (() => {
     .sort((a, b) => b.active - a.active); // 준비 중인 의식은 뒤로
 
   // dev 옵션 (패널에서 바꾸고, 이 브라우저에 저장)
-  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', tabCount: 'big', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page', riteCard: 'aligned', navMerge: 'merged', navSticky: 'on', riteLook: 'gallery', riteCount: 'many', riteLayout: 'shop', charmRotate: 'on' };
+  const DEV_DEFAULTS = { profileView: 'panel', charmLayout: 'shop', storeTabs: 'tiles', tabCount: 'big', headCount: 'serif', monkCount: '2', charmCount: 'many', monkStyle: 'screen', trustStyle: 'full', headStyle: 'wide', screenAuto: 'on', ritualLayout: 'guide', guideDeco: 'rich', reviews: 'hide', ritualGroup: 'group', cardStyle: 'overlay', gate: 'always', heroImage: 'eaves', mainLayout: 'brand', monkLayout: 'mix', cardLink: 'detail', emptyRitual: 'hide', cardPrice: 'hide', charmClick: 'page', riteClick: 'page', riteCard: 'aligned', navMerge: 'merged', navSticky: 'on', riteLook: 'gallery', riteCount: 'many', riteLayout: 'shop', charmRotate: 'on' };
   const devOpt = k => { const o = store.get('yw-dev-opts', {}); return o[k] ?? DEV_DEFAULTS[k]; };
   const devHandlers = [];
   const onDevChange = fn => devHandlers.push(fn);
@@ -928,6 +928,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     { key: 'monkLayout', label: '스님 페이지 구성', choices: [['mix', '혼합형'], ['store', '스토어형'], ['intro', '소개형']] },
     { key: 'storeTabs', label: '스님 페이지 분류 탭', choices: [['underline', '큰 밑줄 탭'], ['tiles', '분류 타일'], ['pill', '막대 (크게)']] },
     { key: 'tabCount', label: '분류 탭 숫자 모양', choices: [['big', '크게 (명조)'], ['badge', '동그란 배지'], ['unit', '숫자 + 단위'], ['plain', '작게 (예전)']] },
+    { key: 'headCount', label: '목록 제목 옆 숫자', choices: [['serif', '명조 (주홍)'], ['badge', '동그란 배지'], ['unit', '숫자 + 단위'], ['plain', '작게 (예전)']] },
     { key: 'riteCard', label: '스님 페이지 제례 · 기도 카드', choices: [['aligned', '2단 맞춤'], ['feature', '큰 사진 + 분류'], ['compact', '작은 카드']] },
     { key: 'riteLook', label: '(2단 맞춤) 제례 카드 모양', choices: [['gallery', '화첩 (4열)'], ['index', '차림표 목록'], ['row', '부적형 가로'], ['cover', '큰 사진 표지']] },
     { key: 'navMerge', label: '(2단 맞춤) 왼쪽 목차', choices: [['merged', '하나로 합침'], ['split', '구역마다 따로']] },
