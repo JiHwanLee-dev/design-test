@@ -426,26 +426,31 @@
           // 분류 탭 모양: underline(큰 밑줄 탭) / tiles(분류 타일) / pill(막대, 크게)
           const tabStyle = YW.devOpt('storeTabs');
           const mark = { all: '全', charm: '符', ritual: '祭' };
+          // 탭 숫자 모양 (dev tabCount): big(타일은 오른쪽 위 큰 명조 숫자, 다른 탭은 배지) / badge / unit(37가지) / plain(예전)
+          const cntStyle = YW.devOpt('tabCount');
+          const cnt = (n, on, size = 'text-sm') => cntStyle === 'plain' ? `<span class="${size} tabular-nums opacity-60">${n}</span>`
+            : cntStyle === 'unit' ? `<span class="${size} font-medium tabular-nums ${on ? 'opacity-80' : 'text-muted'}"><b class="font-bold ${on ? 'text-cinnabar' : 'text-cinnabar-soft'}">${n}</b>가지</span>`
+            : `<span class="inline-flex items-center justify-center min-w-[1.75rem] h-6 px-2 rounded-full text-xs font-bold tabular-nums ${on ? 'bg-cinnabar text-white' : 'bg-cinnabar/10 text-cinnabar-soft'}">${n}</span>`;
           const tools = $('#stTools'), bar = $('#stBar'), tabsEl = $('#stTabs');
           if (tabStyle === 'tiles') {
             tools.className = 'relative z-10 mt-10 scroll-mt-24';
             bar.className = 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4';
             tabsEl.className = 'grid grid-cols-3 gap-2 sm:gap-3 flex-1 max-w-3xl';
             tabsEl.innerHTML = tabsDef.map(([k, name, n]) => `<button type="button" role="tab" aria-selected="${st.cat === k}" data-stcat="${k}" class="ease-spring text-left rounded-2xl p-4 md:p-5 ring-1 ${st.cat === k ? 'bg-fg text-page ring-fg' : 'bg-surface ring-edge/10 hover:ring-edge/30 hover:-translate-y-0.5'}">
-              <span class="block font-serif font-extrabold text-2xl md:text-3xl leading-none ${st.cat === k ? 'text-cinnabar' : 'text-cinnabar-soft'}">${mark[k]}</span>
-              <span class="mt-3 flex flex-wrap items-baseline gap-x-2"><b class="text-base md:text-lg tracking-tight">${name}</b><span class="text-sm tabular-nums opacity-60">${n}</span></span>
+              <span class="flex items-start justify-between gap-2"><span class="font-serif font-extrabold text-2xl md:text-3xl leading-none ${st.cat === k ? 'text-cinnabar' : 'text-cinnabar-soft'}">${mark[k]}</span>${cntStyle === 'big' ? `<span class="font-serif font-extrabold text-2xl md:text-3xl leading-none tabular-nums ${st.cat === k ? 'text-page' : 'text-fg/80'}">${n}</span>` : ''}</span>
+              <span class="mt-3 flex flex-wrap items-center gap-x-2"><b class="text-base md:text-lg tracking-tight">${name}</b>${cntStyle === 'big' ? '' : cnt(n, st.cat === k)}</span>
             </button>`).join('');
           } else if (tabStyle === 'pill') {
             tools.className = 'sticky top-[var(--head-h)] yw-follow z-30 mt-8 px-4 scroll-mt-24';
             bar.className = 'max-w-7xl mx-auto flex items-center justify-between gap-3 rounded-full p-1.5 pl-2 backdrop-blur-xl bg-deep/80 border border-edge/10';
             tabsEl.className = 'flex gap-1 overflow-x-auto no-scrollbar';
-            tabsEl.innerHTML = tabsDef.map(([k, name, n]) => `<button type="button" role="tab" aria-selected="${st.cat === k}" data-stcat="${k}" class="ease-spring shrink-0 h-11 px-5 rounded-full text-base font-semibold ${st.cat === k ? 'bg-fg text-page' : 'text-fg2 hover:bg-edge/5'}">${name} <span class="text-sm tabular-nums opacity-60">${n}</span></button>`).join('');
+            tabsEl.innerHTML = tabsDef.map(([k, name, n]) => `<button type="button" role="tab" aria-selected="${st.cat === k}" data-stcat="${k}" class="ease-spring shrink-0 h-11 px-5 rounded-full text-base font-semibold ${st.cat === k ? 'bg-fg text-page' : 'text-fg2 hover:bg-edge/5'}"><span class="inline-flex items-center gap-2">${name}${cnt(n, st.cat === k)}</span></button>`).join('');
           } else {
             // g-tabs: 위에 붙으면 헤더와의 틈을 페이지 색으로 막음 (common.css)
             tools.className = 'g-tabs sticky top-[var(--head-h)] yw-follow z-30 mt-10 scroll-mt-24 bg-page/90 backdrop-blur-xl border-b border-edge/15';
             bar.className = 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-end justify-between gap-3';
             tabsEl.className = 'flex gap-5 md:gap-9 overflow-x-auto no-scrollbar min-w-0';
-            tabsEl.innerHTML = tabsDef.map(([k, name, n]) => `<button type="button" role="tab" aria-selected="${st.cat === k}" data-stcat="${k}" class="ease-spring relative shrink-0 h-14 md:h-16 text-base sm:text-lg md:text-xl font-bold tracking-tight ${st.cat === k ? 'text-fg after:absolute after:inset-x-0 after:-bottom-px after:h-[3px] after:rounded-full after:bg-cinnabar' : 'text-subtle hover:text-fg'}">${name}<sup class="ml-1 text-xs font-semibold tabular-nums ${st.cat === k ? 'text-cinnabar-soft' : ''}">${n}</sup></button>`).join('');
+            tabsEl.innerHTML = tabsDef.map(([k, name, n]) => `<button type="button" role="tab" aria-selected="${st.cat === k}" data-stcat="${k}" class="ease-spring relative shrink-0 h-14 md:h-16 text-base sm:text-lg md:text-xl font-bold tracking-tight ${st.cat === k ? 'text-fg after:absolute after:inset-x-0 after:-bottom-px after:h-[3px] after:rounded-full after:bg-cinnabar' : 'text-subtle hover:text-fg'}">${cntStyle === 'plain' ? `${name}<sup class="ml-1 text-xs font-semibold tabular-nums ${st.cat === k ? 'text-cinnabar-soft' : ''}">${n}</sup>` : `<span class="inline-flex items-center gap-2">${name}${cnt(n, st.cat === k, 'text-sm md:text-base')}</span>`}</button>`).join('');
           }
           $('#stSortWrap').classList.toggle('mb-2', tabStyle === 'underline'); // 밑줄 탭 높이에 맞춰 살짝 띄움
           const list = products.filter(p => st.cat === 'all' || (st.cat === 'charm' ? p.kind === 'charm' : p.kind === 'rite')).sort(sorters[st.sort]);
