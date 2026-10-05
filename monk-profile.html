@@ -38,7 +38,6 @@
             <p id="meta" class="reveal mt-3 text-muted" style="--index:2"></p>
             <p id="tagline" class="reveal mt-10 font-serif font-extrabold text-2xl md:text-4xl leading-snug" style="--index:3"></p>
             <p id="intro" class="reveal mt-6 text-base md:text-lg text-muted leading-relaxed max-w-[56ch]" style="--index:4"></p>
-            <div id="tags" class="reveal mt-6 flex flex-wrap gap-2" style="--index:4"></div>
             <div class="reveal mt-10 flex flex-col sm:flex-row gap-3" style="--index:5">
               <a id="ctaCharm" class="group ease-spring inline-flex items-center justify-between gap-4 rounded-full bg-cinnabar text-white pl-7 pr-2 py-2 min-h-[52px] font-semibold hover:scale-[1.02] active:scale-[0.98]">
                 부적 보기<span class="ease-spring w-9 h-9 rounded-full bg-black/15 flex items-center justify-center group-hover:translate-x-1"><iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon></span>
@@ -134,7 +133,6 @@
       $('#meta').textContent = `${P.metaLine(m)} · ${m.area}`;
       $('#tagline').textContent = `“${m.tagline}”`;
       $('#intro').textContent = m.intro;
-      $('#tags').innerHTML = m.specialties.map(t => `<span class="rounded-full px-3 py-1.5 text-xs bg-edge/[0.04] border border-edge/10 text-fg2">${t}</span>`).join('');
       $('#ctaCharm').href = `${monkUrl(m.id)}#charms`;
       $('#ctaRite').href = `${monkUrl(m.id)}#rituals`;
       if (!m.charms.length) $('#ctaCharm').remove();

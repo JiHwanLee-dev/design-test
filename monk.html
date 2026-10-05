@@ -77,7 +77,6 @@
           <span class="inline-block rounded-full px-3 py-1 text-[11px] tracking-[0.15em] font-medium bg-cinnabar/10 text-cinnabar-soft">僧 · 스님 이야기</span>
           <p id="syTagline" class="mt-6 font-serif font-extrabold text-2xl md:text-3xl leading-snug"></p>
           <p id="syIntro" class="mt-5 text-muted leading-relaxed max-w-[60ch]"></p>
-          <div id="syTags" class="mt-6 flex flex-wrap gap-2"></div>
           <a data-profile class="ease-spring mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-cinnabar-soft hover:gap-2.5">스님 소개 자세히 보기<iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon></a>
         </div>
         <div class="lg:col-span-5 space-y-3">
@@ -112,7 +111,6 @@
             <p id="pfTagline" class="reveal mt-8 font-serif font-extrabold text-2xl md:text-3xl leading-snug text-fg" style="--index:3"></p>
             <p id="pfIntro" class="reveal mt-5 text-base md:text-lg text-muted leading-relaxed max-w-[62ch]" style="--index:4"></p>
             <a data-profile class="reveal ease-spring mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-cinnabar-soft hover:gap-2.5" style="--index:4">걸어온 길 · 스님의 말, 스님 소개 자세히 보기<iconify-icon icon="solar:arrow-right-linear" width="16"></iconify-icon></a>
-            <div id="pfTags" class="reveal mt-6 flex flex-wrap gap-2" style="--index:5"></div>
           </div>
 
           <aside class="lg:col-span-4 lg:pt-20">
@@ -371,7 +369,6 @@
       $('#pfTemple').innerHTML = `<span class="font-serif text-fg2">${m.hanja}</span> · ${m.temple} · ${m.area} · 출가 ${m.years}년`;
       $('#pfTagline').textContent = `“${m.tagline}”`;
       $('#pfIntro').textContent = m.intro;
-      $('#pfTags').innerHTML = m.specialties.map(t => `<span class="rounded-full px-3 py-1.5 text-xs bg-edge/[0.04] border border-edge/10 text-fg2">${t}</span>`).join('');
       // 정보 카드: 소속 · 주로 모시는 의식 · 상담 시간 · 참여 방식
       $('#pfStats').className = 'space-y-3';
       $('#pfStats').innerHTML = YW.monkInfo(m).map(([k, v]) => `<div class="flex gap-4 text-sm"><dt class="w-9 shrink-0 text-subtle">${k}</dt><dd class="font-semibold leading-snug">${v}</dd></div>`).join('');
@@ -411,7 +408,6 @@
         // 스님 이야기
         $('#syTagline').textContent = `“${m.tagline}”`;
         $('#syIntro').textContent = m.intro;
-        $('#syTags').innerHTML = m.specialties.map(t => `<span class="rounded-full px-3 py-1.5 text-xs bg-surface border border-edge/10 text-fg2">${t}</span>`).join('');
         const box = (k, v) => `<div class="rounded-2xl bg-surface ring-1 ring-edge/10 p-5"><dt class="text-xs text-subtle">${k}</dt><dd class="mt-1 text-lg font-bold tracking-tight">${v}</dd></div>`;
         if (m.storyPhoto) $('#syPhoto').innerHTML = YW.photo(m.storyPhoto, `기도하는 ${m.name} 스님`, 'absolute inset-0 w-full h-full object-cover');
         else $('#syPhoto').remove();
