@@ -241,16 +241,36 @@
       let waysBody;
       if (isCharm) {
         const ids = [...new Set(r.by.flatMap(m => m.charms.map(c => c.id)))];
-        waysBody = `<div class="rounded-2xl ring-1 ring-edge/10 divide-y divide-edge/10">${ids.map(id => {
+        const sellersOf = id => r.by.filter(m => m.charms.some(x => x.id === id));
+        const hrefOf = id => { const s = sellersOf(id); return s.length === 1 ? YW.charmUrl(s[0].id, id) : '#g-monks'; };
+        const artOf = id => { const s = sellersOf(id); return s.length === 1 ? YW.charmArt(s[0], id) : charmSVG(D.CHARM_TYPES[id], YW.hash('ritual', id) % 997 + 1); };
+        // dev charmKinds: group(분류별 2열, 설명 한 줄) / names(분류별 이름만) / list(한 줄씩, 예전)
+        const kindsStyle = YW.devOpt('charmKinds');
+        const groups = D.CHARM_CATS.map(cat => [cat, ids.filter(id => D.CHARM_TYPES[id].cat === cat)]).filter(([, g]) => g.length);
+        const groupHead = (cat, n) => `<h3 class="flex items-center gap-2 text-base font-bold tracking-tight"><span class="font-serif font-extrabold text-lg leading-none text-cinnabar-soft">${D.CHARM_CAT_MARK[cat] || '符'}</span>${cat}<span class="font-serif font-extrabold text-cinnabar-soft tabular-nums">${n}</span></h3>`;
+        if (kindsStyle === 'list') waysBody = `<div class="rounded-2xl ring-1 ring-edge/10 divide-y divide-edge/10">${ids.map(id => {
             const c = D.CHARM_TYPES[id];
-            const sellers = r.by.filter(m => m.charms.some(x => x.id === id));
-            const href = sellers.length === 1 ? YW.charmUrl(sellers[0].id, id) : '#g-monks';
-            return `<a href="${href}" class="group flex items-start gap-4 px-5 py-4 ease-spring hover:bg-edge/[0.03]">
-              <span class="w-10 shrink-0 rounded-md overflow-hidden mt-0.5">${sellers.length === 1 ? YW.charmArt(sellers[0], id) : charmSVG(c, YW.hash('ritual', id) % 997 + 1)}</span>
+            return `<a href="${hrefOf(id)}" class="group flex items-start gap-4 px-5 py-4 ease-spring hover:bg-edge/[0.03]">
+              <span class="w-10 shrink-0 rounded-md overflow-hidden mt-0.5">${artOf(id)}</span>
               <span class="flex-1 min-w-0"><span class="font-semibold">${c.name}</span><span class="block mt-1 text-[15px] text-fg2 leading-relaxed">${c.desc}</span></span>
               <iconify-icon icon="solar:alt-arrow-right-linear" width="16" class="text-subtle mt-1 ease-spring group-hover:translate-x-0.5"></iconify-icon>
             </a>`;
-          }).join('')}</div>`
+          }).join('')}</div>`;
+        else if (kindsStyle === 'names') waysBody = `<div class="rounded-2xl ring-1 ring-edge/10 divide-y divide-edge/10">${groups.map(([cat, g]) => `
+            <div class="px-5 py-4 sm:flex sm:gap-6">
+              <div class="sm:w-36 shrink-0">${groupHead(cat, g.length)}</div>
+              <div class="mt-3 sm:mt-0 flex flex-wrap gap-1.5">${g.map(id => `<a href="${hrefOf(id)}" title="${D.CHARM_TYPES[id].desc}" class="ease-spring rounded-full px-3 py-1.5 text-sm bg-edge/[0.04] ring-1 ring-edge/10 text-fg2 hover:ring-cinnabar/40 hover:text-fg">${D.CHARM_TYPES[id].name}</a>`).join('')}</div>
+            </div>`).join('')}</div>`;
+        else waysBody = groups.map(([cat, g], gi) => `
+            <div class="${gi ? 'mt-8' : ''}">
+              ${groupHead(cat, g.length)}
+              <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">${g.map(id => { const c = D.CHARM_TYPES[id]; return `
+                <a href="${hrefOf(id)}" class="group flex items-center gap-3 rounded-xl p-2.5 pr-3 ring-1 ring-edge/10 ease-spring hover:ring-cinnabar/40 hover:bg-edge/[0.03]">
+                  <span class="w-8 shrink-0 rounded overflow-hidden">${artOf(id)}</span>
+                  <span class="flex-1 min-w-0"><span class="block text-[15px] font-semibold truncate">${c.name}</span><span class="block text-xs text-subtle truncate">${c.desc}</span></span>
+                </a>`; }).join('')}</div>
+            </div>`).join('');
+        waysBody = waysBody
           + sub('만드는 방식') + defs(D.MATERIALS.map(m => [m.name, m.note]));
       } else {
         waysBody = sub('함께 모시는 것') + checks(r.includes)

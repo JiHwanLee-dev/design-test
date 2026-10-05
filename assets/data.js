@@ -5,6 +5,8 @@ window.YW_DATA = (() => {
   // 부적 종류 (전 플랫폼 공통). 가격은 스님마다 다르게 MONKS에서 지정합니다.
   // 부적 분류 (바라는 일 기준). 스님 페이지에서 부적이 많으면 이 순서로 묶어 보여 줌
   const CHARM_CATS = ['삼재 · 액막이', '애정 · 인연', '재물 · 사업', '합격 · 취업', '건강 · 질병', '가정 · 평안', '소원 · 행운'];
+  // 분류 표지 한자 (스님 페이지 목차 · 부적 안내 페이지 묶음 제목)
+  const CHARM_CAT_MARK = { '삼재 · 액막이': '護', '애정 · 인연': '緣', '재물 · 사업': '財', '합격 · 취업': '學', '건강 · 질병': '康', '가정 · 평안': '安', '소원 · 행운': '願' };
 
   const CHARM_TYPES = {
     jaemul:    { glyph: '財', name: '재물 부적',      cat: '재물 · 사업', desc: '흩어지는 돈을 붙잡고 들어올 길을 여는 부적입니다. 지갑이나 금고, 계산대 안쪽에 두시길 권합니다.' },
@@ -546,5 +548,5 @@ window.YW_DATA = (() => {
     if (m.charms.length) m.specialties.unshift('부적');
   });
 
-  return { CHARM_CATS, CHARM_ANATOMY, RITUAL_IMAGES, HERO_IMAGES, CHARM_TYPES, MATERIALS, BLESS_PRICE, MODES, SERVICE_TYPES, CATEGORIES, SHOP_CATS, MONKS, EXAMPLE_MONKS, REVIEWS, SLOTS, RITUAL_DETAILS, FAQ_CATS, FAQS, REFUND_RULES };
+  return { CHARM_CATS, CHARM_CAT_MARK, CHARM_ANATOMY, RITUAL_IMAGES, HERO_IMAGES, CHARM_TYPES, MATERIALS, BLESS_PRICE, MODES, SERVICE_TYPES, CATEGORIES, SHOP_CATS, MONKS, EXAMPLE_MONKS, REVIEWS, SLOTS, RITUAL_DETAILS, FAQ_CATS, FAQS, REFUND_RULES };
 })();
