@@ -920,7 +920,7 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     { key: 'charmCount', label: '부적 수 (시안, 해월 스님)', choices: [['many', '많이 (37개)'], ['normal', '적게 (8개)']] },
     { key: 'riteCount', label: '제례 · 기도 수 (시안, 해월 스님)', choices: [['many', '많이 (18개)'], ['normal', '적게 (4개)']] },
     { key: 'monkCount', label: '스님 수 (시안, 예시 스님 합침)', choices: [['1', '1분'], ['2', '2분'], ['3', '3분'], ['4', '4분'], ['5', '5분']] },
-    { key: 'screenAuto', label: '(병풍) 자동 넘김', choices: [['on', '켬'], ['off', '끔']] },
+    { key: 'screenAuto', label: '(병풍) 자동 넘김', when: () => devOpt('monkStyle') === 'screen', off: '메인 스님 배치가 병풍일 때만', choices: [['on', '켬'], ['off', '끔']] },
     { key: 'monkStyle', label: '메인 스님 배치 (2분 이상)', choices: [['screen', '병풍'], ['index', '이름 색인'], ['portrait', '여백 초상'], ['cards', '카드']] },
     { key: 'heroImage', label: '메인 히어로 사진', choices: [['eaves', '처마 풍경'], ['room', '다실 햇살'], ['incense', '향 연기']] },
     { key: 'reviews', label: '후기 · 평점 (사이트 전체)', choices: [['hide', '숨김'], ['show', '표시']] },
@@ -930,12 +930,12 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     { key: 'tabCount', label: '분류 탭 숫자 모양', choices: [['big', '크게 (명조)'], ['badge', '동그란 배지'], ['unit', '숫자 + 단위'], ['plain', '작게 (예전)']] },
     { key: 'headCount', label: '목록 제목 옆 숫자', choices: [['serif', '명조 (주홍)'], ['badge', '동그란 배지'], ['unit', '숫자 + 단위'], ['plain', '작게 (예전)']] },
     { key: 'riteCard', label: '스님 페이지 제례 · 기도 카드', choices: [['aligned', '2단 맞춤'], ['feature', '큰 사진 + 분류'], ['compact', '작은 카드']] },
-    { key: 'riteLook', label: '(2단 맞춤) 제례 카드 모양', choices: [['gallery', '화첩 (4열)'], ['index', '차림표 목록'], ['row', '부적형 가로'], ['cover', '큰 사진 표지']] },
-    { key: 'navMerge', label: '(2단 맞춤) 왼쪽 목차', choices: [['merged', '하나로 합침'], ['split', '구역마다 따로']] },
+    { key: 'riteLook', label: '(2단 맞춤) 제례 카드 모양', when: () => devOpt('riteCard') === 'aligned' && devOpt('monkLayout') !== 'intro', off: '제례 카드가 2단 맞춤일 때만 (소개형 제외)', choices: [['gallery', '화첩 (4열)'], ['index', '차림표 목록'], ['row', '부적형 가로'], ['cover', '큰 사진 표지']] },
+    { key: 'navMerge', label: '(2단 맞춤) 왼쪽 목차', when: () => devOpt('riteCard') === 'aligned' && devOpt('monkLayout') !== 'intro', off: '제례 카드가 2단 맞춤일 때만 (소개형 제외)', choices: [['merged', '하나로 합침'], ['split', '구역마다 따로']] },
     { key: 'navSticky', label: '(스님 페이지) 왼쪽 목차 고정', choices: [['on', '따라오게 고정'], ['off', '고정 안 함']] },
     { key: 'profileView', label: '스님 소개 보기', choices: [['page', '별도 페이지'], ['panel', '옆 패널']] },
     { key: 'ritualLayout', label: '의식 안내 페이지 구성', choices: [['guide', '안내서형'], ['landing', '랜딩형']] },
-    { key: 'guideDeco', label: '(안내서형) 꾸밈', choices: [['rich', '표지 · 해부도 · 말씀'], ['plain', '글만']] },
+    { key: 'guideDeco', label: '(안내서형) 꾸밈', when: () => devOpt('ritualLayout') === 'guide', off: '의식 안내 페이지가 안내서형일 때만', choices: [['rich', '표지 · 해부도 · 말씀'], ['plain', '글만']] },
     { key: 'charmRotate', label: '(부적 상세) 사진 자동 넘김', choices: [['on', '켬 (4.5초)'], ['off', '끔']] },
     { key: 'riteLayout', label: '제례 · 기도 상세 구성', choices: [['shop', '쇼핑몰형 (부적과 같음)'], ['landing', '랜딩형']] },
     { key: 'charmLayout', label: '부적 상세 구성', choices: [['shop', '쇼핑몰형'], ['intro', '소개형']] },
@@ -945,8 +945,8 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     { key: 'cardLink', label: '메인 의식 카드 클릭', choices: [['detail', '상세 페이지만'], ['both', '상세 + 바로 예약']] },
     { key: 'emptyRitual', label: '모시는 스님이 없는 의식', choices: [['hide', '숨김'], ['soon', '준비 중 표시']] },
     { key: 'cardPrice', label: '의식 카드 가격', choices: [['hide', '숨김'], ['show', '표시']] },
-    { key: 'charmClick', label: '(소개형) 부적 클릭', choices: [['page', '상세 페이지'], ['modal', '팝업']] },
-    { key: 'riteClick', label: '(소개형) 의식 클릭', choices: [['page', '상세 페이지'], ['inline', '페이지 안 예약']] },
+    { key: 'charmClick', label: '(소개형) 부적 클릭', when: () => devOpt('monkLayout') === 'intro', off: '스님 페이지 구성이 소개형일 때만', choices: [['page', '상세 페이지'], ['modal', '팝업']] },
+    { key: 'riteClick', label: '의식 클릭 · 예약 링크', choices: [['page', '상세 페이지'], ['inline', '페이지 안 예약']] },
   ];
   function setDevOpt(key, val) {
     const o = store.get('yw-dev-opts', {}); o[key] = val; store.set('yw-dev-opts', o);
@@ -954,9 +954,19 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
     if (key === 'headStyle') { $('#ywHead').dataset.style = val; document.documentElement.dataset.head = val; $$(`#ywDev [data-opt="${key}"]`).forEach(b => b.setAttribute('aria-pressed', b.dataset.val === val)); return; }
     $$(`#ywDev [data-opt="${key}"]`).forEach(b => b.setAttribute('aria-pressed', b.dataset.val === val));
     renderNavRituals();
+    devDim();
     // 페이지가 직접 다시 그리지 못하면 새로고침
     // 스님 수는 데이터부터 바뀌므로 늘 새로고침
     if (devHandlers.length && key !== 'monkCount' && key !== 'charmCount' && key !== 'riteCount') devHandlers.forEach(fn => fn(key, val)); else location.reload();
+  }
+  // 다른 설정 때문에 지금 화면에 안 먹는 옵션은 흐리게 + 이유 표시 (when이 있는 옵션만)
+  function devDim() {
+    DEV_OPTIONS.filter(o => o.when).forEach(o => {
+      const box = document.querySelector(`#ywDev [data-optbox="${o.key}"]`); if (!box) return;
+      const on = o.when();
+      box.classList.toggle('opacity-40', !on);
+      box.querySelector('[data-offnote]').classList.toggle('hidden', on);
+    });
   }
   function devPanel() {
     const dev = new URLSearchParams(location.search).get('dev');
@@ -988,13 +998,15 @@ ${shop ? shopNav : brandNav}          <div class="flex items-center gap-1">
               </button>`).join('')}
           </div>
           ${DEV_OPTIONS.map(o => `
-            <p class="mt-3 px-1 text-[11px] text-[#a8a29e]">${o.label}</p>
+            <div data-optbox="${o.key}">
+            <p class="mt-3 px-1 text-[11px] text-[#a8a29e]">${o.label}<span data-offnote class="block text-[10px] text-[#c8553d]">${o.off ? `지금 화면엔 적용 안 됨 · ${o.off}` : ''}</span></p>
             <div class="mt-1 grid ${o.choices.length === 3 ? 'grid-cols-3' : 'grid-cols-2'} gap-1">
               ${o.choices.map(([val, name]) => `<button data-opt="${o.key}" data-val="${val}" aria-pressed="${devOpt(o.key) === val}" class="${btn} px-2.5 py-2 text-center text-[12px]">${name}</button>`).join('')}
-            </div>`).join('')}
+            </div></div>`).join('')}
           <p class="mt-3 px-1 text-[11px] text-[#78716c] leading-relaxed">고른 값은 이 브라우저에 저장되어 다른 페이지에서도 유지됩니다.</p>
         </div>
       </div>`);
+    devDim();
     $('#ywDev').addEventListener('click', e => {
       const t = e.target.closest('[data-theme-id]'); if (t) return setTheme(t.dataset.themeId);
       const o = e.target.closest('[data-opt]'); if (o) return setDevOpt(o.dataset.opt, o.dataset.val);
